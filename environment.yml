@@ -1,0 +1,19 @@
+name: research-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - jupyter-book>=2.0
+  - jupyter
+  - jupyterlab
+  - numpy
+  - scipy
+  - matplotlib
+  - pandas
+  - seaborn
+  - sympy
+  - ghp-import
+  - pip
+  - pip:
+    - mystmd

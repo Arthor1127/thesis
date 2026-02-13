@@ -1,0 +1,85 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REVTeX 4.2 template for a Physical Review B (PRB) article
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+ reprint,               % two-column PRB style
+ superscriptaddress,    % author affiliations as superscripts
+ amsmath,amssymb,       % math packages
+ aps,                   % APS journal
+ prb,                   % PRB journal style
+ floatfix               % fixes float placement issues
+]{revtex4-2}
+
+%%%%%%%%%%%%%%%
+% Packages
+%%%%%%%%%%%%%%%
+\usepackage{graphicx}    % include figures
+\usepackage{dcolumn}     % decimal alignment in tables
+\usepackage{bm}          % bold math
+\usepackage{hyperref}    % hyperlinks
+\usepackage{physics}     % Dirac notation, bra-ket, etc.
+\usepackage{siunitx}     % SI units
+\usepackage{xcolor}      % colored text for notes
+\usepackage{subfig}      % subfigures
+% Spanish support
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+
+%%%%%%%%%%%%%%%
+% Document
+%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Research Article Title}
+
+\author{Arturo Ruiz}
+\email{arturo.ruiz@ib.edu.ar}
+\affiliation{Instituto Balseiro, Centro Atómico Bariloche, Comisión Nacional de Energía Atómica (CNEA), 8400 San Carlos de Bariloche, Argentina}
+
+\author{Collaborator Name}
+\affiliation{Instituto Balseiro, Centro Atómico Bariloche, Comisión Nacional de Energía Atómica (CNEA), 8400 San Carlos de Bariloche, Argentina}
+\affiliation{Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET), Argentina}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+This is the abstract of the paper. Briefly describe the research problem, methods, key results, and significance.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main Content
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{sections/introduction}
+\input{sections/theory}
+\input{sections/methods}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Acknowledgments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Agradecimientos}
+Recursos computacionales fueron proveidos por el cluster HPC del Departamento de Física del Centro Atómico Bariloche.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{apsrev4-2}
+\bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\input{sections/appendix}
+
+\end{document}

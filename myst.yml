@@ -1,0 +1,32 @@
+# MyST Markdown Configuration for Jupyter Book v2
+# See: https://mystmd.org/guide/frontmatter
+version: 1
+
+project:
+  id: 722a0136-b105-4971-af5c-cabe770f2c8d
+  title: thesis
+  description: Research documentation for thesis
+  keywords: []
+  authors:
+    - name: Arturo Ruiz
+      email: arturo.ruiz@ib.edu.ar
+      affiliations:
+        - Instituto Balseiro
+        - Comisión Nacional de Energía Atómica
+  github: https://github.com/Arthor1127/thesis
+  bibliography: paper/references.bib
+  
+  # Table of Contents - will be auto-generated with jupyter-book init --write-toc
+  # toc:
+  #   - file: README.md
+
+site:
+  template: book-theme
+  options:
+    logo: logo.png  # Add your logo here
+    favicon: favicon.ico  # Add your favicon here
+  domains:
+    - thesis-Arthor1127.curve.space
+
+# Deployment configuration for GitHub Pages
+# The BASE_URL environment variable is set in the GitHub Actions workflow

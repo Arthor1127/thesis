@@ -1,0 +1,49 @@
+name: deploy-book
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+env:
+  BASE_URL: /${{ github.event.repository.name }}
+
+jobs:
+  deploy-book:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    
+    defaults:
+      run:
+        shell: bash -el {0}
+    
+    steps:
+      - uses: actions/checkout@v5
+      
+      # Install dependencies
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          auto-activate-base: false
+          activate-environment: research-env
+      
+      # Build the book with BASE_URL
+      - name: Build the book
+        run: |
+          jupyter-book build --html
+          touch _build/html/.nojekyll
+      
+      # Upload the book's HTML as an artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _build/html
+      
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

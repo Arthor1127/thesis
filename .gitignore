@@ -1,0 +1,68 @@
+# Data files
+data/raw/
+data/processed/
+*.dat
+*.csv
+*.h5
+*.hdf5
+
+# Large binary files
+*.npy
+*.npz
+
+# Zotero - don't track if using auto-export
+# Uncomment if you want auto-updates from Zotero
+# paper/references.bib
+
+# Figures (source only, not exports)
+figures/src/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.pdf  # Comment this out if you want to track PDFs
+
+# Jupyter Book
+_build/
+.jupyter_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporary files
+tmp/
+temp/
