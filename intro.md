@@ -1,19 +1,21 @@
-# thesis
+# Introducción
 
-Welcome to the thesis research documentation.
+Documentación y datos obtenidos en mi tésis de licenciatura desarrollada en el Instituto Balseiro bajo la dirección de Prof. Gonzalo Usaj y la codirección del Prof. Leandro Tosi. El objetivo de esta tésis es estudiar, modelar, fabricar y caracterizar un circuito cuántico superconductor que actue como material artificial para la simulación de un sistema cuántico de cavidad.
 
 ## Overview
 
-This site contains notebooks, notes, and documentation for ongoing research on thesis.
+Este sitio contiene notebooks, notas y documentación para el proyecto de tésis.
 
-## Navigation
+## Navegación
 
-Use the sidebar to explore:
-- **Notebooks**: Interactive analysis and exploration
-- **Reports**: Weekly progress updates
-- **Notes**: Literature reviews and concept documentation
-- **Data & Figures**: Supporting materials
+Uso de la sidebar:
+- **Notebooks**: análisis interactivo y exploración
+- **Reports**: actualizaciones semanales sobre el progreso
+- **Notes**: reviews de literature y documentación sobre los conceptos empleados
+- **Data & Figures**: material complementario
 
-## Getting Started
+## Motivación
+To be written...
 
-Check out the notebooks section to see the latest analysis.
+## Propuesta de implementación
+To be written...

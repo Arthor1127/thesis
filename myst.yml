@@ -1,7 +1,6 @@
 # MyST Markdown Configuration for Jupyter Book v2
 # See: https://mystmd.org/guide/frontmatter
 version: 1
-
 project:
   id: 722a0136-b105-4971-af5c-cabe770f2c8d
   title: thesis
@@ -15,18 +14,43 @@ project:
         - Comisión Nacional de Energía Atómica
   github: https://github.com/Arthor1127/thesis
   bibliography: paper/references.bib
-  
-  # Table of Contents - will be auto-generated with jupyter-book init --write-toc
-  # toc:
-  #   - file: README.md
+
+toc:
+  - file: README.md
+  - title: Notebooks
+    children:
+      - file: notebooks/README.md
+      - title: Exploration
+        children:
+          - file: notebooks/exploration/single_transmon.ipynb
+          - file: notebooks/exploration/multiple_transmon.ipynb
+      - title: Analysis
+        children: []
+  - title: Notes
+    children:
+      - file: notes/README.md
+  - title: Reports
+    children:
+      - file: reports/README.md
+      - title: Weekly
+        children: []
+      - title: Export
+        children: []
+  - title: Scripts
+    children:
+      - title: cpp
+        children: []
+      - title: python
+        children: []
+      - title: bash
+        children: []
 
 site:
   template: book-theme
   options:
-    logo: logo.png  # Add your logo here
-    favicon: favicon.ico  # Add your favicon here
+    logo: logo.png
+    favicon: favicon.ico
   domains:
     - thesis-Arthor1127.curve.space
-
-# Deployment configuration for GitHub Pages
-# The BASE_URL environment variable is set in the GitHub Actions workflow
+  deploy:
+    url: https://arthor1127.github.io/polaritons

@@ -45,7 +45,7 @@ build/
 *.synctex.gz
 *.bbl
 *.blg
-*.pdf  # Comment this out if you want to track PDFs
+#*.pdf  # Comment this out if you want to track PDFs
 
 # Jupyter Book
 _build/
