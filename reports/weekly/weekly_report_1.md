@@ -16,7 +16,10 @@ Como próximas tareas en este apartado queda
 3. Proponer experimentos que se puedan hacer sobre el circuito después de eso
 4. Repetir usando un hopping alternante (SSH)
 
+En particular me gustaría partir de primeros principios para encontrar el acoplamiento que tiene el array de transmons con los modos fotónicos del resonador LC.
+
 Y en otras áreas me gustaría ir arrancando a 
 1. Aprender a usar los software de diseño del circuito (qiskit, klayout, ansys)
 2. Repasar qcodes para operar más adelante los equipos en el laboratorio
 3. Hacer una literature review para ver si alguien ya exploró teóricamente un hamiltoniano como el que voy a tratar.
+4. Encontrar formas de hacer acoplamientos tuneables/toggleables para que más adelante un solo circuito pueda servir para explorar un amplio régimen de parámetros.
