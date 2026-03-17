@@ -27,4 +27,4 @@ Haciendo la diagonalización usando el algoritmo de van Hemmen, podemos ver que 
 $$
     \omega_c^2 - \omega^2 = 4\omega_c \sum_{k, \sigma} \frac{\vert \eta_{k, \sigma} \vert^2 E_{k, \sigma}}{(E_{k, \sigma})^2 - \omega^2}
 $$
-En el caso particular en que 
+Sin embargo, esto denota que el efecto general del acoplamiento de la cadena con el modo de cavidad es trivial: hay una renormalización general de las energías de los modos bosónicos y el modo de cavidad. En cambio un sistema de cavidad introduce no linealidades que no son analíticamente resolubles en principio (por ejemplo introducir un hopping dependiente de los operadores de creación y destrucción del modo de cavidad). Por tanto se concluye que este paradigma de acoplamiento entre qubits y resonador no simula la física de un sistema cuántico de cavidad.

@@ -34,7 +34,7 @@ donde $f_k = \sinh(2\theta^+_k)/2 = (2U+|\Delta_k|)/(2E^+_k)$ y $g_k = \sinh(2\t
 
 ```{figure} ../../figures/export/ssh_bands.png
 :name: fig-ssh-bands
-:width: 80%
+:width: 100%
 :align: center
 
 Bandas del SSH
@@ -42,7 +42,7 @@ Bandas del SSH
 Como es típico del SSH, se abre un gap de energía cuando los hoppings son distintos. La peculiaridad de este sistema es que las bandas se vuelven más asimétricas conforme $\vert \nu + w\vert \rightarrow \frac{1}{2}\sqrt{8E_cE_J}$.
 ```{figure} ../../figures/export/ssh_comparison.png
 :name: fig-ssh-comparison
-:width: 80%
+:width: 100%
 :align: center
 
 Comparación resultado analítico con el numérico

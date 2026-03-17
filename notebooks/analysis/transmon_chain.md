@@ -3,7 +3,7 @@ Antes de realizar el análisis numérico se realizó un análisis de los niveles
 
 ```{figure} ../../figures/export/single_transmon_truncation.png
 :name: fig-single-transmon
-:width: 80%
+:width: 100%
 :align: center
 
 Comparación en función del truncamiento del espectro de un solo transmon
@@ -12,7 +12,7 @@ Pasando a la cadena de transmons, se trabajó cual es la aproximación del poten
 
 ```{figure} ../../figures/export/transmon_chain_comparison.png
 :name: fig-transmon-chain-comparison
-:width: 80%
+:width: 100%
 :align: center
 
 Comparación de distintas aproximaciones del potencial coseno con el hamiltoniano exacto.
@@ -64,7 +64,7 @@ $$
 Se observa que la relación de dispersión tiene un límite patológico cuando $\hbar g \rightarrow \pm \frac{1}{4}\sqrt{8E_cE_J} = \frac{1}{4}(\omega_q + 2U)$ o equivalentemente $E_g \rightarrow E_c$. En este caso tiene modos de cero energía y si $g > 0$, la relación de dispersión en el borde de zona deja de tener derivada nula. En general quedarse a orden cuadrático alcanza para describir el espectro de una o a lo sumo dos excitaciones en este espacio de Fock pero falla conforme aumentamos este número
 ```{figure} ../../figures/export/bare_quadratic_exact_comparison_transmon_chain.png
 :name: fig-transmon-chain-bare_quadratic_comparison
-:width: 80%
+:width: 100%
 :align: center
 
 Comparación del espectro numérico de la cadena de transmons con la expresión analítica obtenida en aproximación cuadrática
@@ -86,14 +86,14 @@ $$
 con $N$ el número de transmon en total y $\tilde \Delta_k = \Delta_k + \Delta_k^*$. 
 ```{figure} ../../figures/export/transmon_chain_energy_bands.png
 :name: fig-transmon-chain-energy-bands
-:width: 80%
+:width: 100%
 :align: center
 
 Bandas de energía de la cadena de transmon en aproximación cuadrática para distintos valores del hopping. Se incluye el efecto del primer orden en perturbaciones del término de interacción.
 ```
 ```{figure} ../../figures/export/first_order_perturbation_transmon_chain.png
 :name: fig-transmon-chain-first_order_perturbation
-:width: 80%
+:width: 100%
 :align: center
 
 Comparación del espectro numérico de la cadena de transmons con la expresión analítica obtenida en aproximación cuadrática junto con el término cuártico en primer orden de perturbaciones
