@@ -16,7 +16,7 @@ $$
 $$
 con $\tanh \theta_\pm = \frac{2U \pm \vert \Delta_k \vert}{\hbar \omega_q \pm \vert \Delta_k \vert+E_\pm}$ y energías dadas por
 $$
-E_\pm(k) = \sqrt{(\hbar \omega_q)^2 - 4U^2} \cdot \sqrt{1 \pm \frac{2 \vert \Delta_k \vert}{\hbar \omega_q + 2U}}
+E_\pm(k) = \sqrt{(\hbar \omega_q)^2 - 4U^2} \cdot \sqrt{1 \pm \frac{2 \vert \Delta_k \vert}{\hbar \omega_q - 2U}}
 $$
 En esta notación se puede encontrar que la parte diagonal en la base de Fock definida por $\alpha_k$ y $\beta_k$ del término de interacción puede darse por medio de un hamitloniano efectivo de Kerr dado por
 
