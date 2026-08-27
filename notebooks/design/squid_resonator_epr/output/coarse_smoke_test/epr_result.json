@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "l_probe_nh": 15.0,
+  "l_transmon_nh": 10.0,
+  "modes": [
+    {
+      "m": 1,
+      "f_ghz": 7.748321585553,
+      "Q": 61538419.98081,
+      "p": {
+        "probe": 4.498265423799e-07,
+        "transmon": 1.789091246376e-07
+      },
+      "assignment": "resonator_mode_1"
+    },
+    {
+      "m": 2,
+      "f_ghz": 14.563076883,
+      "Q": 457800.1677951,
+      "p": {
+        "probe": 2.038274581032e-05,
+        "transmon": 8.001942374477e-06
+      },
+      "assignment": "resonator_mode_2"
+    },
+    {
+      "m": 3,
+      "f_ghz": 15.93642930943,
+      "Q": 576656.0314242,
+      "p": {
+        "probe": -6.150741997905e-05,
+        "transmon": 6.410156071931e-05
+      },
+      "assignment": "transmon"
+    }
+  ],
+  "mesh": {
+    "elements": null,
+    "note": "coarse smoke test - not a converged mesh"
+  }
+}

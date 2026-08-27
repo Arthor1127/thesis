@@ -1,0 +1,33 @@
+En presencia de condiciones periódicas de contorno, definimos los operadores en espacio de momentos
+\begin{subequations}
+    \begin{align}
+        \hat b_{j, \sigma} &= \frac{1}{\sqrt{N}}\sum_{k} e^{ikj} b_{k, \sigma}\\
+        \hat b_{j, \sigma}^\dag &= \frac{1}{\sqrt{N}}\sum_{k} e^{-ikj} b_{k, \sigma}^\dag
+    \end{align}
+\end{subequations}
+con $k = \frac{2\pi n}{N}$, $n = 0, \ldots, N-1$ o sus equivalentes para la zona de Brillouin simétrica $[-\pi, \pi]$. Estos operadores satisfacen las relaciones de conmutación
+\begin{equation}
+    \left[\hat b_{k \sigma}, \, \hat b^\dag_{k' \sigma'}\right] = \delta_{\sigma}^{\sigma'} \delta_{k}^{k'}.
+\end{equation}
+En esta base, se obtienen las siguientes expresiones
+\begin{subequations}
+    \begin{align}
+        \hat H_C &= \hbar \omega_q \sum_{k,\sigma}\hat b^\dag_{k\sigma}\hat b_{k\sigma} 
+                - \frac{U}{N}\sum_{\substack{k_1,k_2 \\ q,\sigma}} 
+                \hat b_{k_1-q,\sigma}^\dag \hat b^\dag_{k_2+q,\sigma} \hat b_{k_2\sigma}\hat b_{k_1\sigma}
+                \nonumber\\
+               &\quad + \sum_{k}\left(\Delta_C(k)\hat b^\dag_{kA} \hat b_{kB} -\Delta_C(k)\hat b^\dag_{kA}\hat b_{-kB}^\dag+ \text{h.c.}\right)\label{eq:k_space_capacitive_hamiltonian}\\
+        \hat H_J &= \hbar(g_{J,1} + g_{J,2})\sum_{k,\sigma}
+                \hat b^\dag_{k\sigma}\hat b_{k\sigma} 
+                - \frac{1}{2}\left(\hat b^\dag_{k\sigma}\hat b^\dag_{-k\sigma} + \text{h.c.}\right)+\delta_J\nonumber\\
+               &\quad -\sum_{k}\left(\Delta_J(k)\hat b^\dag_{kA} \hat b_{kB} +\Delta_J(k)\hat b^\dag_{kA}\hat b_{-kB}^\dag+ \text{h.c.}\right) \label{eq:k_space_josephson_hamiltonian}
+    \end{align}
+\end{subequations}
+donde se definieron
+\begin{subequations}
+    \begin{align}
+        \Delta_C(k) &= \hbar (g_{C,1} + g_{C,2}\, e^{-ik})\\
+        \Delta_J(k) &= \hbar (g_{J,1} + g_{J,2}\, e^{-ik})
+    \end{align}
+\end{subequations}
+para los siguientes análisis nos enfocamos en la resolución de este modelo en ausencia del término de interacción de dos cuerpos. Dado que nos concentraremos en la dinámica que surge en los primeros niveles de cada qubit, esperamos que el efecto del término Kerr pueda ser introducido de forma perturbativa.

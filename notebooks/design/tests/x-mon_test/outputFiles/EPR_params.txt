@@ -1,0 +1,32 @@
+Simulation Mode Frequencies:
+        Freq (GHz)
+mode_1   10.446465
+______________________________
+
+Renormalised Frequencies:
+ ***Freqs from simulation are adjusted for Lamb shift
+        Freq (GHz)
+mode_1    10.09314
+______________________________
+
+Participation Ratios:
+            jj_1
+mode_1  0.992281
+______________________________
+
+Chi Matrix (MHz):
+ ***Diag is Anharmonicity, Off-Diag is Cross-Kerr
+            mode_1
+mode_1  353.324478
+______________________________
+
+Lamb Shifts:
+        Lamb Shift (MHz)
+mode_1        353.324478
+______________________________
+
+Detuning (GHz):
+        mode_1
+mode_1     0.0
+______________________________
+

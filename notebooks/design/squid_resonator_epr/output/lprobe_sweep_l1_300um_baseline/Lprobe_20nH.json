@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "l_probe_nh": 20.0,
+  "l_transmon_nh": 10.0,
+  "modes": [
+    {
+      "m": 1,
+      "f_ghz": 7.7744,
+      "Q": 51570000.0,
+      "p": {
+        "probe": 5.984e-08,
+        "transmon": 9.33e-09
+      },
+      "assignment": "resonator_mode_1"
+    },
+    {
+      "m": 2,
+      "f_ghz": 14.5622,
+      "Q": 502800.0,
+      "p": {
+        "probe": 1.231e-05,
+        "transmon": 5.805e-06
+      },
+      "assignment": "resonator_mode_2"
+    },
+    {
+      "m": 3,
+      "f_ghz": 15.9481,
+      "Q": 475300.0,
+      "p": {
+        "probe": 4.083e-05,
+        "transmon": 6.554e-05
+      },
+      "assignment": "transmon"
+    }
+  ]
+}

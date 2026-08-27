@@ -1,0 +1,10 @@
+por primera vez con nitrógeno en serpentina:
+muestras 02 y 31 a las que se le hizo litografía y evaporación por primera vez con nitrógeno en serpentina
+muestra de prueba de solamente pads de aluminio Al01 
+observación 10-06-2026
+
+Los que empiezan con D1,D2,D3,D4 son pruebas de dosis siendo la primera 225 uC/s y luego x0.9, x0.8, x0.7
+Se ve que la de x0.8 = 180 uC/s es la que tiene todos los puentes sin caerse.
+
+AlTest 1 2 3 son del primer chip de aluminio con junturas entre pads
+Altest 4 es el del nuevo chip que tuvo menos tiempo de oxidacion

@@ -1,0 +1,12 @@
+{
+  "GitTag": "3b8c020",
+  "Problem": {
+    "DegreesOfFreedom": 1962396,
+    "MPISize": 8,
+    "MeshElements": 287609,
+    "MultigridDegreesOfFreedom": [
+      376989,
+      1962396
+    ]
+  }
+}

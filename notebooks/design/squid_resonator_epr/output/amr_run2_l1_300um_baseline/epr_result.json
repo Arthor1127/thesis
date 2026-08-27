@@ -1,0 +1,42 @@
+{
+  "status": "success",
+  "l_probe_nh": 15.0,
+  "l_transmon_nh": 10.0,
+  "modes": [
+    {
+      "m": 1,
+      "f_ghz": 7.968232436965,
+      "Q": 26537931.55917,
+      "p": {
+        "probe": 8.21974838e-08,
+        "transmon": 7.19622728e-11
+      },
+      "assignment": "resonator_mode_1"
+    },
+    {
+      "m": 2,
+      "f_ghz": 14.52202637195,
+      "Q": 478586.1062191,
+      "p": {
+        "probe": 1.68540144e-05,
+        "transmon": 5.79742142e-06
+      },
+      "assignment": "resonator_mode_2"
+    },
+    {
+      "m": 3,
+      "f_ghz": 15.94903824959,
+      "Q": 415732.51123,
+      "p": {
+        "probe": 5.10145802e-05,
+        "transmon": 6.03764536e-05
+      },
+      "assignment": "transmon"
+    }
+  ],
+  "mesh": {
+    "elements": 3795179,
+    "DoF": 4579392,
+    "note": "AMR run 2, iteration 2 (converged); iteration 3 crashed with an MFEM STable3D error"
+  }
+}

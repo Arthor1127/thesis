@@ -10,6 +10,13 @@ data/processed/
 *.npy
 *.npz
 
+# Palace/GMSH/Paraview simulation output - heavy generated files, not source
+*.pvd
+*.vtu
+*.pvtu
+*.msh
+*.mesh
+
 # Zotero - don't track if using auto-export
 # Uncomment if you want auto-updates from Zotero
 # paper/references.bib

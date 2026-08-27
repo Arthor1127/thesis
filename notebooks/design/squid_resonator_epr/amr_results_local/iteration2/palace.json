@@ -1,0 +1,81 @@
+{
+  "ElapsedTime": {
+    "Counts": {
+      "Adaptation": 1,
+      "CoarseSolve": 0,
+      "Construction": 4,
+      "DiskIO": 5,
+      "Div.-FreeProjection": 38,
+      "EigenvalueSolve": 2,
+      "Estimation": 8,
+      "FarFields": 0,
+      "Gridfunction": 0,
+      "Initialization": 2,
+      "LinearSolve": 34,
+      "MeshPreprocessing": 1,
+      "OperatorConstruction": 2,
+      "PROMConstruction": 0,
+      "PROMSolve": 0,
+      "Paraview": 6,
+      "Postprocessing": 10,
+      "Preconditioner": 34,
+      "Rebalancing": 1,
+      "Setup": 2,
+      "Solve": 8,
+      "TimeStepping": 0,
+      "Total": 2,
+      "WavePorts": 0
+    },
+    "Durations": {
+      "Adaptation": 0.947153727,
+      "CoarseSolve": 0.0,
+      "Construction": 13.372804466,
+      "DiskIO": 7.916440446,
+      "Div.-FreeProjection": 25.572135939999995,
+      "EigenvalueSolve": 4.024466519999999,
+      "Estimation": 0.46843186700000006,
+      "FarFields": 0.0,
+      "Gridfunction": 0.0,
+      "Initialization": 0.140174806,
+      "LinearSolve": 4.732710611000001,
+      "MeshPreprocessing": 7.505444343000001,
+      "OperatorConstruction": 15.151805865000002,
+      "PROMConstruction": 0.0,
+      "PROMSolve": 0.0,
+      "Paraview": 28.035947583000002,
+      "Postprocessing": 3.228780744000001,
+      "Preconditioner": 60.21533264400001,
+      "Rebalancing": 18.261922052,
+      "Setup": 2.365058427,
+      "Solve": 15.173163786,
+      "TimeStepping": 0.0,
+      "Total": 207.499784629,
+      "WavePorts": 0.0
+    }
+  },
+  "GitTag": "869ee5c",
+  "LinearSolver": {
+    "TotalIts": 17,
+    "TotalSolves": 17
+  },
+  "PeakMemoryMegabytes": {
+    "Average": 2446.146240234375,
+    "Max": 2655.67578125,
+    "Min": 2359.546875,
+    "Total": 39138.33984375
+  },
+  "PeakNodeMemoryMegabytes": {
+    "Average": 39138.33984375,
+    "Max": 39138.33984375,
+    "Min": 39138.33984375,
+    "Total": 39138.33984375
+  },
+  "Problem": {
+    "DegreesOfFreedom": 1588408,
+    "MPISize": 16,
+    "MeshElements": 1302514,
+    "MultigridDegreesOfFreedom": [
+      1588408
+    ]
+  }
+}

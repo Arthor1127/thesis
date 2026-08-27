@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "ground_pos_mm": 3.95,
+  "total_length_mm": 5.92905,
+  "mode_index": 0,
+  "target_freq_ghz": 15.0,
+  "resonance_ghz": 15.03829940696,
+  "q_factor": 403938.4201775,
+  "all_modes_ghz": [
+    15.03829940696,
+    17.12208678959,
+    27.31222476259
+  ],
+  "wall_time_s": 2310.8448615074158
+}

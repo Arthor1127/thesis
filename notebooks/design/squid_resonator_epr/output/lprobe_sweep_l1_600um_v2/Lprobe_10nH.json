@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "l_probe_nh": 10.0,
+  "l_transmon_nh": 10.0,
+  "modes": [
+    {
+      "m": 1,
+      "f_ghz": 7.8019,
+      "Q": 66080000.0,
+      "p": {
+        "probe": 6.668e-07,
+        "transmon": 2.648e-05
+      },
+      "assignment": "resonator_mode_1"
+    }
+  ]
+}

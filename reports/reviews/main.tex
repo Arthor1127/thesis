@@ -1,0 +1,54 @@
+\documentclass[reprint, superscriptaddress, amsmath, amssymb, aps, prb, floatfix]{revtex4-2}
+
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{subfig}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{bbm}
+\usepackage{csquotes}
+\usepackage[spanish, es-noshorthands]{babel}
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
+\begin{document}
+\title{Reporte de avances de tésis}
+\author{Arturo Ruiz}
+\email{arturo.ruiz@ib.edu.ar}
+\affiliation{Instituto Balseiro, Centro Atómico Bariloche, Comisión Nacional de Energía Atómica (CNEA), 8400 San Carlos de Bariloche, Argentina}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+    Se presentan avances hechos en la tésis de metamateriales de cavidad, desarrollos paso a paso como material suplementario y se deja una lista de tareas a completar.
+\end{abstract}
+\maketitle
+\section{Hamiltoniano en espacio real}
+\input{sections/real_space.tex}
+\section{Hamiltoniano en espacio de momentos}
+\input{sections/k_space.tex}
+\section{Diagonalización del hamiltoniano capacitivo}
+\input{sections/diagonalization.tex}
+\section{Transformación de Schrieffer-Wolff}
+\input{sections/schrieffer_wolff.tex}
+\section{Cuantización canónica del circuito}
+\input{sections/canonical_quantization.tex}
+\section{Constraints en los parámetros del circuito}
+\input{sections/constraints.tex}
+\section{Matrices de capacitancia en el \textit{strong inter-qubit coupling limit}}
+\input{sections/capacitance_matrix.tex}
+\section{Propuestas del diseño físico del dispositivo}
+\input{sections/device_design.tex}
+\section{Siguientes pasos}
+\input{sections/next_steps.tex}
+\section*{Agradecimientos}
+Recursos computacionales fueron provistos por el cluster HPC del Departamento de Física del Centro Atómico Bariloche.
+\appendix
+\input{sections/appendix.tex}
+\bibliography{bibliography}   % no .bib extension
+\end{document}

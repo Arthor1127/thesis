@@ -1,0 +1,34 @@
+La diagonalización explícita del hamiltoniano \eqref{eq:capacitive_hamiltonian} en el espacio de Fock es complicada de hacer computacionalmente. Esto es así porqué los términos anómalos de dicho hamiltoniano introducen acoplamientos entre subespacios de distinto número de excitaciones. Particularmente, los términos anómalos cambian el número de excitaciones en $\pm 2$ por lo que la única estructura en bloques que se podría aprovechar es la de paridad
+\begin{equation}
+    \hat H = \begin{pmatrix}
+        \hat H_{\text{odd}} & 0 \\
+        0 & \hat H_{\text{even}}
+    \end{pmatrix}
+\end{equation}
+conteniendo $\hat H_{\text{odd}}$ los elementos de matriz correspondientes a vectores del espacio de Fock con 1, 3, 5, $\ldots$ partículas y $\hat H_{\text{even}}$ lo propio (0, 2, 4, $\ldots$). Si el sistema tiene $N$ celdas unidad y $m$ excitaciones, se encuentra que dicho subespacio cuenta con ${2N + m - 1}\choose{m}$ vectores del espacio de Fock. Esto es computacionalmente desventajoso ya que la dimensión de cada subespacio crece factorialmente por lo que las correcciones de primer orden por términos anómalos piden un aumento masivo del espacio de Hilbert.\\~\\
+
+Para proceder, aprovechamos que \eqref{eq:capacitive_hamiltonian} es un hamiltoniano cuadrático por lo que es posible diagonalizarlo por una transformación de Bogoliubov. Como se detalla en \cite{vanHemmen1980}, primero escribimos el hamiltoniano de la forma
+\begin{align}
+    \hat H_C &= A_{ij}\hat b^\dag_i \hat b_j + B_{ij}\hat b^\dag_i \hat b^\dag_j + C_{ij}\hat b_i \hat b_j + D_{ij}\hat b_i \hat b^\dag_j\\
+    &= \mathbf b^\dag \mathbb D \mathbf b
+\end{align}
+con $\mathbf b = (\hat b_1, \hat b_2, \ldots, \hat b_{2N}, \hat b^\dag_1, \ldots, \hat b^\dag_{2N})^T$ y siendo $\mathbb D$ la matriz dinámica del sistema
+\begin{equation}
+    \mathbb{D} = \begin{pmatrix}
+        A&B\\
+        C&D
+    \end{pmatrix}
+\end{equation}
+En el caso bosónico, definimos la métrica simpléctica mediante
+\begin{equation}
+    \tilde I \equiv \sigma_z \otimes \mathbf I_{2N}
+\end{equation}
+siendo $\mathbf I$ la identidad. Con esto, se demuestra que sí $\mathbb D$ es estrictamente positiva, se pueden encontrar nuevos modos bosónicos $\mathbf b = T \mathbf \eta$ que diagonalizan todo el hamiltoniano 
+\begin{equation}
+    \hat H_C = \mathbf \eta^\dag \Omega \mathbf\eta
+\end{equation}
+con $\Omega = \operatorname{diag}(\omega_1, \, \omega_2, \ldots, \omega_{2N}, \,\omega_1, \ldots, \omega_{2N})$. Siendo $\omega_j$ los autovalores positivos del problema 
+\begin{equation}
+    \tilde I \mathbb D \vec x_j = \omega_j \vec x_j
+\end{equation}
+Se demuestra que (contar el apareamiento de autovalores en este problema y las manganetas que hago para armar la matriz de transformación de manera real).

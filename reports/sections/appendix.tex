@@ -1,0 +1,195 @@
+\section{Diagonalización del hamiltoniano capacitivo}
+Habiendo elegido el gauge \eqref{eq:first_gauge}, los hamiltonianos $\hat H_C$ y $\hat H_J$ pueden ser ambos escritos de la forma 
+\begin{align}
+  \hat H &= \sum_{k,\sigma}
+                \epsilon_{k\sigma} \hat b^\dag_{k\sigma}\hat b_{k\sigma} 
+                - \frac{\Delta_{k\sigma}}{2}\left(\hat b^\dag_{k\sigma}\hat b^\dag_{-k\sigma} + \text{h.c.}\right) \nonumber\\
+               &\quad +\sum_{k}\left(t_k\hat b^\dag_{k\sigma_1} \hat b_{k\sigma_2} +\Delta_k\hat b^\dag_{k\sigma_1}\hat b_{-k\sigma_2}^\dag+ \text{h.c.}\right)\label{eq:generalized_hamiltonian}
+\end{align}
+con $\sigma_{1,2} = A, B$. En la tabla \ref{tab:parametros}, se muestran que parámetros corresponden a cada hamiltoniano donde se definió $\tilde{\Delta}_J(k) = \Delta_J(k)e^{-i\left(\operatorname{Arg}\Delta_C(k)\right)}$.
+\begin{table}[h]
+\centering
+\caption{Parámetros iniciales del hamiltoniano para $H_C$ y $H_J$.}
+\label{tab:parametros}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+Parámetro & $\hat H_C$ & $\hat H_J$ \\
+\hline
+$\epsilon_{k\sigma}$ & $\hbar\omega_q$ & $\hbar(g_{J,1}+g_{J,2})$ \\
+$\Delta_{k\sigma}$ & $0$ & $\hbar(g_{J,1}+g_{J,2})$ \\
+$t_k$ & $\abs{\Delta_C(k)}$ & $-\tilde{\Delta}_J(k)$ \\
+$\Delta_k$ & $-\abs{\Delta_C(k)}$ & $-\tilde{\Delta}_J(k)$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+Ahora expresamos \eqref{eq:generalized_hamiltonian} en la base que diagonaliza $\mathcal{I}$ definido en \eqref{eq:symmetries}. Como $\mathcal I^2 = \mathbf{1}$, sus autovalores son $\pm 1$. Tomando la convención $\mathcal{I} \hat \alpha_{k} = \hat \alpha_{k}$, $\mathcal{I} \hat \beta_{k} = -\hat \beta_{k}$, llegamos a las expresiones
+\begin{subequations}
+  \begin{align}
+    \alpha_k &= \frac{\hat b_{kA} + \hat b_{kB}}{\sqrt{2}}\\
+    \beta_k &= \frac{\hat b_{kA} - \hat b_{kB}}{\sqrt{2}}
+  \end{align}\label{eq:alpha_beta}
+\end{subequations}
+Y definiendo $\hat \eta_{k+} \equiv \hat \alpha_k$, $\hat \eta_{k-} \equiv \hat \beta_k$,  llegamos a un hamiltoniano igual a \eqref{eq:generalized_hamiltonian} salvo que $b_{k\sigma} \rightarrow \hat \eta_{k\sigma}$ y los parámetros cambian a
+\begin{subequations}
+  \begin{align}
+    \epsilon_{k\sigma} &\rightarrow \epsilon_{k\sigma} \pm \operatorname{Re}\left(t_k\right)\\
+    \Delta_{k\sigma} &\rightarrow \Delta_{k\sigma} \mp \operatorname{Re}\left(\Delta_{k}\right)\\
+    t_k &\rightarrow -i\operatorname{Im}\left(t_k\right)\\
+    \Delta_k &\rightarrow -i\operatorname{Im}\left(\Delta_k\right)
+  \end{align}
+\end{subequations}
+Ahora expresamos \eqref{eq:generalized_hamiltonian} transformado en la base que diagonaliza $\mathcal{T}$ definido en \eqref{eq:symmetries}. Como $\mathcal T^2 = \mathbf{1}$, sus autovalores son $\pm 1$. Para $k>0, \neq \pi$ tomamos la convención 
+\begin{subequations}
+  \begin{align}
+    \mathcal{T} \hat c_{kA} &= \hat c_{kA}\\
+    \mathcal{T} \hat c_{-kA} &= -\hat c_{-kA}\\
+    \mathcal{T} \hat c_{kB} &= -\hat c_{kB}\\
+    \mathcal{T} \hat c_{-kB} &= \hat c_{kB}
+  \end{align}
+\end{subequations}
+Por lo cual 
+\begin{subequations}
+  \begin{align}
+    \hat c_{kA} &= \frac{\hat b_{\abs{kA}} + \operatorname{Sgn}(k) \hat b_{-\abs{k}A}}{\sqrt{2}}\\
+    \hat c_{kB} &= \frac{\hat b_{-\abs{k}B} + \operatorname{Sgn}(k) \hat b_{\abs{k}B}}{\sqrt{2}}
+  \end{align}
+\end{subequations}
+Mientras que para $k = 0, \pi$, $\hat c_{k\sigma} \equiv \hat \eta_{k\sigma}$. De esta forma, suponiendo que $\epsilon_{k\sigma}$ y $\Delta_{k\sigma}$ son pares ante $k \rightarrow -k$, el hamiltoniano \eqref{eq:generalized_hamiltonian} transformó a 
+\begin{align}
+  \hat H &= \sum_{k,\sigma}
+                \epsilon'_{k\sigma} \hat c^\dag_{k\sigma}\hat c_{k\sigma} 
+                - \frac{\Delta'_{k\sigma}}{2}\left((\hat c^\dag_{k\sigma})^2 + \text{h.c.}\right) \nonumber\\
+               &\quad +\sum_{k}\left(t'_k\hat c^\dag_{kA} \hat c_{kB} +\Delta'_k\hat c^\dag_{kA}\hat c_{kB}^\dag+ \text{h.c.}\right)\nonumber\\
+               &\quad +\sum_{k}\left(t''_k\hat c^\dag_{kA} \hat c_{-kB} +\Delta''_k\hat c^\dag_{kA}\hat c_{-kB}^\dag+ \text{h.c.}\right)\label{eq:time_reversal_transform}
+\end{align}
+con los siguientes parámetros
+\begin{subequations}
+  \begin{align}
+    \epsilon'_{k\sigma} &= \epsilon_{k\sigma}\\
+    \Delta'_{kA} &= \operatorname{Sgn}(k) \Delta_{kA}\\
+    \Delta'_{kB} &= -\operatorname{Sgn}(k) \Delta_{kB}\\
+    t'_k &= \operatorname{Sgn}(k)i\operatorname{Im}\left(t_k\right)\\
+    \Delta'_k &= -i\operatorname{Im}\left(\Delta_k\right)\\
+    t''_k &= \operatorname{Re}\left(t_k\right)\\
+    \Delta''_k &= \operatorname{Sgn}(k) \operatorname{Re}\left(\Delta_k\right)
+  \end{align}
+\end{subequations}
+Si pensamos que aplicamos la transformación \eqref{eq:alpha_beta}, entonces $t_k$ y $\Delta_k$ son puramente imaginarios y por tanto $t''_k = \Delta''_k =0$. De todo esto, se puede demostrar que concatenando ambas transformaciones, llegamos a un hamiltoniano \eqref{eq:time_reversal_transform} con los parámetros que se muestran en la tabla \ref{tab:parametros_finales}
+\begin{table}[h]
+\centering
+\caption{Parámetros iniciales del hamiltoniano para $H_C$ y $H_J$.}
+\label{tab:parametros_finales}
+\begin{ruledtabular}
+\begin{tabular}{l|c|c}
+Parámetro & $\hat H_C$ & $\hat H_J$ \\
+\hline
+$\epsilon'_{kA}$ & $\hbar\omega_q + \abs{\Delta_C}$ & $\hbar(g_{J,1}+g_{J,2})-\operatorname{Re}(\tilde{\Delta}_J)$ \\
+$\epsilon'_{kB}$ & $\hbar\omega_q - \abs{\Delta_C}$ & $\hbar(g_{J,1}+g_{J,2}) + \operatorname{Re}(\tilde{\Delta}_J)$ \\
+$\Delta'_{kA}$ & $\operatorname{Sgn}(k)\abs{\Delta_{C}}$ & $\operatorname{Sgn}(k)\left(\operatorname{Re}(\tilde{\Delta}_J) + \hbar(g_{J,1}+g_{J,2})\right)$ \\
+$\Delta'_{kB}$ & $\operatorname{Sgn}(k)\abs{\Delta_{C}}$ & $\operatorname{Sgn}(k)\left(\operatorname{Re}(\tilde{\Delta}_J) - \hbar(g_{J,1}+g_{J,2})\right)$ \\
+$t'_k$ & $0$ & $i\operatorname{Sgn}(k)\operatorname{Im}(\tilde{\Delta}_J)$ \\
+$\Delta'_k$ & $0$ & $-i\operatorname{Im}(\tilde{\Delta}_J)$ 
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+Finalmente, vemos el efecto de realizar una transformación squeeze como en \eqref{eq:squeeze_transform_total}. En este caso, el hamiltoniano mantiene su forma pero los coeficientes transforman como 
+\begin{subequations}
+  \begin{align}
+    \epsilon'_{k\sigma}&\rightarrow \epsilon'_{k\sigma} \cosh(2z_{k\sigma}) + \Delta'_{k\sigma}\sinh(2z_{k\sigma})\\
+    \Delta'_{k\sigma}&\rightarrow \Delta'_{k\sigma} \cosh(2z_{k\sigma}) + \epsilon'_{k\sigma}\sinh(2z_{k\sigma})\\
+    t'_k &\rightarrow t'_k \cosh(z_{kA} - z_{kB}) + \Delta'_k \sinh(z_{kA} - z_{kB})\\ 
+    \Delta'_k &\rightarrow \Delta'_k \cosh(z_{kA} - z_{kB}) + t'_k \sinh(z_{kA} - z_{kB})
+  \end{align}
+\end{subequations}
+donde se aprovechó el hecho que $t'_k$, $\Delta'_k$ son imaginarios puros mientras que el resto de parámetros son reales. Para diagonalizar $\hat H_C$ queremos que $\Delta'_{k\sigma} = 0$ tras la transformación por lo cual elegimos
+\begin{equation}
+  \tanh(2z_{k\sigma}) = \frac{-\operatorname{Sgn}(k)\abs{\Delta_C}}{\hbar \omega_q \pm \abs{\Delta_C}}
+\end{equation}
+de lo cual $z_{kA}-z_{kB} = -\operatorname{Sgn}(k)\left(\abs{z_{kA}} - \abs{z_{kB}}\right)$ y aprovechando que $t'k = -\operatorname{Sgn}(k)\Delta'_k$ se ve que
+% \begin{equation}
+   de esta forma llegamos a
+\begin{equation}
+    \hat H_C = \sum_{k\sigma}\varepsilon_{k\sigma} \hat \eta_{k\sigma}^\dag \hat \eta_{k\sigma} - \frac{\Delta_{k\sigma}}{2}\left(\hat \eta^\dag_{k\sigma}\hat \eta^\dag_{k\sigma} + \hat \eta_{k\sigma}\hat \eta_{k\sigma}\right)\label{eq:semi_diagonalized_Hc}
+\end{equation}
+con 
+\begin{subequations}
+    \begin{align}
+        \varepsilon_{k\pm} &= \hbar \omega_q \pm \abs{\Delta_C(k)}\\
+        \Delta_{k\pm} &= \pm \operatorname{sgn}(k)\abs{\Delta_C(k)}.
+    \end{align}
+\end{subequations}
+% \end{equation}
+
+% Finalmente, presentamos como queda el hamiltoniano Josephson tras aplicar estas transformaciones 
+% \begin{align}
+%     \hat S^\dag \hat H_J \hat S &= \sum_{k\sigma}\varepsilon_{k\sigma}^J \hat \eta_{k\sigma}^\dag \hat \eta_{k\sigma} -\frac{\Delta_{k\sigma}^J}{2}\left(\hat \eta^\dag_{k\sigma} \hat \eta^\dag_{k\sigma} + \hat \eta_{k\sigma} \hat \eta_{k\sigma}\right)\nonumber\\
+%     &\quad +\sum_{k}\left( t_k \hat \alpha^\dag_k \beta_k -\Delta_k^J \hat \alpha^\dag_k \hat \beta^\dag_k +\operatorname{h.c.}\right) + \Delta E_J
+% \end{align}
+% definiendo los siguientes variables
+% \begin{subequations}
+%     \begin{align}
+%         T_{k\pm}^J &= \hbar (g_{J,1} + g_{J, 2}) \mp \operatorname{Re}\left(\Delta_J e^{-i\varphi_C(k)}\right)\\
+%         K_{k\pm}^J &= \pm\operatorname{sgn}(k)\left(\hbar (g_{J,1} + g_{J, 2}) \pm \operatorname{Re}\left(\Delta_J e^{-i\varphi_C(k)}\right)\right)
+%     \end{align}
+% \end{subequations}
+% el hamiltoniano tiene los siguientes parámetros:
+% \begin{subequations}
+%     \begin{align}
+% \epsilon_{k\sigma}^J &= \frac{1}{E_{k\sigma}}\left(T_{k\sigma}^J \varepsilon_{k\sigma} - K_{k\sigma} \Delta_{k\sigma}\right)\\ 
+% \Delta_{k\alpha}^J &= \frac{1}{E_{k\sigma}}\left(K_{k\sigma}\varepsilon_{k\sigma} - T_{k\sigma}\Delta_{k\sigma}\right)\\
+% t_{k} &= i\frac{\hbar^2 (g_{C,2} g_{J,1} - g_{C,1}g_{J,2})}{\abs{\Delta_C(k)}}\left(1- \frac{4\vert \Delta_C(k)\vert^2}{(\hbar \omega_q)^2}\right)^{-1/4}\sin k \\
+% \Delta_{k} &= -\operatorname{sgn}(k)\, t_{k} = -\abs{t_{k}}\\
+% \Delta E_J &= \sum_{k\sigma}\frac{1}{2E_{k\sigma}}\left(T_{k\sigma}^J(\varepsilon_{k\sigma} - E_{k\sigma}) - K_{k\sigma}^J \Delta_{k\sigma} \right)+\delta_J 
+% \end{align}
+% \end{subequations}
+
+% Particularizamos algunas de estas expresiones para los acoplamientos tipo simétricos ($g_{J,1} = g_{J,2}$) y antisimétrico $g_{J,1} = -g_{J,2}$ con la cavidad usando las expresiones \eqref{eq:coupling_auxiliary_variables}, definimos
+% \begin{equation}
+%     \delta_C(k)\equiv \sqrt{\chi_C^2 + (1-\chi_C^2)\cos(k/2)}
+% \end{equation}
+% \begin{subequations}
+%     \begin{align}
+%         T_{k\pm}^J &= \begin{cases}
+% 2\hbar g_J \cdot \left(1\mp \frac{\cos^2(k/2)}{\delta_C(k)}\right), & \text{symm}\\
+% \mp2\hbar g_J \chi_C\cdot\frac{ \sin^2(k/2)}{\delta_C(k)}, & \text{antisymm}
+% \end{cases}\\
+%     K_{k\pm}^J &= \begin{cases}
+% 2\hbar g_J \cdot \operatorname{sgn}(k) \left( -  \frac{\cos^2(k/2)}{\delta_C(k)}\pm 1\right), \, \text{symm}\\
+%                         2\hbar g_J \chi_C\cdot\frac{\operatorname{sgn}(k)\sin^2(k/2)}{\delta_C(k)}, \quad\text{antisymm}
+% \end{cases}\\
+%     t_k &= \begin{cases}
+%         i\hbar  g_J \chi_C\cdot \frac{\sin(k)}{\delta_C(k)\left[1-\left(\frac{4g_C}{\omega_q}\right)^2 \delta_C^2(k)\right]^{1/4}}, & \text{symm}\\
+%          i\hbar  g_J \cdot \frac{\sin(k)}{\delta_C(k)\left[1-\left(\frac{4g_C}{\omega_q}\right)^2 \delta_C^2(k)\right]^{1/4}}, & \text{antisymm}
+% \end{cases}
+% \end{align}
+% \end{subequations}
+% de lo cual se observa que estas cantidades en estos casos solo dependen de la magnitud de acoplamiento por SQUIDs $g_J\equiv g_{J,1},\abs{g_{J,2}}$ y la dimerización $\chi_C$ salvo $t_k$ que a su vez depende de la relación del acoplamiento respecto a la frecuencia de transición de los transmon.
+\subsection{Perturbaciones a primer orden del término Kerr}
+La interacción de dos cuerpos expresada en la base que diagonaliza $H_C$ se expresa de la siguiente manera:
+\begin{equation}
+  \hat H_{\text{Kerr}} = \sum_{k\sigma} \text{algo}
+\end{equation}
+Quedándonos con la parte diagonal
+\begin{widetext}
+\begin{equation}
+\begin{aligned}
+H_\text{eff} = \frac{U}{N} \Biggl\{
+&-4\left(\sum_k f_k\Bigl(\hat{n}_{\alpha k}+\tfrac{1}{2}\Bigr)\right)
+  \left(\sum_q (f_q+g_q)\Bigl(\hat{n}_{\beta q}+\tfrac{1}{2}\Bigr)\right)
+-4\left(\sum_k g_k\Bigl(\hat{n}_{\beta k}+\tfrac{1}{2}\Bigr)\right)
+  \left(\sum_q (f_q+g_q)\Bigl(\hat{n}_{\alpha q}+\tfrac{1}{2}\Bigr)\right)
+\\
+&-\left(\sum_k \cosh^2\!\theta^+_k\,\hat{n}_{\alpha k}\right)
+  \left(\sum_q \sinh^2\!\theta^+_q\Bigl(\hat{n}_{\alpha q}+1\Bigr)\right)
+-\left(\sum_k \cosh^2\!\theta^-_k\,\hat{n}_{\beta k}\right)
+  \left(\sum_q \sinh^2\!\theta^-_q\Bigl(\hat{n}_{\beta q}+1\Bigr)\right)
+\\
+&+\sum_k\left[f_k^2\Bigl(\hat{n}_{\alpha k}+\tfrac{1}{2}\Bigr)
+  + g_k^2\Bigl(\hat{n}_{\beta k}+\tfrac{1}{2}\Bigr)\right]
+\Biggr\},
+\end{aligned}
+\label{eq:Heff}
+\end{equation}
+\end{widetext}
+donde $f_k = \sinh(2\theta^+_k)/2 = |\Delta_k|/2E^+_k$ y
+$g_k = \sinh(2\theta^-_k)/2 = -|\Delta_k|/2E^-_k$.

@@ -1,0 +1,141 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "coarse_smoke_test.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          4
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          5
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        3,
+        7,
+        6,
+        9,
+        8,
+        11,
+        10
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Attributes": [
+          1
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1e-08,
+        "C": 2e-15
+      },
+      {
+        "Index": 2,
+        "Attributes": [
+          2
+        ],
+        "Direction": [
+          -1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.5000000000000002e-08,
+        "C": 1.5000000000000001e-15
+      }
+    ],
+    "WavePort": [],
+    "Postprocessing": {
+      "Dielectric": [
+        {
+          "Index": 1,
+          "Attributes": [
+            12,
+            13
+          ],
+          "Type": "SA",
+          "Thickness": 2e-06,
+          "Permittivity": 3.85,
+          "LossTan": 0.006
+        },
+        {
+          "Index": 2,
+          "Attributes": [
+            3,
+            7,
+            6,
+            9,
+            8,
+            11,
+            10
+          ],
+          "Type": "MS",
+          "Thickness": 2e-06,
+          "Permittivity": 10.0,
+          "LossTan": 0.0003
+        },
+        {
+          "Index": 3,
+          "Attributes": [
+            3,
+            7,
+            6,
+            9,
+            8,
+            11,
+            10
+          ],
+          "Type": "MA",
+          "Thickness": 2e-06,
+          "Permittivity": 10.0,
+          "LossTan": 0.0005
+        }
+      ]
+    }
+  },
+  "Solver": {
+    "Order": 1,
+    "Eigenmode": {
+      "N": 2,
+      "Tol": 1e-05,
+      "Target": 7.0,
+      "Save": 2
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-05,
+      "MaxIts": 300
+    }
+  }
+}

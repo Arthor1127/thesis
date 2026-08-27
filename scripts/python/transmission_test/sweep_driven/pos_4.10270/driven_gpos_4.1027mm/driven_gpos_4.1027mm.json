@@ -1,0 +1,127 @@
+{
+  "Problem": {
+    "Type": "Driven",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "driven_gpos_4.1027mm.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          7
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          8
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 1.2e-05
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        5,
+        6,
+        10,
+        9,
+        12,
+        11,
+        14,
+        13
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Elements": [
+          {
+            "Attributes": [
+              1
+            ],
+            "Direction": [
+              -0.0,
+              -1.0,
+              0
+            ]
+          },
+          {
+            "Attributes": [
+              2
+            ],
+            "Direction": [
+              0.0,
+              1.0,
+              0
+            ]
+          }
+        ],
+        "R": 50,
+        "L": 0,
+        "C": 0,
+        "Excitation": true
+      },
+      {
+        "Index": 2,
+        "Elements": [
+          {
+            "Attributes": [
+              3
+            ],
+            "Direction": [
+              0.0,
+              1.0,
+              0
+            ]
+          },
+          {
+            "Attributes": [
+              4
+            ],
+            "Direction": [
+              -0.0,
+              -1.0,
+              0
+            ]
+          }
+        ],
+        "R": 50,
+        "L": 0,
+        "C": 0
+      }
+    ],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 2,
+    "Driven": {
+      "MinFreq": 14.0,
+      "MaxFreq": 16.0,
+      "FreqStep": 0.001,
+      "SaveStep": 10,
+      "AdaptiveTol": 0.001,
+      "AdaptiveMaxSamples": 40
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-06,
+      "MaxIts": 500,
+      "InitialGuess": true
+    }
+  }
+}

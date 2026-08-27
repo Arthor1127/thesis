@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "ground_pos_mm": 3.9527,
+  "total_length_mm": 5.92905,
+  "freq_start_ghz": 14.0,
+  "freq_end_ghz": 16.0,
+  "n_points": 2001,
+  "solver_order": 2,
+  "adaptive_tol": 0.001,
+  "wall_time_s": 2162.809544324875,
+  "s21_min_db": -16.3674219459,
+  "s21_min_freq_ghz": 14.789,
+  "s21_min_at_band_edge": false
+}

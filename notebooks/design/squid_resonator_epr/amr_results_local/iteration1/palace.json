@@ -1,0 +1,81 @@
+{
+  "ElapsedTime": {
+    "Counts": {
+      "Adaptation": 0,
+      "CoarseSolve": 0,
+      "Construction": 2,
+      "DiskIO": 3,
+      "Div.-FreeProjection": 19,
+      "EigenvalueSolve": 1,
+      "Estimation": 4,
+      "FarFields": 0,
+      "Gridfunction": 0,
+      "Initialization": 2,
+      "LinearSolve": 17,
+      "MeshPreprocessing": 1,
+      "OperatorConstruction": 1,
+      "PROMConstruction": 0,
+      "PROMSolve": 0,
+      "Paraview": 3,
+      "Postprocessing": 5,
+      "Preconditioner": 17,
+      "Rebalancing": 0,
+      "Setup": 1,
+      "Solve": 4,
+      "TimeStepping": 0,
+      "Total": 1,
+      "WavePorts": 0
+    },
+    "Durations": {
+      "Adaptation": 0.0,
+      "CoarseSolve": 0.0,
+      "Construction": 3.3248537689999997,
+      "DiskIO": 2.015447848,
+      "Div.-FreeProjection": 6.0081499759999994,
+      "EigenvalueSolve": 1.074400912,
+      "Estimation": 0.111890422,
+      "FarFields": 0.0,
+      "Gridfunction": 0.0,
+      "Initialization": 0.140174806,
+      "LinearSolve": 1.2338417,
+      "MeshPreprocessing": 7.505444343000001,
+      "OperatorConstruction": 3.822651922,
+      "PROMConstruction": 0.0,
+      "PROMSolve": 0.0,
+      "Paraview": 8.372126896,
+      "Postprocessing": 1.1752825890000003,
+      "Preconditioner": 14.397287393,
+      "Rebalancing": 0.0,
+      "Setup": 0.590912279,
+      "Solve": 3.596904531,
+      "TimeStepping": 0.0,
+      "Total": 53.659237272,
+      "WavePorts": 0.0
+    }
+  },
+  "GitTag": "869ee5c",
+  "LinearSolver": {
+    "TotalIts": 17,
+    "TotalSolves": 17
+  },
+  "PeakMemoryMegabytes": {
+    "Average": 753.261962890625,
+    "Max": 826.03125,
+    "Min": 725.78125,
+    "Total": 12052.19140625
+  },
+  "PeakNodeMemoryMegabytes": {
+    "Average": 12052.19140625,
+    "Max": 12052.19140625,
+    "Min": 12052.19140625,
+    "Total": 12052.19140625
+  },
+  "Problem": {
+    "DegreesOfFreedom": 499472,
+    "MPISize": 16,
+    "MeshElements": 393357,
+    "MultigridDegreesOfFreedom": [
+      499472
+    ]
+  }
+}
