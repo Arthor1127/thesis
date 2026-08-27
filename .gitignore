@@ -10,6 +10,12 @@ data/processed/
 *.npy
 *.npz
 
+# GDS layout files - large binary, regenerated from design scripts
+*.gds
+
+# qcgoptimizer - work in progress, not ready to publish
+scripts/claude/qcgoptimizer_implementation_plan.md
+
 # Palace/GMSH/Paraview simulation output - heavy generated files, not source
 *.pvd
 *.vtu
