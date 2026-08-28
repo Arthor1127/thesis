@@ -26,6 +26,9 @@ toc:
           - file: notebooks/exploration/multiple_transmon.ipynb
       - title: Analysis
         children: []
+      - title: Design
+        children:
+          - file: notebooks/design/qcgoptimizer/qcgoptimizer.ipynb
   - title: Notes
     children:
       - file: notes/README.md
