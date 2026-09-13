@@ -1,0 +1,94 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "qpdk_launcher_resonator.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          4
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          5
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        3,
+        7,
+        6,
+        9,
+        8,
+        11,
+        10
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Elements": [
+          {
+            "Attributes": [
+              1
+            ],
+            "Direction": [
+              1.0,
+              -1.2246467991473535e-16,
+              0
+            ]
+          },
+          {
+            "Attributes": [
+              2
+            ],
+            "Direction": [
+              -1.0,
+              1.2246467991473535e-16,
+              0
+            ]
+          }
+        ],
+        "R": 50,
+        "L": 0,
+        "C": 0
+      }
+    ],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 2,
+    "Eigenmode": {
+      "N": 5,
+      "Tol": 1e-08,
+      "Target": 5.5,
+      "Save": 5
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-08,
+      "MaxIts": 100
+    }
+  }
+}

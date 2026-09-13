@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Stackup>
+    <Materials>
+        <Material Name="Silicon" Type="Dielectric" Permittivity="11.45" DielectricLossTangent="0.0" Conductivity="0.0" />
+    </Materials>
+    <Dielectrics>
+        <Dielectric Name="Substrate" Material="Silicon" Zmin="-500e-6" Zmax="0" Thickness="500e-6" />
+    </Dielectrics>
+    <Layers>
+        <Layer Name="Metal1" Layer="1" Type="CONDUCTOR" Material="Silicon" Zmin="0" Zmax="0" />
+    </Layers>
+</Stackup>

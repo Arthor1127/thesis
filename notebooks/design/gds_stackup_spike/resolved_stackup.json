@@ -1,0 +1,6 @@
+{
+  "material_name": "Silicon",
+  "permittivity": 11.45,
+  "chip_thickness_m": 0.0005,
+  "metal_gds_layer": 1
+}

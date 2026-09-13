@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gds-stackup-pipeline"
+version = "0.1.0"
+description = "Runs SQDMetal PALACE eigenmode simulations from a raw GDS layout + an XML material stackup, via SQDMetal's native gds_design= input branch."
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "gdstk",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

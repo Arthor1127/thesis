@@ -1,0 +1,16 @@
+{
+  "gds_path": "/home/ruiz/Documents/thesis/notebooks/design/gds_pipeline/qpdk_launcher_resonator.gds",
+  "stackup_xml_path": "/home/ruiz/Documents/thesis/notebooks/design/gds_pipeline/qpdk_stackup.xml",
+  "port_pt_near_centre_end_m": [
+    4.9999999999999996e-06,
+    -6.123233995736766e-22
+  ],
+  "port_len_launch_m": 2e-05,
+  "max_feature_size_m": 2e-05,
+  "segment_rectangle_m": [
+    -0.00019999999999999998,
+    -0.001491,
+    0.000969143,
+    0.00045999999999999996
+  ]
+}
