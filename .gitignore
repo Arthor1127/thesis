@@ -10,6 +10,10 @@ data/processed/
 *.npy
 *.npz
 
+# Core dumps -- a crashed MPI/Palace rank can leave one of these in a sim
+# output dir; never worth tracking
+core.[0-9]*
+
 # GDS layout files - large binary, regenerated from design scripts
 *.gds
 
