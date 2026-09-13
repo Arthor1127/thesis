@@ -1,0 +1,37 @@
+{
+  "source": "job 1938614, 16 pts, order 2, eps_r=11.9, h_substrate=500 um",
+  "eps_eff_over_eps0": 6.45,
+  "naive_physical": {
+    "A": 8.0,
+    "B": 2.5464790894703255,
+    "max_rel_resid": 0.15484450085929793,
+    "rms_rel_resid": 0.06078984088176401
+  },
+  "fit1_plain_log_full_range": {
+    "A": 7.392914555185157,
+    "B": 2.830883760618272,
+    "R2": 0.9307642778213356,
+    "max_rel_resid": 0.13990729765778476,
+    "rms_rel_resid": 0.05888511056224273,
+    "n": 16
+  },
+  "fit2_with_substrate_term": {
+    "form": "C/(eps_eff a) = A + B ln(a/g) - F (a/h),  h = 500 um",
+    "A": 8.199581080364474,
+    "B": 3.28168173229036,
+    "F": 6.379247101107467,
+    "R2": 0.9914586220101754,
+    "max_rel_resid": 0.0677334246029048,
+    "rms_rel_resid": 0.021777160900644757,
+    "n": 16
+  },
+  "fit3_plain_log_transmon_box_a>=100_g<=24": {
+    "A": 5.492408462476178,
+    "B": 3.4225302347084985,
+    "R2": 0.960702366935266,
+    "max_rel_resid": 0.04424396569822019,
+    "rms_rel_resid": 0.029141079064901376,
+    "n": 6
+  },
+  "note": "Plain a/g scaling has a ~14 pct systematic residual that grows with a at fixed g -- the finite 500um substrate breaks the scale invariance. The a/h term absorbs it (max resid 14 pct -> 7 pct); A2,B2 are the thick-substrate coefficients. For real transmon islands (a=100-220um, g=6-24um on 500um Si) use fit3 (A=5.49, B=3.42, 4 pct max)."
+}

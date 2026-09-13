@@ -1,0 +1,6 @@
+6000 auto hs6000
+3000 14.8 hs3000_bigbox
+4000 auto hs4000
+3000 auto hs3000
+2000 auto hs2000
+1000 auto hs1000

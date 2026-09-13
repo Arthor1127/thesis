@@ -1,0 +1,44 @@
+{
+  "geometry": "cs25_cl100",
+  "tag": "eigen_qc_cs25_cl100",
+  "r_eff_ohm": 50.0,
+  "r_per_gap_ohm": 100.0,
+  "n_gaps_per_port": 2,
+  "n_ports": 2,
+  "si_tandelta": 1.2e-05,
+  "palace_reference": {
+    "eigenmode_Qc": 121515
+  },
+  "geometry_note": "Part 2 secondary. PALACE Qc well into its saturated zone.",
+  "resonator_mode": {
+    "fr_hz": 8511862168.05619,
+    "fr_ghz": 8.51186216805619,
+    "fi_hz": 46561.3010519459,
+    "Q_total_hfss": 91404.90037595782,
+    "Qc": 10205022.64039825,
+    "Qc_note": "NOT RESOLVED. Q_total_hfss (91405) equals the dielectric Qi (~92231) to within noise -> the R=50 ports add no measurable loss to the resonator mode -> its coupling Qc is unresolved (the printed Qc, from 1/Qc=1/Q_total-1/Qi, is a ratio of two near-equal numbers and is meaningless). The ~16.5 GHz feedline mode IS damped (see all_modes), so the ports work; the coupler gap is just under-meshed.",
+    "Qc_resolved": false
+  },
+  "pass_history": [],
+  "all_modes": [
+    {
+      "f_hz": 8511862168.05619,
+      "f_im_hz": 46561.3010519459,
+      "f_ghz": 8.51186216805619,
+      "Q": 91404.90037595782
+    },
+    {
+      "f_hz": 16461258983.2392,
+      "f_im_hz": 448317.288271717,
+      "f_ghz": 16.4612589832392,
+      "Q": 18358.93842806964
+    },
+    {
+      "f_hz": 17543635945.252,
+      "f_im_hz": 354671.318245462,
+      "f_ghz": 17.543635945252,
+      "Q": 24732.245099546428
+    }
+  ],
+  "solve_s": 233.1
+}

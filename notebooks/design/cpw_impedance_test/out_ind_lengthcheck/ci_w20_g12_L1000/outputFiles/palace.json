@@ -1,0 +1,81 @@
+{
+  "ElapsedTime": {
+    "Counts": {
+      "Adaptation": 2,
+      "CoarseSolve": 0,
+      "Construction": 3,
+      "DiskIO": 5,
+      "Div.-FreeProjection": 0,
+      "EigenvalueSolve": 0,
+      "Estimation": 3,
+      "FarFields": 0,
+      "Gridfunction": 0,
+      "Initialization": 2,
+      "LinearSolve": 3,
+      "MeshPreprocessing": 1,
+      "OperatorConstruction": 3,
+      "PROMConstruction": 0,
+      "PROMSolve": 0,
+      "Paraview": 6,
+      "Postprocessing": 12,
+      "Preconditioner": 796,
+      "Rebalancing": 2,
+      "Setup": 3,
+      "Solve": 3,
+      "TimeStepping": 0,
+      "Total": 3,
+      "WavePorts": 0
+    },
+    "Durations": {
+      "Adaptation": 3.0219760350000002,
+      "CoarseSolve": 0.0,
+      "Construction": 51.912415184,
+      "DiskIO": 9.613203181000001,
+      "Div.-FreeProjection": 0.0,
+      "EigenvalueSolve": 0.0,
+      "Estimation": 0.326111986,
+      "FarFields": 0.0,
+      "Gridfunction": 0.0,
+      "Initialization": 0.475043575,
+      "LinearSolve": 6.317968506999994,
+      "MeshPreprocessing": 11.312484797000002,
+      "OperatorConstruction": 3.0074171909999996,
+      "PROMConstruction": 0.0,
+      "PROMSolve": 0.0,
+      "Paraview": 16.398089318,
+      "Postprocessing": 0.745958823,
+      "Preconditioner": 47.21275878499994,
+      "Rebalancing": 26.423105794,
+      "Setup": 3.0380500550000002,
+      "Solve": 16.901053241,
+      "TimeStepping": 0.0,
+      "Total": 197.205319814,
+      "WavePorts": 0.0
+    }
+  },
+  "GitTag": "869ee5c",
+  "LinearSolver": {
+    "TotalIts": 318,
+    "TotalSolves": 1
+  },
+  "PeakMemoryMegabytes": {
+    "Average": 943.63232421875,
+    "Max": 948.515625,
+    "Min": 938.375,
+    "Total": 7549.05859375
+  },
+  "PeakNodeMemoryMegabytes": {
+    "Average": 7549.05859375,
+    "Max": 7549.05859375,
+    "Min": 7549.05859375,
+    "Total": 7549.05859375
+  },
+  "Problem": {
+    "DegreesOfFreedom": 2040687,
+    "MPISize": 8,
+    "MeshElements": 1690293,
+    "MultigridDegreesOfFreedom": [
+      2040687
+    ]
+  }
+}

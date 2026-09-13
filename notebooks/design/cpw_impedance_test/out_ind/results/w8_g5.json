@@ -1,0 +1,26 @@
+{
+  "tag": "w8_g5",
+  "cpw_width_um": 8.0,
+  "cpw_gap_um": 5.0,
+  "length_um": 3000.0,
+  "margin_um": 30.0,
+  "integration_length_um": 2940.0,
+  "full3d": false,
+  "metal_thickness_nm": null,
+  "Phi_Wb": 1.58674961812e-15,
+  "I_A": 0.05152105132651,
+  "L_total_H": 3.079808306053613e-14,
+  "Lprime_H_per_m": 1.047553845596467e-11,
+  "Lprime_nH_per_um": 1.047553845596467e-08,
+  "n_tet": 4762139,
+  "n_nod": 806410,
+  "amr": {
+    "enabled": true,
+    "iterations_requested": 4,
+    "tolerance": 0.01,
+    "max_dofs": 3000000,
+    "convergence": []
+  },
+  "solve_seconds": 390.8,
+  "total_seconds": 462.3
+}

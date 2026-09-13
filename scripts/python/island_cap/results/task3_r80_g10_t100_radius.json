@@ -1,0 +1,27 @@
+{
+  "tag": "task3_r80_g10_t100_radius",
+  "radius_um": 80.0,
+  "gap_um": 10.0,
+  "thickness_nm": 100.0,
+  "eps_r": 11.9,
+  "b_over_a": 1.125,
+  "C_island_ground_F": 7.205190890036e-14,
+  "C_island_ground_fF": 72.05190890036,
+  "C_island_self_fF": 77.58100547527,
+  "C_formula_coax_fF": 0.304653077484585,
+  "ratio_sim_over_formula": 236.50477945362533,
+  "maxwell_matrix_F": [
+    [
+      3.051407960311e-13,
+      -7.205190890036e-14
+    ],
+    [
+      -7.205190890036e-14,
+      7.758100547527e-14
+    ]
+  ],
+  "dof": 48441,
+  "mesh_elements": 281277,
+  "solve_s": 7.727842569351196,
+  "wall_s": 62.746848821640015
+}

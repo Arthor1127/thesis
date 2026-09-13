@@ -1,0 +1,416 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+
+% ---------------------------------------------------------------------------
+% notation
+% ---------------------------------------------------------------------------
+\newcommand{\dC}{\delta_{C,k}}
+\newcommand{\dJ}{\delta_{J,k}}
+\newcommand{\dCb}{\bar\delta_{C,k}}
+\newcommand{\dJb}{\bar\delta_{J,k}}
+\newcommand{\kk}{\kappa_k}
+\newcommand{\ph}{\varphi_k}
+\newcommand{\gJ}{g_J}
+\newcommand{\wa}{w_{\alpha}}
+\newcommand{\wb}{w_{\beta}}
+\newcommand{\oa}{\omega_{\alpha,k}}
+\newcommand{\ob}{\omega_{\beta,k}}
+\newcommand{\AJ}{\tilde{\mathcal{A}}_J}
+\newcommand{\BJ}{\tilde{\mathcal{B}}_J}
+\newcommand{\Tr}{T_{\mathrm{rot}}}
+\newcommand{\Tsq}{T_{\mathrm{sq}}}
+\newcommand{\ket}[1]{\lvert #1 \rangle}
+\newcommand{\bra}[1]{\langle #1 \rvert}
+\newcommand{\ip}[2]{\langle #1 \vert #2 \rangle}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\atantwo}{\operatorname{atan2}}
+\newcommand{\wC}{w_C}
+\newcommand{\wh}{w_h}
+\DeclareMathOperator{\wind}{wind}
+
+\title{$H_C$ diagonalisation and the analytic coefficients of $H_J$:\\
+       transcription of the symbolic results}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+This note transcribes the analytical output of the Wolfram notebook
+\texttt{hj\_analytic\_coefficients.nb}. For each $\{k,-k\}$ sector of the
+periodic SSH photonic chain the capacitive Nambu block $H_C$ is diagonalised by a
+paraunitary transform $T=\Tr\,\Tsq$ (a phased sublattice rotation followed by a
+two--mode squeeze); the same $T$ is then applied to the Josephson block $H_J$ and
+the closed forms of every coefficient of the transformed block $\tilde H_J$ are
+read off. Sections~\ref{sec:tls}--\ref{sec:zak} truncate the cavity--dressed
+problem to a two--level system and obtain the Zak phase of the hybridised
+chain\,/\,resonator--photon band analytically. All symbolic results were
+cross--checked against the numerical implementation
+\texttt{PeriodicChainSW} (see \S\ref{sec:checks}).
+
+\section{Conventions}\label{sec:conv}
+
+Per $\{k,-k\}$ sector, in the Nambu basis
+\[
+  \Phi=\bigl(b_{kA},\,b_{kB},\,b_{-kA},\,b_{-kB},\;
+             b_{kA}^{\dagger},\,b_{kB}^{\dagger},\,b_{-kA}^{\dagger},\,b_{-kB}^{\dagger}\bigr)^{\!\top},
+\]
+the ``honest'' quadratic forms are $H_X=\tfrac12\,\Phi^{\dagger}\mathcal H_X\,\Phi$
+with $8\times8$ Hermitian, para--Hermitian matrices $\mathcal H_C$, $\mathcal H_J$.
+Physical mode frequencies and coefficients carry the Nambu prefactor $2$.
+
+\paragraph{Symbols.}
+\begin{align*}
+  \dC &= g_{c1}+g_{c2}\,e^{-ik}, &
+  \dJ &= g_{J1}+g_{J2}\,e^{-ik}\ \ (\text{generic complex}), \\
+  \kk &= \lvert\dC\rvert=\sqrt{g_{c1}^{2}+g_{c2}^{2}+2g_{c1}g_{c2}\cos k}\in(0,\tfrac12), &
+  \gJ &= g_{J1}+g_{J2}\ \ (\text{real}), \\
+  \ph &= \arg\dC, &
+  \dCb,\ \dJb &= \text{complex conjugates.}
+\end{align*}
+The $-k$ blocks use $\delta_{C,-k}=\dCb$ and $\delta_{J,-k}=\dJb$.
+
+Write $h(x,\delta)=\left(\begin{smallmatrix} x & \delta\\ \bar\delta & x\end{smallmatrix}\right)$ for the Bloch $2\times2$.
+
+\paragraph{Capacitive block.}
+With $2\times2$ sub--blocks (rows/cols $A,B$),
+\[
+  \mathcal H_C=
+  \begin{pmatrix} \mathcal N_C & \mathcal P_C\\[2pt] \mathcal P_C^{*} & \mathcal N_C^{*}\end{pmatrix},
+  \qquad
+  \mathcal N_C=\tfrac12\,\mathrm{diag}\bigl(h(1,\dC),\ h(1,\dCb)\bigr),
+\]
+and $\mathcal P_C$ has the nonzero entries
+$(\mathcal P_C)_{14}=(\mathcal P_C)_{41}=-\dC/2$,
+$(\mathcal P_C)_{23}=(\mathcal P_C)_{32}=-\dCb/2$.
+
+\paragraph{Josephson block.}
+$\mathcal H_J$ has the same layout with
+\[
+  \mathcal N_J=\tfrac12\,\mathrm{diag}\bigl(h(\gJ,-\dJ),\ h(\gJ,-\dJb)\bigr),
+\]
+and $\mathcal P_J$ with
+$(\mathcal P_J)_{13}=(\mathcal P_J)_{31}=(\mathcal P_J)_{24}=(\mathcal P_J)_{42}=-\gJ/2$,
+$(\mathcal P_J)_{14}=(\mathcal P_J)_{41}=-\dJ/2$,
+$(\mathcal P_J)_{23}=(\mathcal P_J)_{32}=-\dJb/2$.
+
+\section{The transform \texorpdfstring{$T=\Tr\,\Tsq$}{T = Trot Tsq}}\label{sec:T}
+
+\paragraph{Phased sublattice rotation.}
+\begin{equation}
+  \alpha_k=\frac{e^{-i\ph/2}\,b_{kA}+e^{+i\ph/2}\,b_{kB}}{\sqrt2},
+  \qquad
+  \beta_k=\frac{e^{-i\ph/2}\,b_{kA}-e^{+i\ph/2}\,b_{kB}}{\sqrt2},
+\end{equation}
+with $\ph\to-\ph$ for the $-k$ modes.
+
+\paragraph{Two--mode squeeze on $(\alpha_k,\alpha_{-k})$ and $(\beta_k,\beta_{-k})$.}
+With squeeze parameters
+\begin{equation}
+  z_{k,\alpha}=\tfrac14\ln\!\bigl(1+2\kk\bigr),
+  \qquad
+  z_{k,\beta}=\tfrac14\ln\!\bigl(1-2\kk\bigr),
+\end{equation}
+i.e., writing $x_\alpha=1+2\kk$, $x_\beta=1-2\kk$,
+\[
+  \cosh z_{k,s}=\tfrac12\bigl(x_s^{1/4}+x_s^{-1/4}\bigr),
+  \qquad
+  \sinh z_{k,s}=\tfrac12\bigl(x_s^{1/4}-x_s^{-1/4}\bigr).
+\]
+The composite $T=\Tr\,\Tsq$ is paraunitary,
+$T^{\dagger}\tau_3\,T=\tau_3$ with $\tau_3=\mathrm{diag}(\mathbb 1_4,-\mathbb 1_4)$
+(verified symbolically to the zero matrix).
+
+\section{Diagonalising \texorpdfstring{$H_C$}{HC}: the bands}\label{sec:bands}
+
+$\tilde{\mathcal H}_C=T^{\dagger}\mathcal H_C\,T$ is diagonal, with all off--diagonal
+and pairing entries identically zero and physical band frequencies
+\begin{equation}\label{eq:bands}
+  \boxed{\;
+  \oa=\sqrt{1+2\kk}\,,
+  \qquad
+  \ob=\sqrt{1-2\kk}\,.
+  \;}
+\end{equation}
+
+\section{Transforming \texorpdfstring{$H_J$}{HJ}: the analytic coefficients}\label{sec:HJ}
+
+Write the transformed \emph{physical} Josephson block as
+\[
+  2\,T^{\dagger}\mathcal H_J\,T=
+  \begin{pmatrix} \AJ & \BJ\\ \BJ^{*} & \AJ^{*}\end{pmatrix},
+\]
+in the quasiparticle basis $(\alpha_k,\beta_k,\alpha_{-k},\beta_{-k})$; $\AJ$ is the
+number block and $\BJ$ the induced--pairing block. Introduce
+$\wa=\oa$, $\wb=\ob$ (the band amplitudes of \eqref{eq:bands}).
+
+\subsection{Structure (``Step 9b'')}
+
+$\AJ$ is \emph{momentum--block--diagonal} (it flips the band but never $k$) and
+$\BJ$ is \emph{momentum--block--anti--diagonal} (every nonzero entry is a
+zero--momentum $\gamma_k\,\gamma_{-k}$ pair):
+\begin{equation}\label{eq:zeros}
+  \AJ[\alpha_k,\alpha_{-k}]=\AJ[\alpha_k,\beta_{-k}]=0,
+  \qquad
+  \BJ[\alpha_k,\alpha_k]=\BJ[\alpha_k,\beta_k]=0 .
+\end{equation}
+
+\subsection{Closed forms}
+
+\paragraph{Band--diagonal number shifts.}
+\begin{align}
+  \AJ[\alpha_k,\alpha_k]
+    &= \frac{\gJ}{\wa}\;-\;\wa\,\Re\!\bigl(e^{-i\ph}\,\dJ\bigr)
+     = \frac{\gJ}{\wa}-\frac{\wa}{2}\Bigl(e^{-i\ph}\dJ+e^{i\ph}\dJb\Bigr),
+     \label{eq:AJaa}\\[4pt]
+  \AJ[\beta_k,\beta_k]
+    &= \frac{\gJ}{\wb}\;+\;\wb\,\Re\!\bigl(e^{-i\ph}\,\dJ\bigr).
+     \label{eq:AJbb}
+\end{align}
+
+\paragraph{Interband coupling (same $k$).}
+\begin{equation}\label{eq:AJab}
+  \boxed{\;
+  \AJ[\alpha_k,\beta_k]
+    =\frac{(1-4\kk^{2})^{1/4}}{2}\;e^{-i\ph}\bigl(\dJ-e^{2i\ph}\,\dJb\bigr)
+    = i\,\rho_k,
+  \;}
+\end{equation}
+where the amplitude $\rho_k$ is \emph{real},
+\begin{equation}\label{eq:rho}
+  \boxed{\;
+  \rho_k=(1-4\kk^{2})^{1/4}\,\Im\!\bigl(e^{-i\ph}\,\dJ\bigr)
+        =(1-4\kk^{2})^{1/4}\,
+         \frac{\bigl(g_{c2}g_{J1}-g_{c1}g_{J2}\bigr)\sin k}{\kk}\,.
+  \;}
+\end{equation}
+The prefactor is $\sqrt{\wa}\sqrt{\wb}=\bigl((1+2\kk)(1-2\kk)\bigr)^{1/4}=(1-4\kk^{2})^{1/4}$.
+$\AJ[\alpha_k,\beta_k]$ vanishes iff $\arg\dJ=\ph$ (Josephson and capacitive
+Bloch phases aligned) --- in particular on $\chi_C=0$.
+
+\paragraph{Induced pairing (zero--momentum pairs).}
+\begin{align}
+  \BJ[\alpha_k,\alpha_{-k}]
+    &= -\frac{\gJ}{\wa}\;-\;\wa\,\Re\!\bigl(e^{-i\ph}\,\dJ\bigr),
+     \label{eq:BJaa}\\[4pt]
+  \BJ[\beta_k,\beta_{-k}]
+    &= -\frac{\gJ}{\wb}\;+\;\wb\,\Re\!\bigl(e^{-i\ph}\,\dJ\bigr),
+     \label{eq:BJbb}\\[4pt]
+  \BJ[\alpha_k,\beta_{-k}]
+    &= \AJ[\alpha_k,\beta_k]\;=\;i\,\rho_k .
+     \label{eq:BJab}
+\end{align}
+
+\paragraph{Readout.}
+The band--diagonal number shift $\AJ[\gamma_k,\gamma_k]$ and the same--mode induced
+pairing $\BJ[\gamma_k,\gamma_{-k}]$ differ \emph{only} in the sign of the
+$\gJ/w_\gamma$ term (compare \eqref{eq:AJaa} with \eqref{eq:BJaa},
+\eqref{eq:AJbb} with \eqref{eq:BJbb}). The interband number coupling and the
+$\alpha_k$--$\beta_{-k}$ zero--momentum pair carry the \emph{identical} coefficient
+$i\rho_k$ (\eqref{eq:AJab}, \eqref{eq:BJab}).
+
+\section{TLS truncation: the hybridised state}\label{sec:tls}
+
+Cavity dressing (coupling $\gamma$, resonator frequency $\omega_r$) couples
+$\ket{\alpha_k,0}$ to $\ket{\beta_k,1}$ through the interband coefficient
+\eqref{eq:AJab}. Truncating to that doublet,
+\begin{equation}\label{eq:HTLS}
+  H_{\mathrm{TLS}}(k)=
+  \begin{pmatrix}
+    \oa & -\gamma\,\AJ[\alpha_k,\beta_k]\\[2pt]
+    -\gamma\,\overline{\AJ[\alpha_k,\beta_k]} & \ob+\omega_r
+  \end{pmatrix}
+  = \bar E_k\,\mathbb 1 + \frac{\Delta_k}{2}\,\sigma_z + \gamma\rho_k\,\sigma_y,
+\end{equation}
+with $\bar E_k=\tfrac12(\oa+\ob+\omega_r)$ and $\Delta_k=\oa-\ob-\omega_r$.
+Because $\AJ[\alpha_k,\beta_k]=i\rho_k$ is purely imaginary, the pseudo--spin
+$\bm h_k=\bigl(0,\ \gamma\rho_k,\ \Delta_k/2\bigr)$ is \emph{planar}
+(no $\sigma_x$ component). Its eigenvalues are
+\begin{equation}
+  E_{\pm}(k)=\bar E_k\pm R_k,
+  \qquad
+  R_k=\sqrt{(\gamma\rho_k)^{2}+(\Delta_k/2)^{2}}\,,
+\end{equation}
+and the lower eigenvector, with polar angle
+$\theta_k=\atantwo\!\bigl(\gamma\rho_k,\ \Delta_k/2\bigr)$, is
+\begin{equation}\label{eq:cspinor}
+  c_k=\bigl(i\sin\tfrac{\theta_k}{2},\ \cos\tfrac{\theta_k}{2}\bigr).
+\end{equation}
+
+\paragraph{Lift to the chain\,/\,photon Hilbert space.}
+With the SSH sublattice Bloch spinors
+$u_{\alpha,k}=(1,\ e^{-i\ph})/\sqrt2$, $u_{\beta,k}=(1,\ -e^{-i\ph})/\sqrt2$,
+\begin{equation}\label{eq:psik}
+  \ket{\psi_k}
+   = i\sin\tfrac{\theta_k}{2}\;\ket{u_{\alpha,k}}\otimes\ket{0}
+   \;+\;\cos\tfrac{\theta_k}{2}\;\ket{u_{\beta,k}}\otimes\ket{1},
+\end{equation}
+in the basis $\bigl((A,0),(B,0),(A,1),(B,1)\bigr)$, normalised for every $k$.
+
+\section{Analytical Zak phase of the hybridised band}\label{sec:zak}
+
+Everything is now an explicit function of $k$ through
+$\dC=g_{c1}+g_{c2}e^{-ik}$ and $\dJ=g_{J1}+g_{J2}e^{-ik}$.
+
+\subsection{Energies and spinors, explicitly}
+
+\begin{align}
+  \oa &= \sqrt{1+2\kk}, &
+  \ob &= \sqrt{1-2\kk}, &
+  \Delta_k &= \oa-\ob-\omega_r, \\
+  \rho_k &= (1-4\kk^{2})^{1/4}\,\frac{(g_{c2}g_{J1}-g_{c1}g_{J2})\sin k}{\kk}, &
+  R_k &= \sqrt{(\gamma\rho_k)^{2}+\tfrac14\Delta_k^{2}}, &
+  E_{\pm}(k) &= \bar E_k\pm R_k ,
+\end{align}
+with $\bar E_k=\tfrac12(\oa+\ob+\omega_r)$ as in \eqref{eq:HTLS}.
+The natural eigenvector \eqref{eq:cspinor} is \emph{anti--periodic} across the BZ
+whenever $\theta_k$ winds an odd number of times. The periodic--gauge vector
+\begin{equation}\label{eq:cP}
+  \tilde c_k = e^{i\theta_k/2}\,c_k
+             = \tfrac12\Bigl(i\bigl(e^{i\theta_k}-1\bigr),\;\; e^{i\theta_k}+1\Bigr)
+\end{equation}
+is a function of $e^{i\theta_k}$ alone, hence smooth and periodic. The hybridised
+state $\ket{\psi_k}$ is taken with the $\tilde c_k$ amplitudes.
+
+\subsection{Derivatives}
+
+Only two derivatives enter the Berry connection:
+\begin{equation}\label{eq:phid}
+  \varphi'_k
+   = -\,\frac{g_{c2}\,(g_{c2}+g_{c1}\cos k)}
+             {g_{c1}^{2}+g_{c2}^{2}+2g_{c1}g_{c2}\cos k}\,,
+\end{equation}
+and, with $X_k=\Delta_k/2$ and $Y_k=\gamma\rho_k$,
+\begin{equation}\label{eq:thetad}
+  \theta'_k=\frac{X_k Y'_k-Y_k X'_k}{X_k^{2}+Y_k^{2}}
+\end{equation}
+(explicit but lengthy; used only under the BZ integral and numerically).
+
+\subsection{The Berry connection integrand, in blocks}
+
+The local Berry connection of the hybridised state decomposes exactly:
+\begin{equation}\label{eq:Ablocks}
+  \boxed{\;
+  \mathcal A(k)\;=\;i\,\ip{\psi_k}{\partial_k\psi_k}
+   \;=\;\underbrace{\tfrac12\,\varphi'_k}_{\text{orbital (SSH)}}
+   \;-\;\underbrace{\tfrac12\,\theta'_k}_{\text{two--level}}\,.
+  \;}
+\end{equation}
+Two ways to see the split:
+\begin{itemize}
+  \item \textbf{By physical origin.} Both SSH Bloch spinors carry the \emph{same}
+        orbital connection,
+        \[
+          i\,\ip{u_{\alpha,k}}{\partial_k u_{\alpha,k}}
+          = i\,\ip{u_{\beta,k}}{\partial_k u_{\beta,k}}
+          = \tfrac12\varphi'_k ,
+        \]
+        so it factors out of the $\lvert\tilde c_k\rvert^{2}$--weighted
+        superposition, while the periodic pseudo--spinor contributes
+        $i\,\ip{\tilde c_k}{\partial_k\tilde c_k}=-\tfrac12\theta'_k$.
+  \item \textbf{By sublattice.} The $A$--sublattice components of $\ket{\psi_k}$
+        give $-\tfrac14\theta'_k$; the $B$--sublattice components (which carry
+        $e^{-i\ph}$) give $\tfrac12\varphi'_k-\tfrac14\theta'_k$.
+\end{itemize}
+
+\subsection{The two block integrals}
+
+\paragraph{Orbital block (closed form).}
+\begin{equation}\label{eq:orbint}
+  \int_{0}^{2\pi}\!\frac{\varphi'_k}{2}\,dk
+   =\begin{cases}
+      0, & g_{c1}>g_{c2},\\[4pt]
+      -\pi, & g_{c2}>g_{c1},
+    \end{cases}
+   \;=\;-\pi\,\wC ,
+\end{equation}
+where $\wC\in\{0,1\}$ is the SSH winding
+($\dC$ traces a circle of radius $g_{c2}$ about $g_{c1}$).
+
+\paragraph{Two--level block (winding number).}
+\begin{equation}\label{eq:tlsint}
+  \int_{0}^{2\pi}\!\theta'_k\,dk = 2\pi\,\wh,
+  \qquad
+  \wh=\wind_{0}\bigl(\gamma\rho_k,\ \Delta_k/2\bigr),
+\end{equation}
+the number of times the planar vector $(\gamma\rho_k,\Delta_k/2)$ circles the
+origin as $k$ crosses the BZ. \texttt{Integrate} cannot resolve this for generic
+parameters; $\wh$ is read off numerically.
+
+\subsection{Result}
+
+\begin{equation}\label{eq:zak}
+  \boxed{\;
+  \gamma_{\mathrm{Zak}}
+   =\int_{0}^{2\pi}\!\mathcal A(k)\,dk
+   =-\pi\,\wC-\pi\,\wh
+   \;\equiv\;\pi\,(\wh-\wC)\pmod{2\pi}
+   \;\in\;\{0,\pi\}\,.
+  \;}
+\end{equation}
+The invariant is quantised. $\wC$ is fixed by the SSH dimerisation; the cavity
+enters \emph{only} through $\wh$: $\Delta_k=\oa-\ob-\omega_r$ shifts rigidly with
+$\omega_r$, so $\wh=1$ (the vector encircles the origin) precisely while
+\begin{equation}
+  \omega_r\in\Bigl[\ \min_{k}\bigl(\oa-\ob\bigr),\ \max_{k}\bigl(\oa-\ob\bigr)\ \Bigr]
+\end{equation}
+--- the interband--splitting window --- and $\wh=0$ outside it. The resonator
+therefore toggles $\gamma_{\mathrm{Zak}}$ by $\pi$ on crossing the interband
+resonance, independently of $\gamma$ (which only sets how sharp the transition in
+$\omega_r$ is).
+
+\section{Cross--checks}\label{sec:checks}
+
+\paragraph{Coefficients vs \texttt{PeriodicChainSW} (\S7 of the notebook).}
+For each of eight parameter points --- generic $k$, both TRIMs $k=0,\pi$, and both
+dimerisation sides $g_{c1}\gtrless g_{c2}$, all with $g_{c1}+g_{c2}<\tfrac12$ ---
+\texttt{PeriodicChainSW.sector\_nambu}$(k)$ builds $\mathcal H_J$ and
+\texttt{diagonalize\_cap\_sector}$(k)$ builds the same $T$; then
+$2\,T^{\dagger}\mathcal H_J\,T$ is compared entry--by--entry with
+\eqref{eq:AJaa}--\eqref{eq:BJab}. All differences
+$\max\lvert\Delta\AJ\rvert$, $\max\lvert\Delta\BJ\rvert\sim10^{-15}$ (double
+precision round--off).
+
+\paragraph{Operator--level (\S6).}
+$\mathcal H_C$, $\mathcal H_J$ are also built as second--quantised operators;
+the operator form of $T$ is substituted, the result normal--ordered (Q3), and the
+same coefficients extracted with \texttt{Coefficient}. They match
+\eqref{eq:AJab}, \eqref{eq:BJaa}, \eqref{eq:BJab}, \eqref{eq:BJbb}.
+
+\sloppy
+\paragraph{Zak phase vs \texttt{dressed\_zak\_phase} (\S8.4, \S9.7).}
+$\lvert\gamma_{\mathrm{Zak}}\rvert/\pi$ from \eqref{eq:zak} is compared with the
+fully cavity--dressed Wilson--loop Zak phase of the lower hybridised band,
+\texttt{PeriodicChainSW.}\allowbreak\texttt{dressed\_zak\_phase(1)} (photon cutoff $6$, $N=8$):
+
+\begin{center}
+\begin{tabular}{cllccccc}
+\toprule
+\# & $(g_{c1},g_{c2})$ & regime & $\omega_r$ & $\gamma$ &
+   $\wC$ & $\wh$ & $\dfrac{\lvert\gamma_{\mathrm{Zak}}\rvert}{\pi}$ \;$\overset{?}{=}$\; $\dfrac{\gamma_{\mathrm{dressed}}}{\pi}$\\
+\midrule
+1 & $(0.18,0.11)$ & trivial      & 0.30 & 0.03 & 0 & 1 & $1=1$ \\
+2 & $(0.18,0.11)$ & trivial      & 0.55 & 0.03 & 0 & 1 & $1=1$ \\
+3 & $(0.18,0.11)$ & trivial      & 0.80 & 0.03 & 0 & 0 & $0=0$ \\
+4 & $(0.11,0.18)$ & topological  & 0.30 & 0.03 & 1 & 1 & $0=0$ \\
+5 & $(0.11,0.18)$ & topological  & 0.80 & 0.03 & 1 & 0 & $1=1$ \\
+6 & $(0.18,0.11)$ & trivial      & 0.30 & 0.06 & 0 & 1 & $1=1$ \\
+7 & $(0.18,0.11)$ & trivial      & 0.80 & 0.06 & 0 & 0 & $0=0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+($g_{J1}=1$, $g_{J2}=-0.5$ throughout.) All rows agree.
+
+\end{document}

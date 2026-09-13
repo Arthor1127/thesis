@@ -1,0 +1,667 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "eig_njj_40_Lj_1.2nH.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          83
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          84
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        86,
+        85,
+        88,
+        87,
+        90,
+        89
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Attributes": [
+          1
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 2,
+        "Attributes": [
+          2
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 3,
+        "Attributes": [
+          3
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 4,
+        "Attributes": [
+          4
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 5,
+        "Attributes": [
+          5
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 6,
+        "Attributes": [
+          6
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 7,
+        "Attributes": [
+          7
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 8,
+        "Attributes": [
+          8
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 9,
+        "Attributes": [
+          9
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 10,
+        "Attributes": [
+          10
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 11,
+        "Attributes": [
+          11
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 12,
+        "Attributes": [
+          12
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 13,
+        "Attributes": [
+          13
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 14,
+        "Attributes": [
+          14
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 15,
+        "Attributes": [
+          15
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 16,
+        "Attributes": [
+          16
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 17,
+        "Attributes": [
+          17
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 18,
+        "Attributes": [
+          18
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 19,
+        "Attributes": [
+          19
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 20,
+        "Attributes": [
+          20
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 21,
+        "Attributes": [
+          21
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 22,
+        "Attributes": [
+          22
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 23,
+        "Attributes": [
+          23
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 24,
+        "Attributes": [
+          24
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 25,
+        "Attributes": [
+          25
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 26,
+        "Attributes": [
+          26
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 27,
+        "Attributes": [
+          27
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 28,
+        "Attributes": [
+          28
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 29,
+        "Attributes": [
+          29
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 30,
+        "Attributes": [
+          30
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 31,
+        "Attributes": [
+          31
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 32,
+        "Attributes": [
+          32
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 33,
+        "Attributes": [
+          33
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 34,
+        "Attributes": [
+          34
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 35,
+        "Attributes": [
+          35
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 36,
+        "Attributes": [
+          36
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 37,
+        "Attributes": [
+          37
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 38,
+        "Attributes": [
+          38
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 39,
+        "Attributes": [
+          39
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 40,
+        "Attributes": [
+          40
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      }
+    ],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 1,
+    "Eigenmode": {
+      "N": 12,
+      "Tol": 1e-05,
+      "Target": 0.5,
+      "Save": 12
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-05,
+      "MaxIts": 300
+    }
+  }
+}

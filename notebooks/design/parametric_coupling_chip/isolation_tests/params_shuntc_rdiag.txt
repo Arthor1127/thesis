@@ -1,0 +1,4 @@
+28.8137 shuntc_r0 0
+28.8137 shuntc_r1e-9 1e-9
+28.8137 shuntc_r1e-3 1e-3
+28.8137 shuntc_r1 1.0

@@ -1,0 +1,19 @@
+{
+  "R_ohm": 5000000.0,
+  "tag": "bareres_eig_R5e06",
+  "method": "HFSS eigenmode, lossless, lumped series R",
+  "analytic_Qc": 78601,
+  "analytic_formula": "Qc = (pi/4)*(R/49.961)",
+  "palace_eigenmode_Qc": 78181.5,
+  "fr_ghz": 7.97829,
+  "Qc_eigenmode": 57882.9,
+  "Qc_over_analytic": 0.7364,
+  "modes": [
+    {
+      "f_hz": 7978292023.16456,
+      "f_im_hz": 68917.5557755372,
+      "Q": 57882.87130458938
+    }
+  ],
+  "solve_s": 157.2
+}

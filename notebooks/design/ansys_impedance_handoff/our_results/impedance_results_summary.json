@@ -1,0 +1,42 @@
+{
+  "cross_section": {
+    "cpw_width_um": 20.0,
+    "cpw_gap_um": 11.5,
+    "substrate_material": "silicon",
+    "substrate_permittivity_er": 11.45,
+    "substrate_thickness_um": 500.0,
+    "metal_model": "zero-thickness (quasi-3D) PEC sheet",
+    "notes": "Metal is modeled as an infinitesimally thin perfect conductor (SQDMetal's default 'quasi-3D' treatment), not a finite-thickness real conductor. Ansys should match this if possible (thin/zero-thickness sheet boundary), or explicitly note the difference if using a finite-thickness metal, since that changes fringing capacitance somewhat."
+  },
+  "analytic_predictions": {
+    "DesignHelper_Z0_ohm": 49.96,
+    "DesignHelper_note": "Independent analytic conformal-mapping CPW formula from this project's own parametric_coupling package.",
+    "SQDMetal_CpwParams_Z0_ohm": 50.29,
+    "SQDMetal_CpwParams_note": "SQDMetal's OWN analytic CPW formula (SQDMetal.Utilities.CpwParams.calc_impedance), which explicitly models a grounded-backplane-at-finite-height correction. Evaluated at h=500um (our substrate thickness): 50.291 Ohm. Essentially h-insensitive: h=500um through h=500mm all give 50.29-50.31 Ohm, so substrate-thickness truncation is NOT the source of the sim disagreement below.",
+    "both_formulas_agree_to_percent": 0.6
+  },
+  "palace_driven_S11_based_Zin": {
+    "method": "Built the bare CPW cross-section (no launchpad, no coupler) in qiskit_metal/SQDMetal, ran PALACE_Driven_Simulation with lumped CPW ports on both ends (create_port_CPW_on_Route), computed Zin = Z0_ref*(1+S11)/(1-S11) with Z0_ref=50 Ohm, averaged over 6-10GHz (flat response, no resonance in this geometry).",
+    "converged_value_ohm_real": 40.45,
+    "converged_value_ohm_imag": -1.66,
+    "converged_value_ohm_abs": 40.48,
+    "convergence_evidence": "Ran a 12-point convergence sweep: mesh resolution refined 4x (0.5x -> 0.125x -> 0.0625x the 'half smallest feature' rule), vacuum height above chip varied 1x-12x the substrate thickness, and lateral ground-plane width varied 0.1x-3.0x the chip size (a 30x range). NONE of these moved the result beyond the 4th significant figure once mesh reached the 0.125x factor -- i.e. this Zin value is numerically CONVERGED and insensitive to every domain-size/mesh-resolution parameter tested.",
+    "discrepancy_vs_analytic_percent": -19.5,
+    "discrepancy_note": "This is far outside the ~5-10% end-fringing residual normally seen in this repo's own validated FEM-vs-analytic comparisons (see capacitance-based result below). Something about this specific extraction is suspected to be the cause, not the underlying mesh/physics -- see 'leading_hypothesis' below."
+  },
+  "palace_capacitance_based_Z0": {
+    "method": "Independent extraction avoiding S-parameters and avoiding this project's OWN still-unresolved ~40,000x inductance-sim bug. Ran PALACE_Capacitance_Simulation TWICE on the identical bare-CPW-line geometry (a 3mm-long straight segment, both ends open/floating -- see cpw_impedance_test_build_design.py's far_end='open' convention): once with the real silicon substrate, once with the SAME geometry but vacuum everywhere (er=1). For a quasi-TEM line the per-length inductance L' is purely geometric (independent of the dielectric), so L' = 1/(c0^2 * C'_vacuum), and Z0 = sqrt(L'/C'_real) = 1/(c0*sqrt(C'_vacuum*C'_real)) -- no inductance sim needed at all.",
+    "Cprime_real_F_per_m": 1.6433048609853331e-10,
+    "Cprime_vacuum_F_per_m": 2.9940984409359996e-11,
+    "derived_Z0_ohm": 47.554,
+    "derived_v_phase_m_per_s": 1.2797e8,
+    "derived_eps_eff": 5.4885,
+    "discrepancy_vs_analytic_percent": -5.5,
+    "convergence_caveat": "AMR had NOT fully converged for either capacitance run within the requested 4 iterations (real: still changing ~4%/iteration at the last step; vacuum: stopped after only 2 iterations, last relative change ~17%) -- both were still trending toward slightly LOWER final C values, meaning derived Z0 could still drift a few more percent higher with tighter AMR convergence, likely landing even closer to the ~50 Ohm analytic target. Even without full convergence, -5.5% is already well within this pipeline's established normal residual range for OTHER cross-sections (w8_g5 gave +9.4%, a thickness-variant test gave +5.6%)."
+  },
+  "leading_hypothesis": {
+    "statement": "The driven S-parameter method's Zin is the outlier (not the capacitance method, and not the underlying mesh/FEM physics, which both check out close to the analytic target). The most likely cause: SQDMetal builds a CPW lumped port as TWO separate 'fin' boundary elements (one on each side of the trace, opposite Direction vectors in the PALACE config -- see port-S.csv Boundaries.LumpedPort.Elements in the generated config.json), not a single simple lumped element. This is visible directly in the generated PALACE config.json (Boundaries->LumpedPort->Elements, two Attributes/Direction pairs per port index). It's suspected this differential two-element port definition does not map onto the textbook single-port formula Zin=Z0_ref*(1+S11)/(1-S11) the same way a simple lumped port would.",
+    "supporting_evidence": "Earlier in this same investigation, V/I computed directly from PALACE's own port-V.csv/port-I.csv (rather than via S11) came back EXACTLY 50.000000000 Ohm for every configuration tested, completely independent of the actual physical mismatch that IS visible in the S-parameter magnitude/phase data. That is consistent with something in this port type's own V/I or S-parameter bookkeeping not behaving like a textbook single-element lumped port.",
+    "what_this_means_for_the_sweep": "The (fr, Qc, Qr) values extracted via Lorentzian fitting of the driven S21 magnitude/phase throughout this project's Qc sweep do NOT depend on this Zin extraction and should still be trustworthy (confirmed via independent E-field mode-plot visualization and clean fit-vs-data overlays in multiple cases this session). Only the raw baseline S11/Zin-derived 'is the line matched to 50 Ohm' diagnostic is in question."
+  }
+}

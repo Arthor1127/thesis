@@ -1,0 +1,81 @@
+{
+  "ElapsedTime": {
+    "Counts": {
+      "Adaptation": 0,
+      "CoarseSolve": 0,
+      "Construction": 1,
+      "DiskIO": 3,
+      "Div.-FreeProjection": 0,
+      "EigenvalueSolve": 0,
+      "Estimation": 1,
+      "FarFields": 0,
+      "Gridfunction": 0,
+      "Initialization": 2,
+      "LinearSolve": 1,
+      "MeshPreprocessing": 1,
+      "OperatorConstruction": 1,
+      "PROMConstruction": 0,
+      "PROMSolve": 0,
+      "Paraview": 2,
+      "Postprocessing": 4,
+      "Preconditioner": 502,
+      "Rebalancing": 0,
+      "Setup": 1,
+      "Solve": 1,
+      "TimeStepping": 0,
+      "Total": 1,
+      "WavePorts": 0
+    },
+    "Durations": {
+      "Adaptation": 0.0,
+      "CoarseSolve": 0.0,
+      "Construction": 53.186289178,
+      "DiskIO": 35.975929558000004,
+      "Div.-FreeProjection": 0.0,
+      "EigenvalueSolve": 0.0,
+      "Estimation": 0.452473151,
+      "FarFields": 0.0,
+      "Gridfunction": 0.0,
+      "Initialization": 2.2852996899999996,
+      "LinearSolve": 18.655142339999998,
+      "MeshPreprocessing": 77.95903433900001,
+      "OperatorConstruction": 4.067671121999999,
+      "PROMConstruction": 0.0,
+      "PROMSolve": 0.0,
+      "Paraview": 24.212118015,
+      "Postprocessing": 1.018669383,
+      "Preconditioner": 131.7199654409999,
+      "Rebalancing": 0.0,
+      "Setup": 4.370978092,
+      "Solve": 9.194353682,
+      "TimeStepping": 0.0,
+      "Total": 363.293071408,
+      "WavePorts": 0.0
+    }
+  },
+  "GitTag": "869ee5c",
+  "LinearSolver": {
+    "TotalIts": 500,
+    "TotalSolves": 1
+  },
+  "PeakMemoryMegabytes": {
+    "Average": 2614.55126953125,
+    "Max": 3319.41015625,
+    "Min": 2498.9765625,
+    "Total": 20916.41015625
+  },
+  "PeakNodeMemoryMegabytes": {
+    "Average": 20916.41015625,
+    "Max": 20916.41015625,
+    "Min": 20916.41015625,
+    "Total": 20916.41015625
+  },
+  "Problem": {
+    "DegreesOfFreedom": 5734497,
+    "MPISize": 8,
+    "MeshElements": 4762139,
+    "MultigridDegreesOfFreedom": [
+      5734497
+    ]
+  }
+}

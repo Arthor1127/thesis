@@ -1,0 +1,81 @@
+{
+  "ElapsedTime": {
+    "Counts": {
+      "Adaptation": 0,
+      "CoarseSolve": 0,
+      "Construction": 1,
+      "DiskIO": 3,
+      "Div.-FreeProjection": 0,
+      "EigenvalueSolve": 0,
+      "Estimation": 1,
+      "FarFields": 0,
+      "Gridfunction": 0,
+      "Initialization": 2,
+      "LinearSolve": 1,
+      "MeshPreprocessing": 1,
+      "OperatorConstruction": 1,
+      "PROMConstruction": 0,
+      "PROMSolve": 0,
+      "Paraview": 2,
+      "Postprocessing": 4,
+      "Preconditioner": 216,
+      "Rebalancing": 0,
+      "Setup": 1,
+      "Solve": 1,
+      "TimeStepping": 0,
+      "Total": 1,
+      "WavePorts": 0
+    },
+    "Durations": {
+      "Adaptation": 0.0,
+      "CoarseSolve": 0.0,
+      "Construction": 12.07352546,
+      "DiskIO": 4.4773567850000004,
+      "Div.-FreeProjection": 0.0,
+      "EigenvalueSolve": 0.0,
+      "Estimation": 0.07181219,
+      "FarFields": 0.0,
+      "Gridfunction": 0.0,
+      "Initialization": 0.475043575,
+      "LinearSolve": 0.9764685199999997,
+      "MeshPreprocessing": 11.312484797000002,
+      "OperatorConstruction": 0.8306988639999999,
+      "PROMConstruction": 0.0,
+      "PROMSolve": 0.0,
+      "Paraview": 3.637939329,
+      "Postprocessing": 0.15108221500000002,
+      "Preconditioner": 7.761980104999996,
+      "Rebalancing": 0.0,
+      "Setup": 0.782156105,
+      "Solve": 1.942120738,
+      "TimeStepping": 0.0,
+      "Total": 44.663097424,
+      "WavePorts": 0.0
+    }
+  },
+  "GitTag": "869ee5c",
+  "LinearSolver": {
+    "TotalIts": 214,
+    "TotalSolves": 1
+  },
+  "PeakMemoryMegabytes": {
+    "Average": 425.8916015625,
+    "Max": 517.9140625,
+    "Min": 406.12109375,
+    "Total": 3407.1328125
+  },
+  "PeakNodeMemoryMegabytes": {
+    "Average": 3407.1328125,
+    "Max": 3407.1328125,
+    "Min": 3407.1328125,
+    "Total": 3407.1328125
+  },
+  "Problem": {
+    "DegreesOfFreedom": 864539,
+    "MPISize": 8,
+    "MeshElements": 715483,
+    "MultigridDegreesOfFreedom": [
+      864539
+    ]
+  }
+}

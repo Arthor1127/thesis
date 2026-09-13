@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parametric-coupling"
+version = "0.1.0"
+description = "Hamiltonian-parameter extraction from SQDMetal/Palace capacitance and inductance matrices."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pint",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

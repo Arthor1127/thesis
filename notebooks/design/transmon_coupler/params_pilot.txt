@@ -1,0 +1,3 @@
+8 80 4 8 6 1 uniform
+8 80 4 8 6 1 amr
+8 80 4 8 6 0 uniform

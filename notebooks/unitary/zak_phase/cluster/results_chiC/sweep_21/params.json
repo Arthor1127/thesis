@@ -1,0 +1,49 @@
+{
+  "index": 21,
+  "omega_r": 0.1643,
+  "gamma": 0.0371,
+  "i_omega_r": 2,
+  "i_gamma": 5,
+  "Omega_J": 1.0,
+  "Chi_J": 0.0,
+  "d_ph": 4,
+  "Nk": 96,
+  "s_A": -0.25,
+  "s_B": 0.25,
+  "omega_C_min": 0.02,
+  "omega_C_max": 0.9,
+  "n_omega_C": 100,
+  "chi_C_min": -0.95,
+  "chi_C_max": 0.95,
+  "n_chi_C": 100,
+  "omega_r_values": [
+    0.03,
+    0.0971,
+    0.1643,
+    0.2314,
+    0.2986,
+    0.3657,
+    0.4329,
+    0.5
+  ],
+  "gamma_values": [
+    0.005,
+    0.0114,
+    0.0179,
+    0.0243,
+    0.0307,
+    0.0371,
+    0.0436,
+    0.05
+  ],
+  "fields": [
+    "zak_b0",
+    "zak_b1",
+    "zak_comb12",
+    "gap01",
+    "gap12"
+  ],
+  "wall_seconds": 1034.0,
+  "x_axis": "chi_C",
+  "chi_C_values": []
+}

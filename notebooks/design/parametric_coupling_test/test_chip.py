@@ -8,8 +8,7 @@ just checked for "doesn't crash" -- see test_coupling_matches_manual_calc).
 import numpy as np
 from scipy.constants import e, h, hbar
 
-from design_helper import DesignHelper
-from chip import Chip
+from parametric_coupling import DesignHelper, Chip
 
 
 def make_toy_chip(dh):
@@ -23,13 +22,13 @@ def make_toy_chip(dh):
          'EJ': dh._as_quantity(15, 'GHz'), 'EC': dh._as_quantity(0.25, 'GHz')},
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
-         'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(6, 'GHz')},
     ]
     return Chip.from_simulation(dh, cap_matrix_F, node_labels, specs)
 
 
 def test_coupling_matches_manual_calc():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     g = chip.compute_coupling('Q1', 'R1').to('Hz').magnitude
 
@@ -49,7 +48,7 @@ def test_coupling_matches_manual_calc():
 
 
 def test_duplicate_component_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     try:
         chip.add_component({'type': 'ground', 'name': 'Q1', 'nodes': ['qubit_pad']})
@@ -59,7 +58,7 @@ def test_duplicate_component_raises():
 
 
 def test_unknown_node_label_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     try:
         chip.add_component({'type': 'ground', 'name': 'GND', 'nodes': ['nope']})
@@ -69,7 +68,7 @@ def test_unknown_node_label_raises():
 
 
 def test_update_component_changes_live_coupling():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     g_before = chip.compute_coupling('Q1', 'R1').to('MHz').magnitude
     chip.update_component('Q1', EJ=dh._as_quantity(16, 'GHz'))
@@ -79,7 +78,7 @@ def test_update_component_changes_live_coupling():
 
 
 def test_remove_component():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     chip.remove_component('R1')
     assert 'R1' not in chip.components
@@ -91,7 +90,7 @@ def test_remove_component():
 
 
 def test_matrix_size_mismatch_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = Chip(dh, ['a', 'b', 'c'])
     try:
         chip.set_capacitance_matrix(np.array([[1e-13, -5e-15], [-5e-15, 1e-13]]))
@@ -111,7 +110,7 @@ def test_floating_transmon_coupling_matches_manual_calc():
     Toy 3-node matrix: [float_pad0, float_pad1, res_pad]
     Asymmetric mutual caps (-8 fF vs -3 fF) so the two terms don't cancel.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
 
     # Asymmetric: pad0-res = -8 fF, pad1-res = -3 fF
     C = np.array([
@@ -124,7 +123,7 @@ def test_floating_transmon_coupling_matches_manual_calc():
          'EJ': dh._as_quantity(15, 'GHz'), 'EC': dh._as_quantity(0.25, 'GHz')},
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
-         'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(6, 'GHz')},
     ])
 
     g = chip.compute_coupling('Qfloat', 'R1').to('Hz').magnitude
@@ -152,7 +151,7 @@ def test_floating_transmon_coupling_symmetric_cancels():
     == C[pad1,res]) has no net coupling to a neighbor via the differential charge
     operator -- both contributions cancel. g should be exactly 0.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
 
     # Perfectly symmetric: both pads couple equally to res_pad
     C = np.array([
@@ -165,7 +164,7 @@ def test_floating_transmon_coupling_symmetric_cancels():
          'EJ': dh._as_quantity(15, 'GHz'), 'EC': dh._as_quantity(0.25, 'GHz')},
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
-         'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(6, 'GHz')},
     ])
 
     g = chip.compute_coupling('Qfloat', 'R1').to('Hz').magnitude
@@ -175,7 +174,7 @@ def test_floating_transmon_coupling_symmetric_cancels():
 
 
 def test_coupling_matrix_excludes_ground():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     n = 4
     C = np.eye(n) * 100e-15
     C[0, 1] = C[1, 0] = -5e-15
@@ -187,9 +186,9 @@ def test_coupling_matrix_excludes_ground():
         {'type': 'qubit', 'name': 'Q1', 'nodes': ['qubit_pad'],
          'EJ': dh._as_quantity(15, 'GHz'), 'EC': dh._as_quantity(0.25, 'GHz')},
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res1_pad'],
-         'capacitance': dh._as_quantity(100, 'fF'), 'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s')},
+         'capacitance': dh._as_quantity(100, 'fF'), 'frequency': dh._as_quantity(6, 'GHz')},
         {'type': 'resonator', 'name': 'R2', 'nodes': ['res2_pad'],
-         'capacitance': dh._as_quantity(100, 'fF'), 'omega_r': (2 * np.pi * dh._as_quantity(7, 'GHz')).to('1/s')},
+         'capacitance': dh._as_quantity(100, 'fF'), 'frequency': dh._as_quantity(7, 'GHz')},
         {'type': 'ground', 'name': 'GND', 'nodes': ['ground']},
     ]
     chip = Chip.from_simulation(dh, C, node_labels, specs)
@@ -208,13 +207,11 @@ def test_coupling_matrix_excludes_ground():
 def test_dispersive_shift_matches_formula():
     """chi = -g^2 * alpha / (Delta*(Delta+alpha)), independent manual calc."""
     from scipy.constants import h
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
 
     g = chip.compute_coupling('Q1', 'R1').to('Hz').magnitude
-    # resonator linear freq from omega_r
-    omega_r = (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s').magnitude
-    f_res = omega_r / (2 * np.pi)
+    f_res = dh._as_quantity(6, 'GHz').to('Hz').magnitude
     # qubit freq: sqrt(8*EJ*EC) - EC
     EJ_Hz = 15e9; EC_Hz = 0.25e9
     f_qubit = (np.sqrt(8 * EJ_Hz * EC_Hz) - EC_Hz)
@@ -230,7 +227,7 @@ def test_dispersive_shift_matches_formula():
 
 def test_dressed_frequencies_keys_and_signs():
     """dressed_frequencies returns Qubit↔Resonator pairs only, with correct sign."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     df = chip.dressed_frequencies()
 
@@ -241,7 +238,7 @@ def test_dressed_frequencies_keys_and_signs():
 
     chi = entry['chi'].to('Hz').magnitude
     f_q_bare = chip.components['Q1'].frequency().to('Hz').magnitude
-    f_r_bare = (chip.components['R1'].omega_r / (2 * np.pi)).to('Hz').magnitude
+    f_r_bare = dh._as_quantity(chip.components['R1'].frequency, dh.freq_units).to('Hz').magnitude
 
     # qubit dressed = f_q - chi, resonator dressed = f_r + chi
     assert abs(entry['qubit'].to('Hz').magnitude - (f_q_bare - chi)) < 1, \
@@ -255,7 +252,7 @@ def test_dressed_frequencies_keys_and_signs():
 
 def test_epr_bridge_coupling_consistent():
     """from_epr_params: compute_coupling on the bridged Chip reproduces g_epr."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     from scipy.constants import hbar as hbar_si, e
     # phi_zpf_sq for a 6 GHz resonator at 50 Ohm: Z=50, phi_zpf^2=hbar*Z/2, in phi0^2
     phi0 = hbar_si / (2 * e)
@@ -278,7 +275,7 @@ def test_epr_bridge_coupling_consistent():
 
 def test_generate_output_structure():
     """generate_output returns expected keys and non-empty component table."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     out = chip.generate_output(title="Test Chip")
 
@@ -311,7 +308,7 @@ def test_generate_output_structure():
 
 def test_dispersive_guardrail_valid():
     """is_dispersive_valid=True when g/|Delta| << 0.1."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     df = chip.dressed_frequencies()
     entry = df[('Q1', 'R1')]
@@ -323,7 +320,7 @@ def test_dispersive_guardrail_valid():
 
 def test_dispersive_guardrail_invalid():
     """is_dispersive_valid=False when g/|Delta| > 0.1 (near-resonant case)."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     # Put qubit very close to resonator so g/Delta >> 0.1
     cap_matrix_F = np.array([[100e-15, -30e-15], [-30e-15, 100e-15]])
     node_labels = ['qubit_pad', 'res_pad']
@@ -333,7 +330,7 @@ def test_dispersive_guardrail_invalid():
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
          # Resonator very close to qubit (~5.23 GHz) -> small Delta, large g
-         'omega_r': (2 * np.pi * dh._as_quantity(5.3, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(5.3, 'GHz')},
     ]
     chip = Chip.from_simulation(dh, cap_matrix_F, node_labels, specs)
     df = chip.dressed_frequencies()
@@ -345,7 +342,7 @@ def test_dispersive_guardrail_invalid():
 
 def test_resonator_resonator_hybridization():
     """Res↔Res: exact normal-mode frequencies match analytic formula."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     C = np.array([
         [100e-15, -5e-15, -5e-15],
         [-5e-15, 100e-15, -5e-15],
@@ -357,10 +354,10 @@ def test_resonator_resonator_hybridization():
          'EJ': dh._as_quantity(15, 'GHz'), 'EC': dh._as_quantity(0.25, 'GHz')},
         {'type': 'resonator', 'name': 'R1', 'nodes': ['res1_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
-         'omega_r': (2 * np.pi * dh._as_quantity(6.0, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(6.0, 'GHz')},
         {'type': 'resonator', 'name': 'R2', 'nodes': ['res2_pad'],
          'capacitance': dh._as_quantity(100, 'fF'),
-         'omega_r': (2 * np.pi * dh._as_quantity(7.0, 'GHz')).to('1/s')},
+         'frequency': dh._as_quantity(7.0, 'GHz')},
     ]
     chip = Chip.from_simulation(dh, C, node_labels, specs)
     df = chip.dressed_frequencies()
@@ -385,7 +382,7 @@ def test_resonator_resonator_hybridization():
 
 def test_purcell_decay():
     """Purcell: gamma = kappa*(g/Delta)^2, None when kappa unset."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     # Without kappa -- should return None
     chip = make_toy_chip(dh)
     assert chip.compute_purcell('Q1', 'R1') is None
@@ -399,7 +396,7 @@ def test_purcell_decay():
     # Manual: g/Delta
     g_Hz = chip.compute_coupling('Q1', 'R1').to('Hz').magnitude
     comp_r = chip.components['R1']
-    f_res = (comp_r.omega_r / (2 * np.pi)).to('Hz').magnitude
+    f_res = dh._as_quantity(comp_r.frequency, dh.freq_units).to('Hz').magnitude
     f_q = chip.components['Q1'].frequency().to('Hz').magnitude
     Delta = f_res - f_q
     gamma_manual = 1e6 * (g_Hz / Delta)**2  # kappa=1MHz * ratio^2, in Hz
@@ -412,7 +409,7 @@ def test_purcell_decay():
 
 def test_higher_order_dispersive():
     """chi_prime and vacuum shifts have correct signs and scaling."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     ho = chip.compute_higher_order_dispersive('Q1', 'R1')
 
@@ -438,7 +435,7 @@ def test_higher_order_dispersive():
 
 def test_inductance_matrix_inverse_matches_manual_calc():
     """linv is the matrix inverse of inductance_matrix, independent check."""
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)  # capacitance matrix + components, unrelated
 
     L = np.array([
@@ -464,7 +461,7 @@ def test_inductance_node_labels_independent_of_capacitance_node_labels():
     capacitance matrix's node_labels -- setting one must not disturb the
     other, and they're allowed to differ in count/names/order entirely.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)  # node_labels = ['qubit_pad', 'res_pad']
     cap_node_labels_before = list(chip.node_labels)
 
@@ -482,7 +479,7 @@ def test_inductance_node_labels_independent_of_capacitance_node_labels():
 
 
 def test_inductance_matrix_size_mismatch_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     try:
         chip.set_inductance_matrix(np.eye(3), node_labels=['a', 'b'])
@@ -492,7 +489,7 @@ def test_inductance_matrix_size_mismatch_raises():
 
 
 def test_inductance_unknown_label_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     chip.set_inductance_matrix(np.eye(2) * 10.0, node_labels=['a', 'b'])
     try:
@@ -503,7 +500,7 @@ def test_inductance_unknown_label_raises():
 
 
 def test_inductance_matrix_not_loaded_raises():
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = make_toy_chip(dh)
     try:
         _ = chip.linv
@@ -516,7 +513,7 @@ def test_from_inductance_simulation_standalone():
     """from_inductance_simulation builds a Chip with no capacitance matrix
     or components -- inductance-matrix-only ingestion, as requested.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     L = np.array([[20.0, 2.0], [2.0, 25.0]])
     chip = Chip.from_inductance_simulation(dh, L, node_labels=['squid_a', 'squid_b'])
 
@@ -532,8 +529,8 @@ def test_floating_squid_EJ_matches_compute_squid_EJ():
     flux changes -- independent check, not reusing FloatingSQUID's own
     property in the assertion.
     """
-    from components import FloatingSQUID
-    dh = DesignHelper(light_speed='3e8 m/s')
+    from parametric_coupling import FloatingSQUID
+    dh = DesignHelper()
     sq = FloatingSQUID('Qsq', [0, 1], dh, EJ1=dh._as_quantity(10, 'GHz'),
                         EJ2=dh._as_quantity(8, 'GHz'), EC=dh._as_quantity(0.25, 'GHz'),
                         flux=0.0)
@@ -554,8 +551,8 @@ def test_floating_squid_frequency_changes_with_flux():
     EJ with zero overrides -- this is the actual point of making EJ a
     property instead of duplicating Qubit's methods.
     """
-    from components import FloatingSQUID
-    dh = DesignHelper(light_speed='3e8 m/s')
+    from parametric_coupling import FloatingSQUID
+    dh = DesignHelper()
     sq = FloatingSQUID('Qsq', [0, 1], dh, EJ1=dh._as_quantity(10, 'GHz'),
                         EJ2=dh._as_quantity(8, 'GHz'), EC=dh._as_quantity(0.25, 'GHz'),
                         flux=0.0)
@@ -580,7 +577,7 @@ def test_floating_squid_coupling_matches_manual_calc():
     test_floating_transmon_coupling_matches_manual_calc but with
     flux-tunable EJ on top.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     C = np.array([
         [100e-15, -40e-15, -8e-15],
         [-40e-15, 100e-15, -3e-15],
@@ -596,7 +593,7 @@ def test_floating_squid_coupling_matches_manual_calc():
     chip.add_component({
         'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
         'capacitance': dh._as_quantity(100, 'fF'),
-        'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s'),
+        'frequency': dh._as_quantity(6, 'GHz'),
     })
 
     g = chip.compute_coupling('Qsq', 'R1').to('Hz').magnitude
@@ -621,8 +618,8 @@ def test_floating_squid_coupling_matches_manual_calc():
 
 
 def test_floating_squid_requires_two_nodes():
-    from components import FloatingSQUID
-    dh = DesignHelper(light_speed='3e8 m/s')
+    from parametric_coupling import FloatingSQUID
+    dh = DesignHelper()
     try:
         FloatingSQUID('bad', [0], dh, EJ1=dh._as_quantity(10, 'GHz'),
                        EJ2=dh._as_quantity(8, 'GHz'), EC=dh._as_quantity(0.25, 'GHz'))
@@ -638,8 +635,8 @@ def test_floating_squid_requires_two_nodes():
 
 
 def test_floating_squid_EJ_cannot_be_set_directly():
-    from components import FloatingSQUID
-    dh = DesignHelper(light_speed='3e8 m/s')
+    from parametric_coupling import FloatingSQUID
+    dh = DesignHelper()
     sq = FloatingSQUID('Qsq', [0, 1], dh, EJ1=dh._as_quantity(10, 'GHz'),
                         EJ2=dh._as_quantity(8, 'GHz'), EC=dh._as_quantity(0.25, 'GHz'))
     try:
@@ -653,7 +650,7 @@ def test_floating_squid_update_component_flux():
     """Chip.update_component('Qsq', flux=...) is the intended way to
     flux-tune a FloatingSQUID already registered on a Chip.
     """
-    dh = DesignHelper(light_speed='3e8 m/s')
+    dh = DesignHelper()
     chip = Chip(dh, ['sq_pad0', 'sq_pad1', 'res_pad'])
     chip.set_capacitance_matrix(np.array([
         [100e-15, -40e-15, -8e-15],
@@ -668,7 +665,7 @@ def test_floating_squid_update_component_flux():
     chip.add_component({
         'type': 'resonator', 'name': 'R1', 'nodes': ['res_pad'],
         'capacitance': dh._as_quantity(100, 'fF'),
-        'omega_r': (2 * np.pi * dh._as_quantity(6, 'GHz')).to('1/s'),
+        'frequency': dh._as_quantity(6, 'GHz'),
     })
     g_before = chip.compute_coupling('Qsq', 'R1').to('MHz').magnitude
     chip.update_component('Qsq', flux=0.4)

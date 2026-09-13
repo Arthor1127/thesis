@@ -1,0 +1,46 @@
+{
+  "geometry": "cs14_cl300",
+  "tag": "eigen_qc_cs14_cl300",
+  "r_eff_ohm": 50.0,
+  "r_per_gap_ohm": 100.0,
+  "n_gaps_per_port": 2,
+  "n_ports": 2,
+  "si_tandelta": 0.0,
+  "palace_reference": {
+    "eigenmode_Qc_2port_R50": 13562,
+    "eigenmode_Qc_1port_open2nd": 26966,
+    "driven_S21_fit_Qc": 15684
+  },
+  "geometry_note": "Part 1. PALACE numbers not fully trusted; independent check.",
+  "resonator_mode": {
+    "fr_hz": 8507676149.02165,
+    "fr_ghz": 8.50767614902165,
+    "fi_hz": 0.999002320509815,
+    "Q_total_hfss": 4258086279.859679,
+    "Qc": 4258086279.859679,
+    "Qc_is_lower_bound_only": false,
+    "Qc_note": "dielectric lossless + PEC metal, so the eigenmode Q is Qc directly (fr/(2 fi), fi from the R=50 ports only). Check pass_history: if mode Q keeps climbing / jumping pass-to-pass it has hit the eigensolver noise floor and Qc is only a lower bound."
+  },
+  "pass_history": [],
+  "all_modes": [
+    {
+      "f_hz": 8507676149.02165,
+      "f_im_hz": 0.999002320509815,
+      "f_ghz": 8.50767614902165,
+      "Q": 4258086279.859679
+    },
+    {
+      "f_hz": 21749016056.2317,
+      "f_im_hz": 11139.804616412,
+      "f_ghz": 21.7490160562317,
+      "Q": 976184.8077743397
+    },
+    {
+      "f_hz": 25326436915.9465,
+      "f_im_hz": 47948.2242164736,
+      "f_ghz": 25.3264369159465,
+      "Q": 264101.92796300765
+    }
+  ],
+  "solve_s": 602.5
+}

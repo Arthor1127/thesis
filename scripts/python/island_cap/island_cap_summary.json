@@ -1,0 +1,19 @@
+{
+  "eps_r": 11.9,
+  "eps_eff_coplanar_over_eps0": 6.45,
+  "radius_sweep": {
+    "coax_fit_eps_eff_over_eps0": 1711.7939227686377,
+    "disc_model_median_sim_over_model": 1.175640925818156
+  },
+  "gap_sweep": {
+    "coax_fit_eps_eff_over_eps0": 924.312262755715,
+    "disc_model_median_sim_over_model": 1.1531927602539884,
+    "logfit_A_fF": 36.11541230545379,
+    "logfit_B_fF": 27.41166848702185
+  },
+  "thickness_sweep": {
+    "C_mean_fF": 93.29465037742,
+    "C_spread_fF": 0.0
+  },
+  "median_sim_over_coax": 247.80366055708348
+}

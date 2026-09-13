@@ -1,0 +1,105 @@
+{
+  "Problem": {
+    "Type": "Driven",
+    "Verbose": 2,
+    "Output": "postpro_o2"
+  },
+  "Model": {
+    "Mesh": "/home/ruiz/Documents/thesis/notebooks/design/parametric_coupling_chip/impedance_crosscheck/stage2_out/mesh.msh",
+    "L0": 1e-06,
+    "Refinement": {}
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          1
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          2
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ],
+    "Postprocessing": {}
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        10
+      ]
+    },
+    "Absorbing": {
+      "Attributes": [
+        11
+      ],
+      "Order": 1
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "R": 50.0,
+        "Excitation": 1,
+        "Elements": [
+          {
+            "Attributes": [
+              20
+            ],
+            "Direction": "+Y"
+          },
+          {
+            "Attributes": [
+              21
+            ],
+            "Direction": "-Y"
+          }
+        ]
+      },
+      {
+        "Index": 2,
+        "R": 50.0,
+        "Elements": [
+          {
+            "Attributes": [
+              22
+            ],
+            "Direction": "+Y"
+          },
+          {
+            "Attributes": [
+              23
+            ],
+            "Direction": "-Y"
+          }
+        ]
+      }
+    ]
+  },
+  "Solver": {
+    "Order": 2,
+    "Device": "CPU",
+    "Driven": {
+      "Samples": [
+        {
+          "Type": "Linear",
+          "MinFreq": 2.0,
+          "MaxFreq": 26.0,
+          "FreqStep": 2.0
+        }
+      ]
+    },
+    "Linear": {
+      "Type": "Default",
+      "KSPType": "GMRES",
+      "Tol": 1e-08,
+      "MaxIts": 250
+    }
+  }
+}

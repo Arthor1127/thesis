@@ -1,0 +1,75 @@
+{
+  "tag": "N8_L40_g4_w8_t6_amr",
+  "with_coupler": true,
+  "finger_count": 8,
+  "finger_length_um": 40.0,
+  "finger_gap_um": 4.0,
+  "finger_width_um": 8.0,
+  "finger_tip_gap_um": 6.0,
+  "spine_width_um": 12.0,
+  "neck_um": 60.0,
+  "pad_radius_um": 136.0,
+  "pad_gap_um": 20.0,
+  "eps_r_sim": 11.45,
+  "solver_order": 2,
+  "amr": true,
+  "n_conductors": 3,
+  "terminal_names": [
+    "C[i][1] (F)",
+    "C[i][2] (F)",
+    "C[i][3] (F)"
+  ],
+  "ground_index": 0,
+  "C_mutual_all_fF": {
+    "C[i][1] (F)--C[i][2] (F)": 94.82694886720999,
+    "C[i][1] (F)--C[i][3] (F)": 94.82729164731,
+    "C[i][2] (F)--C[i][3] (F)": 25.26191819738
+  },
+  "C_to_ground_fF": {
+    "C[i][2] (F)": 94.82694886720999,
+    "C[i][3] (F)": 94.82729164731
+  },
+  "C_selfdiag_fF": {
+    "C[i][2] (F)": 137.27273272309998,
+    "C[i][3] (F)": 137.27356840939999
+  },
+  "C_c_fF": 25.26191819738,
+  "maxwell_C_matrix_F": [
+    [
+      1.091076918788e-12,
+      -9.482694886721e-14,
+      -9.482729164731e-14
+    ],
+    [
+      -9.482694886721e-14,
+      1.372727327231e-13,
+      -2.526191819738e-14
+    ],
+    [
+      -9.482729164731e-14,
+      -2.526191819738e-14,
+      1.372735684094e-13
+    ]
+  ],
+  "amr_cycles": [
+    {
+      "iter": "iteration1",
+      "n_conductors": 3,
+      "C_c_fF": 27.47896691426
+    },
+    {
+      "iter": "iteration2",
+      "n_conductors": 3,
+      "C_c_fF": 26.114792657859997
+    },
+    {
+      "iter": "iteration3",
+      "n_conductors": 3,
+      "C_c_fF": 25.514196188489997
+    }
+  ],
+  "dof": 2781241,
+  "mesh_elements": 2049975,
+  "solve_s": 890.6309349536896,
+  "wall_s": 1065.5278477668762
+}

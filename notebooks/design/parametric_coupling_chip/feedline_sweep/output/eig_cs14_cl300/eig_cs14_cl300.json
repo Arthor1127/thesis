@@ -1,0 +1,66 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "eig_cs14_cl300.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          3
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          4
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        1,
+        2,
+        6,
+        5,
+        8,
+        7,
+        10,
+        9
+      ]
+    },
+    "LumpedPort": [],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 2,
+    "Eigenmode": {
+      "N": 4,
+      "Tol": 1e-08,
+      "Target": 7.0,
+      "Save": 4
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-08,
+      "MaxIts": 200
+    }
+  }
+}

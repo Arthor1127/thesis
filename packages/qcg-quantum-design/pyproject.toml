@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qcg-quantum-design"
+version = "0.1.0"
+description = "SSH photonic chain + second-quantization engine (PHOTONICChain / SecondQuantizationEngine)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "matplotlib"]
+
+[project.optional-dependencies]
+gpu = ["cupy"]
+
+[tool.setuptools]
+py-modules = ["ssh_chain_sq", "sq_engine", "thesis_cmaps", "thesis_style", "qcg_cmaps"]
+
+[tool.setuptools.package-dir]
+"" = "src"

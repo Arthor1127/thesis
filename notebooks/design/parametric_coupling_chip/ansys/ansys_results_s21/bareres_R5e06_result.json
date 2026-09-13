@@ -1,0 +1,33 @@
+{
+  "R_ohm": 5000000.0,
+  "tag": "bareres_R5e06",
+  "analytic_Qc": 78601,
+  "analytic_formula": "Qc = (pi/4) * (R / 49.961)",
+  "palace_eigenmode_Qc": 78181.5,
+  "group_delay_method": {
+    "fr_hz": 7989307000.598913,
+    "tau_g_peak_s": -0.00012159347534179688,
+    "Qc": 1525946.3276840537
+  },
+  "oneport_fit": {
+    "fr_hz": 7989307023.529964,
+    "Ql": 46659.0755650905,
+    "Qc": 94457.29379190443,
+    "phi_rad": 18.849545008923673,
+    "Qi": 92206.15688100788,
+    "fit_cost": 2.2258023282897283e-13
+  },
+  "si_tandelta": 1.2e-05,
+  "fr_ghz": 7.98931,
+  "Qc_group_delay": 1525946.3,
+  "Qc_group_delay_note": "unreliable here: the -38 dB near-critical notch makes the S11 phase non-monotonic, so the group-delay estimator breaks. Use Qc_oneport_fit.",
+  "Ql_oneport_fit": 46659.1,
+  "Qc_oneport_fit": 94457.3,
+  "Qi_oneport_fit": 92206.2,
+  "n_freq": 20001,
+  "sweep_ghz": [
+    7.98677,
+    7.99185
+  ],
+  "solve_note": "HFSS driven interpolating sweep, fine mesh (MIN/MAXPASS 16/20, MaxDeltaS 1e-4), window centred on f_r; fit run offline from the saved .s1p (driver crashed post-export)."
+}

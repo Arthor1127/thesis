@@ -1,0 +1,28 @@
+{
+  "Excitations": [
+    [
+      [
+        1,
+        {
+          "CurrentDipole": [],
+          "LumpedPort": [
+            1
+          ],
+          "SurfaceCurrent": [],
+          "WavePort": []
+        }
+      ]
+    ]
+  ],
+  "GitTag": "3b8c020",
+  "Problem": {
+    "DegreesOfFreedom": 4851328,
+    "MPISize": 8,
+    "MeshElements": 115174,
+    "MultigridDegreesOfFreedom": [
+      147676,
+      775108,
+      4851328
+    ]
+  }
+}

@@ -1,0 +1,412 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "eig_njj_23_Lj_1.2nH.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          49
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          50
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        52,
+        51,
+        54,
+        53,
+        56,
+        55
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Attributes": [
+          1
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 2,
+        "Attributes": [
+          2
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 3,
+        "Attributes": [
+          3
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 4,
+        "Attributes": [
+          4
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 5,
+        "Attributes": [
+          5
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 6,
+        "Attributes": [
+          6
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 7,
+        "Attributes": [
+          7
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 8,
+        "Attributes": [
+          8
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 9,
+        "Attributes": [
+          9
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 10,
+        "Attributes": [
+          10
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 11,
+        "Attributes": [
+          11
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 12,
+        "Attributes": [
+          12
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 13,
+        "Attributes": [
+          13
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 14,
+        "Attributes": [
+          14
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 15,
+        "Attributes": [
+          15
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 16,
+        "Attributes": [
+          16
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 17,
+        "Attributes": [
+          17
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 18,
+        "Attributes": [
+          18
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 19,
+        "Attributes": [
+          19
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 20,
+        "Attributes": [
+          20
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 21,
+        "Attributes": [
+          21
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 22,
+        "Attributes": [
+          22
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 23,
+        "Attributes": [
+          23
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      }
+    ],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 1,
+    "Eigenmode": {
+      "N": 12,
+      "Tol": 1e-05,
+      "Target": 0.5,
+      "Save": 12
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-05,
+      "MaxIts": 300
+    }
+  }
+}

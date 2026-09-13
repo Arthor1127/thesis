@@ -1,0 +1,27 @@
+{
+  "tag": "coeff_a100_g6_o2",
+  "radius_um": 100.0,
+  "gap_um": 6.0,
+  "thickness_nm": 100.0,
+  "eps_r": 11.9,
+  "b_over_a": 1.06,
+  "C_island_ground_F": 9.247580243715e-14,
+  "C_island_ground_fF": 92.47580243715,
+  "C_island_self_fF": 100.20840802439999,
+  "C_formula_coax_fF": 0.615816658377182,
+  "ratio_sim_over_formula": 150.1677507082139,
+  "maxwell_matrix_F": [
+    [
+      4.010685947618e-13,
+      -9.247580243715e-14
+    ],
+    [
+      -9.247580243715e-14,
+      1.0020840802439999e-13
+    ]
+  ],
+  "dof": 1942003,
+  "mesh_elements": 1456059,
+  "solve_s": 89.7345449924469,
+  "wall_s": 278.04862332344055
+}

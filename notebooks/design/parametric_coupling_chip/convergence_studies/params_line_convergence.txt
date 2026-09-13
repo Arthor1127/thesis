@@ -1,0 +1,7 @@
+0.5 1.0 conv_baseline
+0.25 1.0 conv_mesh2x
+0.125 1.0 conv_mesh4x
+0.5 3.0 conv_z3x
+0.5 6.0 conv_z6x
+0.125 6.0 conv_mesh4x_z6x
+0.0625 12.0 conv_mesh8x_z12x

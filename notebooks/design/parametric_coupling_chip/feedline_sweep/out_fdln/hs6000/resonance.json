@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "coupling_space_um": 14.0,
+  "coupling_length_um": 300.0,
+  "chip_half_span_um": 6000.0,
+  "feedline_length_mm": 12.0,
+  "all_modes_ghz": [
+    6.831694431946,
+    7.761305660941,
+    8.273276409625,
+    8.753456015258,
+    10.55011329925,
+    10.86850890962
+  ],
+  "all_q_factors": [
+    404824.553281,
+    392299.8425287,
+    402723.1861447,
+    402753.9687581,
+    399844.5269928,
+    383888.0216974
+  ],
+  "starting_freq_hz": 5000000000.0,
+  "number_of_freqs": 6,
+  "amr_max_its": 0,
+  "amr_tol": 0.01,
+  "num_cpus": 8,
+  "wall_time_s": 32704.37350511551
+}

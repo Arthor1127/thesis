@@ -1,0 +1,41 @@
+{
+  "tag": "w20_g12_L1000",
+  "cpw_width_um": 20.0,
+  "cpw_gap_um": 12.0,
+  "length_um": 1000.0,
+  "margin_um": 60.0,
+  "integration_length_um": 880.0,
+  "full3d": false,
+  "metal_thickness_nm": null,
+  "Phi_Wb": -3.974430182162e-17,
+  "I_A": 0.05152105132651,
+  "L_total_H": -7.714186880571223e-16,
+  "Lprime_H_per_m": -8.766121455194572e-13,
+  "Lprime_nH_per_um": -8.766121455194572e-10,
+  "n_tet": 715483,
+  "n_nod": 121880,
+  "amr": {
+    "enabled": true,
+    "iterations_requested": 4,
+    "tolerance": 0.01,
+    "max_dofs": 3000000,
+    "convergence": [
+      {
+        "iteration": "iteration1",
+        "L_nH": -4.03095605707175e-05
+      },
+      {
+        "iteration": "iteration2",
+        "L_nH": -4.3260740409040484e-05,
+        "rel_change_vs_prev": -0.06821843108598892
+      },
+      {
+        "iteration": "iteration3",
+        "L_nH": -7.714186880571223e-07,
+        "rel_change_vs_prev": -55.07945604480494
+      }
+    ]
+  },
+  "solve_seconds": 228.7,
+  "total_seconds": 241.1
+}

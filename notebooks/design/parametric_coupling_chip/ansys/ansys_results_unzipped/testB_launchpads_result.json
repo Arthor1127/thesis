@@ -1,0 +1,41 @@
+{
+  "name": "testB_launchpads",
+  "two_port": true,
+  "n_freq": 41,
+  "f_min_hz": 6000000000.0,
+  "f_max_hz": 10000000000.0,
+  "Zpi_port1_mean_real": 44.97461005912547,
+  "Zpi_port1_mean_imag": 0.0,
+  "Zpi_port1_std_real": 0.037832303828392554,
+  "Zpi_port2_mean_real": 45.15509405389778,
+  "eps_eff_port1_mean": 5.941255309951357,
+  "Zin_fromS11_50_mean_real": 44.130298400090226,
+  "Zin_fromS11_50_mean_imag": -0.2367635245023952,
+  "Zin_fromS11_50_abs_mean": 44.13107003457982,
+  "S11_50_mean_db": -24.093781837799785,
+  "abs_S11_50ohm_mean": 0.06241845380197852,
+  "S11_raw_mean_abs": 0.041204047937942724,
+  "convergence": {
+    "file": "testB_launchpads_convergence.csv",
+    "raw": [
+      "          2|           1518|        0.064727|",
+      "          3|           1975|         0.18486|",
+      "          4|           2568|         0.21672|",
+      "          5|           3340|         0.17151|",
+      "          6|           4347|         0.11379|",
+      "          7|           5653|        0.076674|",
+      "          8|           7352|        0.077857|",
+      "          9|           9560|        0.050604|",
+      "         10|          12432|        0.036338|",
+      "         11|          16162|         0.02078|",
+      "         12|          21011|        0.018161|",
+      "         13|          27315|        0.012464|"
+    ]
+  },
+  "analytic_targets": {
+    "DesignHelper_Z0": 49.96,
+    "SQDMetal_CpwParams_Z0": 50.29,
+    "PALACE_driven_Zin_abs": 40.48,
+    "PALACE_cap_Z0": 47.55
+  }
+}

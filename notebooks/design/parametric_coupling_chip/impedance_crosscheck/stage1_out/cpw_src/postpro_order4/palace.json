@@ -1,0 +1,43 @@
+{
+  "Excitations": [
+    [
+      [
+        1,
+        {
+          "CurrentDipole": [],
+          "LumpedPort": [
+            1
+          ],
+          "SurfaceCurrent": [],
+          "WavePort": []
+        }
+      ],
+      [
+        2,
+        {
+          "CurrentDipole": [],
+          "LumpedPort": [
+            2
+          ],
+          "SurfaceCurrent": [],
+          "WavePort": []
+        }
+      ]
+    ]
+  ],
+  "GitTag": "3b8c020",
+  "LinearSolver": {
+    "TotalIts": 350,
+    "TotalSolves": 10
+  },
+  "Problem": {
+    "DegreesOfFreedom": 716544,
+    "MPISize": 8,
+    "MeshElements": 16346,
+    "MultigridDegreesOfFreedom": [
+      23262,
+      117748,
+      716544
+    ]
+  }
+}

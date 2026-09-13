@@ -1,0 +1,37 @@
+{
+  "modes": [
+    {
+      "f_hz": 8546116348.61898,
+      "f_imag_hz": 46329.7396645973,
+      "Q": 92231.43072342218
+    },
+    {
+      "f_hz": 16178648236.0837,
+      "f_imag_hz": 89898.6229999368,
+      "Q": 89982.73664378082
+    },
+    {
+      "f_hz": 16912652482.6497,
+      "f_imag_hz": 94255.0425737539,
+      "Q": 89717.49426252536
+    },
+    {
+      "f_hz": 18703732235.0953,
+      "f_imag_hz": 108261.101834519,
+      "Q": 86382.51374757219
+    },
+    {
+      "f_hz": 20475842520.3448,
+      "f_imag_hz": 115146.773586024,
+      "Q": 88911.92467953815
+    }
+  ],
+  "note": "Identify the resonator mode as the one near ~8 GHz whose field is concentrated on the hanging meander (feedline modes ~17 GHz, box modes >12 GHz).",
+  "palace_reference": {
+    "fr_hz": 8101000000.0,
+    "eigenmode_fr_range_ghz": [
+      8.25,
+      8.28
+    ]
+  }
+}

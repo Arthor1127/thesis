@@ -1,0 +1,3532 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[    139264,       3523]
+NotebookOptionsPosition[    127657,       3321]
+NotebookOutlinePosition[    128048,       3337]
+CellTagsIndexPosition[    128005,       3334]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["H_C diagonalisation and the analytic coefficients of H_J", "Title",ExpressionUUID->"5c8fe53e-5e51-495b-ab66-d4390e78eafc"],
+
+Cell["\<\
+Per {k,-k} sector of the periodic SSH photonic chain, the capacitive Nambu \
+block H_C is diagonalised by  T = T_rot . T_sq :  a phased sublattice \
+rotation into alpha_k / beta_k, followed by a two-mode squeeze on each {k,-k} \
+pair.  This notebook builds that transform symbolically, checks it \
+diagonalises H_C into the bands  Sqrt[1 \[PlusMinus] 2 |\[Delta]_C,k|] , then \
+applies the SAME T to the Josephson block H_J and reads off closed forms for \
+every coefficient of the transformed  \[Tilde]H_J .  The matrix result is \
+cross-checked at the operator level with Q3 (Multiply / NormalOrder / \
+Coefficient) and against a stored numerical reference from PeriodicChainSW.\
+\>", "Text",ExpressionUUID->"9c053818-5dfe-44c4-b85a-7195b79a078e"],
+
+Cell["\<\
+Fundamental symbols:  ad = |\[Delta]_C,k|  (real, 0 < ad < 1/2),   ph = arg \
+\[Delta]_C,k  (real),   dJ = \[Delta]_J,k = g_J1 + g_J2 e^{-ik}  (generic \
+complex),   gJ = g_J1 + g_J2  (real).   The -k blocks use the conjugates  \
+\[Delta]_C,-k = ad e^{-i ph}  and  \[Delta]_J,-k = Conjugate[dJ].\
+\>", "Text",ExpressionUUID->"993981e4-01a8-4ab2-83d4-5dbd0b54cc36"],
+
+Cell[CellGroupData[{
+
+Cell["1  Setup", "Section",ExpressionUUID->"a42aeb4b-5d6a-4504-9c46-76b53de17def"],
+
+Cell["\<\
+Needs[\"QuantumMob`Q3`\"];
+$Assumptions = ad > 0 && ad < 1/2 && ph \[Element] Reals && gJ \[Element] \
+Reals;\
+\>", "Input",
+ CellLabel->
+  "In[120]:=",ExpressionUUID->"1bcef5dc-17cb-4063-8239-1ea6affbe92c"],
+
+Cell["\<\
+dCk  = ad Exp[I ph];                  (* \[Delta]_{C,k}   *)
+dCkc = Conjugate[dCk];                (* \[Delta]_{C,-k} = conj  ->  ad \
+Exp[-I ph] *)
+dJk  = dJ;                            (* \[Delta]_{J,k}  (generic complex) *)
+dJkc = Conjugate[dJ];                 (* \[Delta]_{J,-k} = conj *)\
+\>", "Input",
+ CellLabel->
+  "In[122]:=",ExpressionUUID->"e1375398-8bf5-4272-bcde-75bbb1f9a760"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2  The sector Nambu matrices (honest 1/2 convention)", "Section",ExpressionUUID->"9b90a75e-4da0-4514-95dc-75a7340ec895"],
+
+Cell["\<\
+Basis  (b_{kA}, b_{kB}, b_{-kA}, b_{-kB} ; then the four daggers).  These 8x8 \
+blocks are transcribed from PeriodicChainSW.sector_nambu, which is verified \
+against the real-space -> k-space Fourier transform.\
+\>", "Text",ExpressionUUID->"21dfb15f-6419-4abb-bcd9-ce872c26ea39"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+sectorFromBloch[on_, bl_] := ArrayFlatten[{
+   {{{on, bl}, {Conjugate[bl], on}},        0},
+   {0,        {{on, Conjugate[bl]}, {bl, on}}}}];
+
+capNormal  = (1/2) sectorFromBloch[1, dCk];
+capPairing = Normal @ SparseArray[
+   {{1, 4} -> -dCk/2, {2, 3} -> -dCkc/2, {3, 2} -> -dCkc/2, {4, 1} -> \
+-dCk/2}, {4, 4}];
+HC = ArrayFlatten[{{capNormal, capPairing}, {Conjugate[capPairing], \
+Conjugate[capNormal]}}];
+
+jNormal  = (1/2) sectorFromBloch[gJ, -dJk];
+jPairing = Normal @ SparseArray[
+   {{1, 3} -> -gJ/2, {1, 4} -> -dJk/2, {2, 3} -> -dJkc/2, {2, 4} -> -gJ/2,
+    {3, 1} -> -gJ/2, {3, 2} -> -dJkc/2, {4, 1} -> -dJk/2, {4, 2} -> -gJ/2}, \
+{4, 4}];
+HJ = ArrayFlatten[{{jNormal, jPairing}, {Conjugate[jPairing], \
+Conjugate[jNormal]}}];
+
+MatrixForm /@ {HC, HJ}\
+\>", "Input",
+ CellLabel->
+  "In[126]:=",ExpressionUUID->"cf974777-c0a2-4aa6-b7ff-04dfa03a491a"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {
+        FractionBox["1", "2"], 
+        RowBox[{
+         FractionBox["1", "2"], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], "0", "0", "0", "0", "0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}]},
+       {
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], 
+        FractionBox["1", "2"], "0", "0", "0", "0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], "0"},
+       {"0", "0", 
+        FractionBox["1", "2"], 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], "0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], "0", "0"},
+       {"0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], 
+        FractionBox["1", "2"], 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], "0", "0", "0"},
+       {"0", "0", "0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], 
+        FractionBox["1", "2"], 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], "0", "0"},
+       {"0", "0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], 
+        FractionBox["1", "2"], "0", "0"},
+       {"0", 
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}], "0", "0", "0", "0", 
+        FractionBox["1", "2"], 
+        RowBox[{
+         FractionBox["1", "2"], " ", "ad", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]]}]},
+       {
+        RowBox[{
+         RowBox[{"-", 
+          FractionBox["1", "2"]}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], "0", "0", "0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", 
+           InterpretationBox[
+            TemplateBox[{"ph", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`ph]]}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"ad", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`ad]]}], 
+        FractionBox["1", "2"]}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {
+        FractionBox["gJ", "2"], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], "0", "0", "0", "0", 
+        RowBox[{"-", 
+         FractionBox["gJ", "2"]}], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}]},
+       {
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        FractionBox["gJ", "2"], "0", "0", "0", "0", 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox["gJ", "2"]}]},
+       {"0", "0", 
+        FractionBox["gJ", "2"], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox["gJ", "2"]}], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], "0", "0"},
+       {"0", "0", 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], 
+        FractionBox["gJ", "2"], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], 
+        RowBox[{"-", 
+         FractionBox["gJ", "2"]}], "0", "0"},
+       {"0", "0", 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"gJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`gJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        FractionBox[
+         InterpretationBox[
+          TemplateBox[{"gJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`gJ]], "2"], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], "0", "0"},
+       {"0", "0", 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"gJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`gJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], 
+        FractionBox[
+         InterpretationBox[
+          TemplateBox[{"gJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`gJ]], "2"], "0", "0"},
+       {
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"gJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`gJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}], "0", "0", "0", "0", 
+        FractionBox[
+         InterpretationBox[
+          TemplateBox[{"gJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`gJ]], "2"], 
+        RowBox[{"-", 
+         FractionBox["dJ", "2"]}]},
+       {
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"gJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`gJ]], "2"]}], "0", "0", "0", "0", 
+        RowBox[{"-", 
+         FractionBox[
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]], "2"]}], 
+        FractionBox[
+         InterpretationBox[
+          TemplateBox[{"gJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`gJ]], "2"]}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}], "}"}]], "Output",
+ CellChangeTimes->{3.997811427260373*^9, 3.997811491361191*^9},
+ CellLabel->
+  "Out[136]=",ExpressionUUID->"b74e125e-3cc2-4c29-b6ee-68af5b0f6f44"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3  The transform  T = T_rot . T_sq", "Section",ExpressionUUID->"cba39084-53c7-4fb0-b39e-933090b88b15"],
+
+Cell[CellGroupData[{
+
+Cell["3.1  Phased sublattice rotation", "Subsection",ExpressionUUID->"1bf3aa33-aef8-4b71-b863-4d86ab4d33df"],
+
+Cell["\<\
+alpha_k = (e^{-i ph/2} b_{kA} + e^{+i ph/2} b_{kB})/Sqrt[2],   beta_k  = \
+(e^{-i ph/2} b_{kA} - e^{+i ph/2} b_{kB})/Sqrt[2];   for -k the phase flips \
+(ph -> -ph).  As a passive Nambu transform \[CapitalPsi]_site = T_rot . \
+\[CapitalPsi]_alphabeta .\
+\>", "Text",ExpressionUUID->"e72e48ea-2f01-4047-abe4-53c4a8ac9b15"],
+
+Cell["\<\
+eh = Exp[I ph/2]; ehc = Exp[-I ph/2];
+rotPlus  = (1/Sqrt[2]) {{ehc, eh}, {ehc, -eh}};      (* rows = alpha_k , \
+beta_k   *)
+rotMinus = (1/Sqrt[2]) {{eh, ehc}, {eh, -ehc}};      (* rows = alpha_-k , \
+beta_-k *)
+rot4  = ArrayFlatten[{{rotPlus, 0}, {0, rotMinus}}];
+Trot  = ArrayFlatten[{{Inverse[rot4], 0}, {0, Conjugate[Inverse[rot4]]}}] // \
+Simplify;\
+\>", "Input",
+ CellLabel->
+  "In[137]:=",ExpressionUUID->"a559c2a8-6c79-4968-946a-853776c50d95"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+3.2  Two-mode squeeze on (alpha_k, alpha_-k) and (beta_k, beta_-k)\
+\>", "Subsection",ExpressionUUID->"7594041c-9486-4306-93f8-af93a458d753"],
+
+Cell["\<\
+z_{k,alpha} = (1/4) Log[1 + 2 ad],   z_{k,beta} = (1/4) Log[1 - 2 ad];   the \
+squeeze  gamma_k -> Cosh z gamma_k + Sinh z gamma_-k^dagger  removes the \
+pairing left by the rotation.  With  xa = 1 + 2 ad ,  xb = 1 - 2 ad :  Cosh z \
+= (x^{1/4} + x^{-1/4})/2 ,  Sinh z = (x^{1/4} - x^{-1/4})/2 .\
+\>", "Text",ExpressionUUID->"c87454da-1a6f-4266-9763-4e70757afbf9"],
+
+Cell["\<\
+xa = 1 + 2 ad; xb = 1 - 2 ad;
+chA = (xa^(1/4) + xa^(-1/4))/2; shA = (xa^(1/4) - xa^(-1/4))/2;
+chB = (xb^(1/4) + xb^(-1/4))/2; shB = (xb^(1/4) - xb^(-1/4))/2;
+Umat = DiagonalMatrix[{chA, chB, chA, chB}];
+Vmat = Normal @ SparseArray[{{1, 3} -> shA, {3, 1} -> shA, {2, 4} -> shB, {4, \
+2} -> shB}, {4, 4}];
+Tsq  = ArrayFlatten[{{Umat, Vmat}, {Conjugate[Vmat], Conjugate[Umat]}}];
+
+Tmat = Trot . Tsq // Simplify;
+tau3 = DiagonalMatrix[Join[ConstantArray[1, 4], ConstantArray[-1, 4]]];\
+\>", "Input",
+ CellLabel->
+  "In[142]:=",ExpressionUUID->"177cd0d7-96dd-4d2e-81a9-a729b25eb151"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3.3  T is paraunitary", "Subsection",ExpressionUUID->"82c07e6b-c1ef-4cf9-b9a2-41c141290fbc"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+FullSimplify[ConjugateTranspose[Tmat] . tau3 . Tmat - tau3]   (* -> 0 matrix \
+*)\
+\>", "Input",
+ CellLabel->
+  "In[151]:=",ExpressionUUID->"9f36aec7-c457-4018-bb1d-0680594c9ebc"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+     "0"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.997811427615535*^9, 3.997811491575303*^9},
+ CellLabel->
+  "Out[151]=",ExpressionUUID->"e1223a6b-7853-470d-a93a-a004827fabca"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["4  Diagonalising H_C", "Section",ExpressionUUID->"1dab4222-246e-4698-9c6a-26bded24ded6"],
+
+Cell["\<\
+\[Tilde]H_C = T^dagger H_C T .  In the honest 1/2 convention its diagonal is \
+(1/2) Sqrt[1 \[PlusMinus] 2 ad] ; multiply by the Nambu prefactor 2 for \
+physical frequencies.\
+\>", "Text",ExpressionUUID->"341e0e5c-d0d0-4e00-8eda-bbd67d5e54dd"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+HCd = FullSimplify[ConjugateTranspose[Tmat] . HC . Tmat];
+{ MatrixForm[HCd] , FullSimplify[2 Diagonal[HCd][[1 ;; 4]]] }\
+\>", "Input",
+ CellLabel->
+  "In[152]:=",ExpressionUUID->"fb365ed4-987b-48c7-b07b-0f97eae44287"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "+", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0", "0", "0", "0", "0", "0"},
+       {"0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "-", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0", "0", "0", "0", "0"},
+       {"0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "+", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0", "0", "0", "0"},
+       {"0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "-", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0", "0", "0"},
+       {"0", "0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "+", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0", "0"},
+       {"0", "0", "0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "-", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0", "0"},
+       {"0", "0", "0", "0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "+", 
+           RowBox[{"2", " ", "ad"}]}]]}], "0"},
+       {"0", "0", "0", "0", "0", "0", "0", 
+        RowBox[{
+         FractionBox["1", "2"], " ", 
+         SqrtBox[
+          RowBox[{"1", "-", 
+           RowBox[{"2", " ", "ad"}]}]]}]}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     SqrtBox[
+      RowBox[{"1", "+", 
+       RowBox[{"2", " ", "ad"}]}]], ",", 
+     SqrtBox[
+      RowBox[{"1", "-", 
+       RowBox[{"2", " ", "ad"}]}]], ",", 
+     SqrtBox[
+      RowBox[{"1", "+", 
+       RowBox[{"2", " ", "ad"}]}]], ",", 
+     SqrtBox[
+      RowBox[{"1", "-", 
+       RowBox[{"2", " ", "ad"}]}]]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.997811427871038*^9, 3.997811491800767*^9},
+ CellLabel->
+  "Out[153]=",ExpressionUUID->"c6b37228-d081-46ec-b94b-cdc56196f050"]
+}, Open  ]],
+
+Cell["\<\
+Expected:  {Sqrt[1 + 2 ad], Sqrt[1 - 2 ad], Sqrt[1 + 2 ad], Sqrt[1 - 2 ad]}  \
+and HCd off-diagonal / pairing entries all zero.\
+\>", "Text",ExpressionUUID->"7ca951f2-6c4c-49f5-bb45-48c2a1c2d5b1"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5  Transforming H_J  ->  the analytic coefficients", "Section",ExpressionUUID->"6fdaac25-beec-493b-9e83-8a2c573c72ff"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+HJd = ConjugateTranspose[Tmat] . HJ . Tmat // Simplify[#, TimeConstraint -> \
+120] &;
+
+AJqp = FullSimplify[2 HJd[[1 ;; 4, 1 ;; 4]], TimeConstraint -> 90];   (* \
+physical number block  \[Tilde]A_J *)
+BJqp = FullSimplify[2 HJd[[1 ;; 4, 5 ;; 8]], TimeConstraint -> 90];   (* \
+physical pairing block \[Tilde]B_J *)
+
+labels = {\"\[Alpha]_k\", \"\[Beta]_k\", \"\[Alpha]_-k\", \"\[Beta]_-k\"};
+Grid[Prepend[MapThread[Prepend, {AJqp, labels}], Prepend[labels, \
+\"\[Tilde]A_J\"]], Frame -> All]
+Grid[Prepend[MapThread[Prepend, {BJqp, labels}], Prepend[labels, \
+\"\[Tilde]B_J\"]], Frame -> All]\
+\>", "Input",
+ CellLabel->
+  "In[154]:=",ExpressionUUID->"c934a3b5-b2a7-46cc-aa41-551540e23757"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"\[Tilde]A_J\"\>", "\<\"\[Alpha]_k\"\>", "\<\"\[Beta]_k\"\>", "\<\"\
+\[Alpha]_-k\"\>", "\<\"\[Beta]_-k\"\>"},
+    {"\<\"\[Alpha]_k\"\>", 
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+          RowBox[{"(", 
+           RowBox[{"dJ", "+", 
+            RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+            RowBox[{"2", " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "+", 
+               RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+             InterpretationBox[
+              TemplateBox[{"dJ", 
+                
+                TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+                 "RowWithSeparators"]},
+               "Superscript"],
+              Conjugate[$CellContext`dJ]]}]}], ")"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]]}], ")"}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], "0", "0"},
+    {"\<\"\[Beta]_k\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "dJ"}], "+", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "-", 
+          RowBox[{"2", " ", "ad"}]}]]}]], 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+        RowBox[{"2", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", 
+           RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], "0", "0"},
+    {"\<\"\[Alpha]_-k\"\>", "0", "0", 
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+          RowBox[{"(", 
+           RowBox[{"dJ", "+", 
+            RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+            RowBox[{"2", " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "+", 
+               RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+             InterpretationBox[
+              TemplateBox[{"dJ", 
+                
+                TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+                 "RowWithSeparators"]},
+               "Superscript"],
+              Conjugate[$CellContext`dJ]]}]}], ")"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]]}], ")"}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "dJ"}], "+", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"\[Beta]_-k\"\>", "0", "0", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "-", 
+          RowBox[{"2", " ", "ad"}]}]]}]], 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+        RowBox[{"2", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", 
+           RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.997811429013774*^9, 3.997811492386262*^9},
+ CellLabel->
+  "Out[160]=",ExpressionUUID->"db165a56-2d8d-4c54-86f9-d6685e3dd738"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"\[Tilde]B_J\"\>", "\<\"\[Alpha]_k\"\>", "\<\"\[Beta]_k\"\>", "\<\"\
+\[Alpha]_-k\"\>", "\<\"\[Beta]_-k\"\>"},
+    {"\<\"\[Alpha]_k\"\>", "0", "0", 
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+          RowBox[{"(", 
+           RowBox[{"dJ", "+", 
+            RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+            RowBox[{"2", " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "+", 
+               RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+             InterpretationBox[
+              TemplateBox[{"dJ", 
+                
+                TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+                 "RowWithSeparators"]},
+               "Superscript"],
+              Conjugate[$CellContext`dJ]]}]}], ")"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]]}], ")"}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"\[Beta]_k\"\>", "0", "0", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "dJ"}], "+", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "-", 
+          RowBox[{"2", " ", "ad"}]}]]}]], 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+        RowBox[{"2", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", 
+           RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"\[Alpha]_-k\"\>", 
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+          RowBox[{"(", 
+           RowBox[{"dJ", "+", 
+            RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+            RowBox[{"2", " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"1", "+", 
+               RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+             SuperscriptBox["\[ExponentialE]", 
+              RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+             InterpretationBox[
+              TemplateBox[{"dJ", 
+                
+                TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+                 "RowWithSeparators"]},
+               "Superscript"],
+              Conjugate[$CellContext`dJ]]}]}], ")"}]}], ")"}], "/", 
+        RowBox[{"(", 
+         RowBox[{"2", " ", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]]}], ")"}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "dJ"}], "+", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], "0", "0"},
+    {"\<\"\[Beta]_-k\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "-", 
+          RowBox[{"2", " ", "ad"}]}]]}]], 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+        RowBox[{"2", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", 
+           RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], "0", "0"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.997811429013774*^9, 3.997811492389141*^9},
+ CellLabel->
+  "Out[161]=",ExpressionUUID->"1a0ac1c8-b901-4db7-a28b-603018c5b209"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5.1  The individual coefficients (closed form)", "Subsection",ExpressionUUID->"a0fb8d33-d659-43f2-afe3-0685344ed317"],
+
+Cell["\<\
+\[Tilde]A_J is momentum-block-diagonal (it flips the band but never k); \
+\[Tilde]B_J is momentum-block-anti-diagonal (every pair is a zero-momentum \
+alpha_k / *_-k pair).  Step 9b of K_SPACE_CALCULATIONS.md.\
+\>", "Text",ExpressionUUID->"6081cf75-00d8-44d3-89a4-3e882f6a5dca"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+coeffs = {
+  \"A_J[alpha_k, alpha_k]  (alpha band shift)\"      -> AJqp[[1, 1]],
+  \"A_J[beta_k,  beta_k]   (beta band shift)\"       -> AJqp[[2, 2]],
+  \"A_J[alpha_k, beta_k]   (interband, same k)\"     -> AJqp[[1, 2]],
+  \"A_J[alpha_k, alpha_-k] (should be 0)\"           -> FullSimplify[AJqp[[1, \
+3]]],
+  \"A_J[alpha_k, beta_-k]  (should be 0)\"           -> FullSimplify[AJqp[[1, \
+4]]],
+  \"B_J[alpha_k, alpha_-k] (zero-momentum pair)\"    -> BJqp[[1, 3]],
+  \"B_J[alpha_k, beta_-k]  (zero-momentum pair)\"    -> BJqp[[1, 4]],
+  \"B_J[beta_k,  beta_-k]  (zero-momentum pair)\"    -> BJqp[[2, 4]],
+  \"B_J[alpha_k, alpha_k]  (should be 0)\"           -> FullSimplify[BJqp[[1, \
+1]]],
+  \"B_J[alpha_k, beta_k]   (should be 0)\"           -> FullSimplify[BJqp[[1, \
+2]]]};
+Grid[List @@@ coeffs, Frame -> All, Alignment -> Left]\
+\>", "Input",
+ CellLabel->
+  "In[162]:=",ExpressionUUID->"75f6ce7c-f9bc-4e29-bb29-54ded6c9a564"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"A_J[alpha_k, alpha_k]  (alpha band shift)\"\>", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+        RowBox[{"(", 
+         RowBox[{"dJ", "+", 
+          RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+          RowBox[{"2", " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "+", 
+             RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+           InterpretationBox[
+            TemplateBox[{"dJ", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "+", 
+          RowBox[{"2", " ", "ad"}]}]]}]]}]},
+    {"\<\"A_J[beta_k,  beta_k]   (beta band shift)\"\>", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[ExponentialE]", 
+        RowBox[{
+         RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+       RowBox[{"(", 
+        RowBox[{"dJ", "-", 
+         RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", 
+            RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+      RowBox[{"2", " ", 
+       SqrtBox[
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "ad"}]}]]}]]},
+    {"\<\"A_J[alpha_k, beta_k]   (interband, same k)\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"A_J[alpha_k, alpha_-k] (should be 0)\"\>", "0"},
+    {"\<\"A_J[alpha_k, beta_-k]  (should be 0)\"\>", "0"},
+    {"\<\"B_J[alpha_k, alpha_-k] (zero-momentum pair)\"\>", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+        RowBox[{"(", 
+         RowBox[{"dJ", "+", 
+          RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+          RowBox[{"2", " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "+", 
+             RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+           InterpretationBox[
+            TemplateBox[{"dJ", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "+", 
+          RowBox[{"2", " ", "ad"}]}]]}]]}]},
+    {"\<\"B_J[alpha_k, beta_-k]  (zero-momentum pair)\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"B_J[beta_k,  beta_-k]  (zero-momentum pair)\"\>", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[ExponentialE]", 
+        RowBox[{
+         RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+       RowBox[{"(", 
+        RowBox[{"dJ", "-", 
+         RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", 
+            RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+      RowBox[{"2", " ", 
+       SqrtBox[
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "ad"}]}]]}]]},
+    {"\<\"B_J[alpha_k, alpha_k]  (should be 0)\"\>", "0"},
+    {"\<\"B_J[alpha_k, beta_k]   (should be 0)\"\>", "0"}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.9978114291210527`*^9, 3.997811492413745*^9},
+ CellLabel->
+  "Out[163]=",ExpressionUUID->"423fa980-53cc-4343-8dbe-b83dbbbeaa3c"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["6  Operator-level cross-check with Q3", "Section",ExpressionUUID->"120a1da6-6633-4846-8268-75488135dd2d"],
+
+Cell["\<\
+Build H_C, H_J as second-quantized operators from the same 8x8 blocks, \
+substitute the operator form of T ( b = T . (alpha,beta,...) ), normal-order, \
+and extract the same coefficients with Coefficient[..].  They must match \
+section 5.\
+\>", "Text",ExpressionUUID->"914adba3-3536-4d4c-aefe-508445ca30b8"],
+
+Cell["\<\
+Let[Boson, b, qp];
+site  = {b[1], b[2], b[3], b[4]};
+psiN  = Join[site, Dagger /@ site];                 (* Nambu spinor of the \
+site modes *)
+
+toOp[mat_, pref_] := pref Sum[mat[[i, j]] Multiply[Dagger[psiN[[i]]], \
+psiN[[j]]], {i, 8}, {j, 8}];
+HCop = NormalOrder @ toOp[HC, 1/2];
+HJop = NormalOrder @ toOp[HJ, 1/2];
+
+qpN  = Join[{qp[1], qp[2], qp[3], qp[4]}, Dagger /@ {qp[1], qp[2], qp[3], \
+qp[4]}];
+rule = Thread[psiN -> Tmat . qpN];                  (* b_i , b_i^dag  as \
+(alpha,beta,..) combos *)
+
+HJqp = NormalOrder[HJop /. rule] // ExpandAll // Simplify[#, TimeConstraint \
+-> 120] &;\
+\>", "Input",
+ CellLabel->
+  "In[164]:=",ExpressionUUID->"22f1eb2e-404a-493d-a588-fde6b4f92da6"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+opCoeff[m_, n_] := 2 Coefficient[HJqp, Multiply[Dagger[qp[m]], qp[n]]];       \
+ (* number  *)
+opPair[m_, n_]  := 2 Coefficient[HJqp, Multiply[Dagger[qp[m]], \
+Dagger[qp[n]]]];(* pairing *)
+
+Grid[{
+  {\"\", \"matrix  (sec 5)\", \"operator (Q3)\"},
+  {\"A_J[alpha_k, beta_k]\",   AJqp[[1, 2]], opCoeff[1, 2]},
+  {\"B_J[alpha_k, alpha_-k]\", BJqp[[1, 3]], opPair[1, 3]},
+  {\"B_J[alpha_k, beta_-k]\",  BJqp[[1, 4]], opPair[1, 4]},
+  {\"B_J[beta_k,  beta_-k]\",  BJqp[[2, 4]], opPair[2, 4]}
+} /. x_ :> FullSimplify[x], Frame -> All, Alignment -> Left]\
+\>", "Input",
+ CellLabel->
+  "In[176]:=",ExpressionUUID->"82bb987e-50cb-4611-bbb8-d465172db2f1"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"\"\>", "\<\"matrix  (sec 5)\"\>", "\<\"operator (Q3)\"\>"},
+    {"\<\"A_J[alpha_k, beta_k]\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"B_J[alpha_k, alpha_-k]\"\>", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+        RowBox[{"(", 
+         RowBox[{"dJ", "+", 
+          RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+          RowBox[{"2", " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "+", 
+             RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+           InterpretationBox[
+            TemplateBox[{"dJ", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "+", 
+          RowBox[{"2", " ", "ad"}]}]]}]]}], 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[ExponentialE]", 
+         RowBox[{
+          RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+        RowBox[{"(", 
+         RowBox[{"dJ", "+", 
+          RowBox[{"2", " ", "ad", " ", "dJ"}], "+", 
+          RowBox[{"2", " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "+", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"1", "+", 
+             RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+           SuperscriptBox["\[ExponentialE]", 
+            RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+           InterpretationBox[
+            TemplateBox[{"dJ", 
+              
+              TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+               "RowWithSeparators"]},
+             "Superscript"],
+            Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+       RowBox[{"2", " ", 
+        SqrtBox[
+         RowBox[{"1", "+", 
+          RowBox[{"2", " ", "ad"}]}]]}]]}]},
+    {"\<\"B_J[alpha_k, beta_-k]\"\>", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["ad", "2"]}]}], ")"}], 
+       RowBox[{"1", "/", "4"}]], " ", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{
+        RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+      RowBox[{"(", 
+       RowBox[{"dJ", "-", 
+        RowBox[{
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+         InterpretationBox[
+          TemplateBox[{"dJ", 
+            
+            TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+             "RowWithSeparators"]},
+           "Superscript"],
+          Conjugate[$CellContext`dJ]]}]}], ")"}]}]},
+    {"\<\"B_J[beta_k,  beta_-k]\"\>", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[ExponentialE]", 
+        RowBox[{
+         RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+       RowBox[{"(", 
+        RowBox[{"dJ", "-", 
+         RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", 
+            RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+      RowBox[{"2", " ", 
+       SqrtBox[
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "ad"}]}]]}]], 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[ExponentialE]", 
+        RowBox[{
+         RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+       RowBox[{"(", 
+        RowBox[{"dJ", "-", 
+         RowBox[{"2", " ", "ad", " ", "dJ"}], "-", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"\[ImaginaryI]", " ", "ph"}]], " ", "gJ"}], "-", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1"}], "+", 
+            RowBox[{"2", " ", "ad"}]}], ")"}], " ", 
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"2", " ", "\[ImaginaryI]", " ", "ph"}]], " ", 
+          InterpretationBox[
+           TemplateBox[{"dJ", 
+             
+             TemplateBox[{"\[ThinSpace]", "\"\[ThinSpace]\"", "\"*\""}, 
+              "RowWithSeparators"]},
+            "Superscript"],
+           Conjugate[$CellContext`dJ]]}]}], ")"}]}], 
+      RowBox[{"2", " ", 
+       SqrtBox[
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "ad"}]}]]}]]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.997811431780425*^9, 3.997811494499755*^9},
+ CellLabel->
+  "Out[179]=",ExpressionUUID->"2e71bc06-f21f-4c27-8a77-f54fd96e4cd1"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+7  Comparison against the implemented procedure (PeriodicChainSW)\
+\>", "Section",ExpressionUUID->"0cb63d99-e556-4c6b-a4ac-d702d9e8842d"],
+
+Cell["\<\
+The closed forms above are checked against the shipped numerical procedure: \
+for a set of parameter points, PeriodicChainSW.sector_nambu(k) builds the 8x8 \
+blocks and PeriodicChainSW.diagonalize_cap_sector(k) builds the same T = \
+T_rot . T_sq, then 2 (T^dagger H_J T) is the physical transformed Josephson \
+block.  The points span generic k, the two TRIMs (k = 0, pi), and both \
+dimerisation sides (g_c1 > g_c2 and g_c1 < g_c2), all with g_c1 + g_c2 < 1/2. \
+ The reference numbers below were produced by that procedure (numpy, \
+complex128).\
+\>", "Text",ExpressionUUID->"317a3a02-b3ec-4a7d-9c31-e3942d9586f3"],
+
+Cell["\<\
+reference = {
+  <|\"k\"->0.7, \"gc1\"->0.18, \"gc2\"->0.11, \"gJ1\"->1.0, \"gJ2\"->-0.5,
+    \"ad\"->0.27347349161566964, \"ph\"->-0.2621166301913443, \
+\"dJ\"->(0.6175789063577557 + (0.3221088436188455)*I), \"gJ\"->0.5,
+    \"AJnum\"->{{(-0.23606724543142563 + (0.0)*I), (0.0 + \
+(0.4310756766297129)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(-0.4310756766297129)*I), (1.0881487868209314 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (0.0)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-0.23606724543142563 + \
+(0.0)*I), (0.0 + (-0.4310756766297129)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.4310756766297129)*I), (1.0881487868209314 + (0.0)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-1.0400787906728883 + \
+(0.0)*I), (0.0 + (0.431075676629713)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (-0.43107567662971297)*I), (-0.3975319305639089 + (0.0)*I)}, \
+{(-1.0400787906728883 + (0.0)*I), (0.0 + (-0.431075676629713)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + (0.43107567662971297)*I), \
+(-0.3975319305639089 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->1.3, \"gc1\"->0.24, \"gc2\"->0.16, \"gJ1\"->1.0, \"gJ2\"->0.0,
+    \"ad\"->0.3220930145755544, \"ph\"->-0.49911468195387293, \"dJ\"->(1.0 + \
+(0.0)*I), \"gJ\"->1.0,
+    \"AJnum\"->{{(-0.34595707445122803 + (0.0)*I), (0.0 + \
+(0.41861049190351596)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(-0.41861049190351596)*I), (2.2001741210198795 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (0.0)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-0.34595707445122803 + \
+(0.0)*I), (0.0 + (-0.41861049190351596)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.41861049190351596)*I), (2.2001741210198795 + (0.0)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-1.9057053668785253 + \
+(0.0)*I), (0.0 + (0.41861049190351585)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.0 + (-0.41861049190351596)*I), (-1.1527096402905788 + (0.0)*I)}, \
+{(-1.9057053668785253 + (0.0)*I), (0.0 + (-0.41861049190351585)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + (0.41861049190351596)*I), \
+(-1.1527096402905788 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->2.1, \"gc1\"->0.2, \"gc2\"->0.19, \"gJ1\"->0.8, \"gJ2\"->-0.3,
+    \"ad\"->0.19424648272339662, \"ph\"->-1.0053293441192788, \
+\"dJ\"->(0.9514538313799573 + (0.2589628099946621)*I), \"gJ\"->0.5,
+    \"AJnum\"->{{(0.08125417429345227 + (-1.3877787807814457*^-17)*I), \
+(-4.163336342344337*^-17 + (0.9043470511265219)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.0)*I)}, {(0.0 + (-0.904347051126522)*I), (0.8670683619587722 + \
+(-6.938893903907228*^-18)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (0.08125417429345227 + \
+(1.3877787807814457*^-17)*I), (-4.163336342344337*^-17 + \
+(-0.9043470511265219)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.904347051126522)*I), (0.8670683619587722 + (6.938893903907228*^-18)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-0.7673949317790723 + \
+(0.0)*I), (-5.204170427930421*^-17 + (0.9043470511265219)*I)}, {(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (2.0816681711721685*^-17 + \
+(-0.9043470511265218)*I), (-0.4117217553515621 + \
+(6.245004513516506*^-17)*I)}, {(-0.7673949317790723 + (0.0)*I), \
+(-5.204170427930421*^-17 + (-0.9043470511265219)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.0)*I)}, {(2.0816681711721685*^-17 + (0.9043470511265218)*I), \
+(-0.4117217553515621 + (-6.245004513516506*^-17)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.0)*I)}}|>,
+  <|\"k\"->0.35, \"gc1\"->0.34, \"gc2\"->0.05, \"gJ1\"->1.2, \"gJ2\"->-0.7,
+    \"ad\"->0.38734825704630566, \"ph\"->-0.04427667665550054, \
+\"dJ\"->(0.5424391010068348 + (0.24002846521881593)*I), \"gJ\"->0.5,
+    \"AJnum\"->{{(-0.3324381722493373 + (0.0)*I), (1.3877787807814457*^-16 + \
+(0.20977434223783134)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, \
+{(1.1102230246251565*^-16 + (-0.20977434223783128)*I), (1.3055620720974066 + \
+(6.938893903907228*^-18)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (-0.3324381722493373 + (0.0)*I), \
+(1.3877787807814457*^-16 + (-0.20977434223783134)*I)}, {(0.0 + (0.0)*I), (0.0 \
++ (0.0)*I), (1.1102230246251565*^-16 + (0.20977434223783128)*I), \
+(1.3055620720974066 + (-6.938893903907228*^-18)*I)}}, \"BJnum\"->{{(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (-1.0830889724106343 + \
+(-3.469446951953614*^-18)*I), (3.469446951953614*^-17 + \
+(0.20977434223783134)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), \
+(2.7755575615628914*^-17 + (-0.20977434223783128)*I), (-0.8012026836638975 + \
+(1.3877787807814457*^-17)*I)}, {(-1.0830889724106343 + \
+(3.469446951953614*^-18)*I), (3.469446951953614*^-17 + \
+(-0.20977434223783134)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, \
+{(2.7755575615628914*^-17 + (0.20977434223783128)*I), (-0.8012026836638975 + \
+(-1.3877787807814457*^-17)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->3.05, \"gc1\"->0.15, \"gc2\"->0.14, \"gJ1\"->1.0, \"gJ2\"->-0.2,
+    \"ad\"->0.016614763596254644, \"ph\"->-0.879943857157201, \
+\"dJ\"->(1.1991616649078123 + (0.01829292844648744)*I), \"gJ\"->0.8,
+    \"AJnum\"->{{(0.024670586780475984 + (0.0)*I), (0.0 + \
+(0.9355953220019553)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(-0.9355953220019555)*I), (1.5510668578678521 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (0.0)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (0.024670586780475984 + \
+(0.0)*I), (0.0 + (-0.9355953220019553)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.9355953220019555)*I), (1.5510668578678521 + (0.0)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-1.5493904842505433 + \
+(0.0)*I), (0.0 + (0.9355953220019555)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (-0.9355953220019556)*I), (-0.07619818070014697 + (0.0)*I)}, \
+{(-1.5493904842505433 + (0.0)*I), (0.0 + (-0.9355953220019555)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + (0.9355953220019556)*I), \
+(-0.07619818070014697 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->0.9, \"gc1\"->0.11, \"gc2\"->0.3, \"gJ1\"->0.6, \"gJ2\"->-0.9,
+    \"ad\"->0.37832031125207094, \"ph\"->-0.6702241446856617, \
+\"dJ\"->(0.040551028556402025 + (0.7049942186647351)*I), \
+\"gJ\"->-0.30000000000000004,
+    \"AJnum\"->{{(0.311936529607036 + (0.0)*I), (0.0 + \
+(0.467111267091767)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, \
+{(-1.1449174941446927*^-16 + (-0.46711126709176715)*I), (-0.8084840729758278 \
++ (0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.311936529607036 + (0.0)*I), (0.0 + (-0.467111267091767)*I)}, \
+{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-1.1449174941446927*^-16 + \
+(0.46711126709176715)*I), (-0.8084840729758278 + (0.0)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (0.7646357948013303 + \
+(0.0)*I), (-4.163336342344337*^-17 + (0.467111267091767)*I)}, {(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (-3.469446951953614*^-17 + \
+(-0.46711126709176726)*I), (0.4077781211239792 + (0.0)*I)}, \
+{(0.7646357948013303 + (0.0)*I), (-4.163336342344337*^-17 + \
+(-0.467111267091767)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, \
+{(-3.469446951953614*^-17 + (0.46711126709176726)*I), (0.4077781211239792 + \
+(0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->1.75, \"gc1\"->0.3, \"gc2\"->0.09, \"gJ1\"->0.5, \"gJ2\"->-0.5,
+    \"ad\"->0.2974469919076799, \"ph\"->-0.302313379618763, \
+\"dJ\"->(0.589123027824746 + (0.49199297343696846)*I), \"gJ\"->0.0,
+    \"AJnum\"->{{(-0.5252688205950155 + (0.0)*I), (0.0 + \
+(0.5783477551958729)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(-0.5783477551958729)*I), (0.26472810986706663 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (0.0)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-0.5252688205950155 + \
+(0.0)*I), (0.0 + (-0.5783477551958729)*I)}, {(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.5783477551958729)*I), (0.26472810986706663 + (0.0)*I)}}, \
+\"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (-0.5252688205950155 + \
+(0.0)*I), (0.0 + (0.5783477551958729)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), \
+(0.0 + (-0.5783477551958729)*I), (0.26472810986706663 + (0.0)*I)}, \
+{(-0.5252688205950155 + (0.0)*I), (0.0 + (-0.5783477551958729)*I), (0.0 + \
+(0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + (0.5783477551958729)*I), \
+(0.26472810986706663 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>,
+  <|\"k\"->0.05, \"gc1\"->0.2, \"gc2\"->0.2, \"gJ1\"->0.9, \"gJ2\"->-0.1,
+    \"ad\"->0.3998750065102811, \"ph\"->-0.025, \"dJ\"->(0.8001249739605034 + \
+(0.004997916927067834)*I), \"gJ\"->0.8,
+    \"AJnum\"->{{(-0.4765765206347383 + (0.0)*I), (0.0 + \
+(0.01936827483933629)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(-0.019368274839336286)*I), (2.145619987499655 + \
+(2.6020852139652106*^-18)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}, {(0.0 + \
+(0.0)*I), (0.0 + (0.0)*I), (-0.4765765206347383 + (0.0)*I), (0.0 + \
+(-0.01936827483933629)*I)}, {(0.0 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.019368274839336286)*I), (2.145619987499655 + \
+(-2.6020852139652106*^-18)*I)}}, \"BJnum\"->{{(0.0 + (0.0)*I), (0.0 + \
+(0.0)*I), (-1.6692289302807184 + (0.0)*I), (0.0 + (0.01936827483933629)*I)}, \
+{(0.0 + (0.0)*I), (0.0 + (0.0)*I), (0.0 + (-0.019368274839336282)*I), \
+(-1.4298549188963965 + (-2.168404344971009*^-18)*I)}, {(-1.6692289302807184 + \
+(0.0)*I), (0.0 + (-0.01936827483933629)*I), (0.0 + (0.0)*I), (0.0 + \
+(0.0)*I)}, {(0.0 + (0.019368274839336282)*I), (-1.4298549188963965 + \
+(2.168404344971009*^-18)*I), (0.0 + (0.0)*I), (0.0 + (0.0)*I)}}|>
+};\
+\>", "Input",
+ CellLabel->
+  "In[180]:=",ExpressionUUID->"3f39e67a-cb66-499d-a45d-43fdaf3c1623"],
+
+Cell["\<\
+atPoint[pt_] := {ad -> pt[\"ad\"], ph -> pt[\"ph\"], dJ -> pt[\"dJ\"], gJ -> \
+pt[\"gJ\"]};
+analyticAJ[pt_] := AJqp /. atPoint[pt];
+analyticBJ[pt_] := BJqp /. atPoint[pt];
+maxDiff[a_, b_] := Max @ Abs @ Flatten[N[a] - b];\
+\>", "Input",
+ CellLabel->
+  "In[181]:=",ExpressionUUID->"575797c2-bb06-4f91-9818-550afa78a3a9"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Grid[Prepend[
+  Table[With[{pt = reference[[i]]},
+     {i,
+      Row[{\"k=\", NumberForm[pt[\"k\"], 3], \"  g_c1=\", pt[\"gc1\"], \" \
+g_c2=\", pt[\"gc2\"],
+           \"  g_J1=\", pt[\"gJ1\"], \" g_J2=\", pt[\"gJ2\"],
+           \"  (\", If[pt[\"gc1\"] > pt[\"gc2\"], \"trivial\", \
+\"topological\"], \")\"}],
+      ScientificForm[maxDiff[analyticAJ[pt], pt[\"AJnum\"]], 2],
+      ScientificForm[maxDiff[analyticBJ[pt], pt[\"BJnum\"]], 2]}],
+    {i, Length[reference]}],
+  {\"#\", \"parameters\", \"max|\[CapitalDelta] \[Tilde]A_J|\", \"max|\
+\[CapitalDelta] \[Tilde]B_J|\"}],
+ Frame -> All, Alignment -> Left]\
+\>", "Input",
+ CellLabel->
+  "In[185]:=",ExpressionUUID->"19fa0d08-bcf3-4e9d-a128-c7f6c5e85b37"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"#\"\>", "\<\"parameters\"\>", "\<\"max|\[CapitalDelta] \[Tilde]A_J|\
+\"\>", "\<\"max|\[CapitalDelta] \[Tilde]B_J|\"\>"},
+    {"1", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"0.7\"", ShowStringCharacters -> False], 0.7, AutoDelete -> 
+         True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.18`", "\" g_c2=\"", 
+       "0.11`", "\"  g_J1=\"", "1.`", "\" g_J2=\"", 
+       RowBox[{"-", "0.5`"}], "\"  (\"", "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"2.3\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       2.2584111220625*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"2.3\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       2.2584111220625*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"2", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"1.3\"", ShowStringCharacters -> False], 1.3, AutoDelete -> 
+         True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.24`", "\" g_c2=\"", 
+       "0.16`", "\"  g_J1=\"", "1.`", "\" g_J2=\"", "0.`", "\"  (\"", 
+       "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"8.9\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       8.881784197001252*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"1.1\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-15\"\>"]}],
+        ShowStringCharacters->False],
+       1.1141164906984895`*^-15,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"3", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"2.1\"", ShowStringCharacters -> False], 2.1, AutoDelete -> 
+         True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.2`", "\" g_c2=\"", 
+       "0.19`", "\"  g_J1=\"", "0.8`", "\" g_J2=\"", 
+       RowBox[{"-", "0.3`"}], "\"  (\"", "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"5.6\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       5.605544161229858*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"3.4\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       3.3638202796559585`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"4", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"0.35\"", ShowStringCharacters -> False], 0.35, 
+         AutoDelete -> True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.34`", 
+       "\" g_c2=\"", "0.05`", "\"  g_J1=\"", "1.2`", "\" g_J2=\"", 
+       RowBox[{"-", "0.7`"}], "\"  (\"", "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"1.8\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       1.7988498082682064`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"4.4\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       4.445943312254074*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"5", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"3.05\"", ShowStringCharacters -> False], 3.05, 
+         AutoDelete -> True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.15`", 
+       "\" g_c2=\"", "0.14`", "\"  g_J1=\"", "1.`", "\" g_J2=\"", 
+       RowBox[{"-", "0.2`"}], "\"  (\"", "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"3.3\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       3.3306690738754696`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"6.8\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       6.75028738573284*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"6", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"0.9\"", ShowStringCharacters -> False], 0.9, AutoDelete -> 
+         True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.11`", "\" g_c2=\"", 
+       "0.3`", "\"  g_J1=\"", "0.6`", "\" g_J2=\"", 
+       RowBox[{"-", "0.9`"}], "\"  (\"", "\"topological\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"2.3\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       2.2906195668375543`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"3.4\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       3.356899737786129*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"7", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"1.75\"", ShowStringCharacters -> False], 1.75, 
+         AutoDelete -> True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.3`", 
+       "\" g_c2=\"", "0.09`", "\"  g_J1=\"", "0.5`", "\" g_J2=\"", 
+       RowBox[{"-", "0.5`"}], "\"  (\"", "\"trivial\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"2.2\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       2.2343463202142493`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"2.2\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-16\"\>"]}],
+        ShowStringCharacters->False],
+       2.2343463202142493`*^-16,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]},
+    {"8", 
+     TemplateBox[{"\"k=\"", 
+       TagBox[
+        InterpretationBox[
+         StyleBox["\"0.05\"", ShowStringCharacters -> False], 0.05, 
+         AutoDelete -> True], NumberForm[#, 3]& ], "\"  g_c1=\"", "0.2`", 
+       "\" g_c2=\"", "0.2`", "\"  g_J1=\"", "0.9`", "\" g_J2=\"", 
+       RowBox[{"-", "0.1`"}], "\"  (\"", "\"topological\"", "\")\""},
+      "RowDefault"], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"5.6\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-17\"\>"]}],
+        ShowStringCharacters->False],
+       5.557136039937488*^-17,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ], 
+     TagBox[
+      InterpretationBox[
+       StyleBox[
+        RowBox[{"\<\"1.7\"\>", "\[Times]", 
+         SuperscriptBox["10", "\<\"-17\"\>"]}],
+        ShowStringCharacters->False],
+       1.7468341531342965`*^-17,
+       AutoDelete->True],
+      ScientificForm[#, 2]& ]}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.997811431825821*^9, 3.9978114945264177`*^9},
+ CellLabel->
+  "Out[185]=",ExpressionUUID->"57de6f98-5a94-4aaa-9681-bda8d66d973a"]
+}, Open  ]],
+
+Cell["\<\
+All entries ~ 1e-15 (double-precision round-off) -> the closed forms \
+reproduce the implemented procedure exactly, across generic k, both TRIMs and \
+both topological sides.\
+\>", "Text",ExpressionUUID->"76d94e17-669f-43b0-a92f-e2c515df2e97"],
+
+Cell[CellGroupData[{
+
+Cell["7.1  Per-coefficient side by side (point 1)", "Subsection",ExpressionUUID->"693d37e0-2140-4331-9430-1914e6a20160"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+pt = reference[[1]];
+aA = analyticAJ[pt]; aB = analyticBJ[pt];
+Grid[{
+  {\"coefficient\", \"analytic (closed form @ point 1)\", \"numeric \
+(PeriodicChainSW)\"},
+  {\"A_J[\[Alpha]_k,\[Alpha]_k]\", Chop@aA[[1, 1]], Chop@pt[\"AJnum\"][[1, \
+1]]},
+  {\"A_J[\[Beta]_k,\[Beta]_k]\",  Chop@aA[[2, 2]], Chop@pt[\"AJnum\"][[2, 2]]},
+  {\"A_J[\[Alpha]_k,\[Beta]_k]\", Chop@aA[[1, 2]], Chop@pt[\"AJnum\"][[1, 2]]},
+  {\"A_J[\[Alpha]_k,\[Alpha]_-k]\", Chop@aA[[1, 3]], Chop@pt[\"AJnum\"][[1, \
+3]]},
+  {\"B_J[\[Alpha]_k,\[Alpha]_-k]\", Chop@aB[[1, 3]], Chop@pt[\"BJnum\"][[1, \
+3]]},
+  {\"B_J[\[Alpha]_k,\[Beta]_-k]\",  Chop@aB[[1, 4]], Chop@pt[\"BJnum\"][[1, \
+4]]},
+  {\"B_J[\[Beta]_k,\[Beta]_-k]\",   Chop@aB[[2, 4]], Chop@pt[\"BJnum\"][[2, \
+4]]},
+  {\"B_J[\[Alpha]_k,\[Alpha]_k]\",  Chop@aB[[1, 1]], Chop@pt[\"BJnum\"][[1, \
+1]]}
+}, Frame -> All, Alignment -> Left]\
+\>", "Input",
+ CellLabel->
+  "In[186]:=",ExpressionUUID->"8da26102-8695-48e7-83db-914a5be24ce6"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"coefficient\"\>", "\<\"analytic (closed form @ point 1)\"\>", \
+"\<\"numeric (PeriodicChainSW)\"\>"},
+    {"\<\"A_J[\[Alpha]_k,\[Alpha]_k]\"\>", 
+     RowBox[{"-", "0.2360672454314256`"}], 
+     RowBox[{"-", "0.23606724543142563`"}]},
+    {"\<\"A_J[\[Beta]_k,\[Beta]_k]\"\>", "1.0881487868209316`", 
+     "1.0881487868209314`"},
+    {"\<\"A_J[\[Alpha]_k,\[Beta]_k]\"\>", 
+     RowBox[{"0.`", "\[VeryThinSpace]", "+", 
+      RowBox[{"0.43107567662971313`", " ", "\[ImaginaryI]"}]}], 
+     RowBox[{"0.`", "\[VeryThinSpace]", "+", 
+      RowBox[{"0.4310756766297129`", " ", "\[ImaginaryI]"}]}]},
+    {"\<\"A_J[\[Alpha]_k,\[Alpha]_-k]\"\>", "0", "0"},
+    {"\<\"B_J[\[Alpha]_k,\[Alpha]_-k]\"\>", 
+     RowBox[{"-", "1.0400787906728883`"}], 
+     RowBox[{"-", "1.0400787906728883`"}]},
+    {"\<\"B_J[\[Alpha]_k,\[Beta]_-k]\"\>", 
+     RowBox[{"0.`", "\[VeryThinSpace]", "+", 
+      RowBox[{"0.43107567662971313`", " ", "\[ImaginaryI]"}]}], 
+     RowBox[{"0.`", "\[VeryThinSpace]", "+", 
+      RowBox[{"0.431075676629713`", " ", "\[ImaginaryI]"}]}]},
+    {"\<\"B_J[\[Beta]_k,\[Beta]_-k]\"\>", 
+     RowBox[{"-", "0.3975319305639091`"}], 
+     RowBox[{"-", "0.3975319305639089`"}]},
+    {"\<\"B_J[\[Alpha]_k,\[Alpha]_k]\"\>", "0", "0"}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.997811431845808*^9, 3.997811494547637*^9},
+ CellLabel->
+  "Out[188]=",ExpressionUUID->"e168a85e-d661-457b-a61e-b6001c1fb050"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+8  TLS truncation:  the hybridised spinor  |\[Psi]_k\[RightAngleBracket]  and \
+its Zak phase\
+\>", "Section",ExpressionUUID->"1ee33169-69be-490a-a0c7-45f77f3f6cff"],
+
+Cell["\<\
+Cavity dressing couples the alpha band (0 photons) to the beta band (1 \
+photon) through the interband number coefficient  \[Tilde]A_J[alpha_k, \
+beta_k]  found in section 5.  Truncating the dressed problem to the two \
+nearly-resonant states  {|alpha_k, 0\[RightAngleBracket], |beta_k, 1\
+\[RightAngleBracket]}  gives a k-dependent two-level system whose lower \
+eigenvector, lifted back to the sublattice \[TensorProduct] photon Hilbert \
+space, is the hybridised chain / resonator photon state  |\[Psi]_k\
+\[RightAngleBracket] .  Its Zak phase \[Gamma] = \[Integral]_0^{2\[Pi]} dk \
+\[LeftAngleBracket]\[Psi]_k| i \[PartialD]_k |\[Psi]_k\[RightAngleBracket]  \
+comes out quantised, and the cavity frequency omega_r is the knob that \
+toggles it.\
+\>", "Text",ExpressionUUID->"16093705-1cab-4583-bfa3-a03315a8eac0"],
+
+Cell[CellGroupData[{
+
+Cell["8.1  The two-level Hamiltonian", "Subsection",ExpressionUUID->"e944bceb-36e0-4304-8b5d-94f1ffa55e81"],
+
+Cell["\<\
+The interband coupling  gAB = \[Tilde]A_J[alpha_k, beta_k]  is purely \
+imaginary:  gAB = I rho  with rho = (1 - 4 ad^2)^{1/4} Im[\[Delta]_J,k e^{-I \
+ph}]  real.  Hence the pseudo-spin  h = (0, gam rho, \[CapitalDelta]/2)  with \
+ \[CapitalDelta] = w_alpha - w_beta - omega_r  is PLANAR (no x-component), \
+and the whole k-dependence sits in the single angle  beta_k = atan2(\
+\[CapitalDelta]/2, gam rho).  New symbols:  wr = omega_r ,  gam = gamma  \
+(both real, positive).  Once gAB = I rho is checked, the spinor algebra is \
+carried with a REAL placeholder symbol  rho  (a big \[Delta]_J-dependent \
+expression under ArcTan defeats FullSimplify); rho is put back to its closed \
+form only for the numeric checks.\
+\>", "Text",ExpressionUUID->"691c3c61-05ef-41d6-83be-8af7d30337a9"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+gAB       = AJqp[[1, 2]];                                  (* interband \
+number coupling, section 5 *)
+rhoClosed = (1 - 4 ad^2)^(1/4) ComplexExpand[Im[dJ Exp[-I ph]], {dJ}];   (* \
+real: Cos[ph] Im[dJ] - Re[dJ] Sin[ph] *)
+Print[\"gAB is purely imaginary :  gAB - I rhoClosed  ->  \", \
+FullSimplify[gAB - I rhoClosed]];
+
+Clear[rho]; $Assumptions = $Assumptions && wr > 0 && gam > 0 && rho \
+\[Element] Reals;
+wAlpha = Sqrt[1 + 2 ad]; wBeta = Sqrt[1 - 2 ad];
+deltaTLS = wAlpha - wBeta - wr;                            (* w_alpha - \
+w_beta - omega_r *)
+meanTLS  = (wAlpha + wBeta + wr)/2;
+
+HTLSraw   = {{wAlpha, -I gam rho}, {I gam rho, wBeta + wr}};             (* \
+-gam gAB = -I gam rho *)
+HTLSpauli = meanTLS IdentityMatrix[2] + (deltaTLS/2) PauliMatrix[3] + gam rho \
+PauliMatrix[2];
+Print[\"HTLS  =  mean I2 + (\[CapitalDelta]/2) sigma_z + gam rho sigma_y  ->  \
+\",
+      Simplify[HTLSraw - HTLSpauli]];
+MatrixForm[HTLSpauli]\
+\>", "Input",
+ CellLabel->
+  "In[189]:=",ExpressionUUID->"b5176634-a73d-4112-b289-7db15f9008d9"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"gAB is purely imaginary :  gAB - I rhoClosed  ->  \"\>", "\[InvisibleSpace]",
+    "0"}],
+  SequenceForm["gAB is purely imaginary :  gAB - I rhoClosed  ->  ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9978114318829517`*^9, 3.997811494563447*^9},
+ CellLabel->
+  "During evaluation of \
+In[189]:=",ExpressionUUID->"94487569-ba09-483d-aaf7-eb66ffa68e6e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"HTLS  =  mean I2 + (\[CapitalDelta]/2) sigma_z + gam rho \
+sigma_y  ->  \"\>", "\[InvisibleSpace]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}],
+  SequenceForm[
+  "HTLS  =  mean I2 + (\[CapitalDelta]/2) sigma_z + gam rho sigma_y  ->  ", {{
+   0, 0}, {0, 0}}],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9978114318829517`*^9, 3.997811494564466*^9},
+ CellLabel->
+  "During evaluation of \
+In[189]:=",ExpressionUUID->"c2912260-711f-4e3e-a7b0-0df0909a9bc0"]
+}, Open  ]],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", 
+           SqrtBox[
+            RowBox[{"1", "-", 
+             RowBox[{"2", " ", "ad"}]}]]}], "+", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          SqrtBox[
+           RowBox[{"1", "-", 
+            RowBox[{"2", " ", "ad"}]}]], "+", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]], "+", "wr"}], ")"}]}]}], 
+      RowBox[{
+       RowBox[{"-", "\[ImaginaryI]"}], " ", "gam", " ", "rho"}]},
+     {
+      RowBox[{"\[ImaginaryI]", " ", "gam", " ", "rho"}], 
+      RowBox[{
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          SqrtBox[
+           RowBox[{"1", "-", 
+            RowBox[{"2", " ", "ad"}]}]], "-", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]], "+", "wr"}], ")"}]}], "+", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        RowBox[{"(", 
+         RowBox[{
+          SqrtBox[
+           RowBox[{"1", "-", 
+            RowBox[{"2", " ", "ad"}]}]], "+", 
+          SqrtBox[
+           RowBox[{"1", "+", 
+            RowBox[{"2", " ", "ad"}]}]], "+", "wr"}], ")"}]}]}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.9978114318981*^9, 3.9978114945660667`*^9},
+ CellLabel->
+  "Out[201]//MatrixForm=",ExpressionUUID->"2c76876b-e05c-4fb7-914c-\
+83004acfb98d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+hVec    = {0, gam rho, deltaTLS/2};                       (* planar \
+pseudo-spin, x-component = 0 *)
+betaK   = ArcTan[deltaTLS/2, gam rho];                    (* two-argument \
+ArcTan = atan2 *)
+Rk      = Sqrt[(gam rho)^2 + (deltaTLS/2)^2];             (* |h| *)
+cSpinor = {I Sin[betaK/2], Cos[betaK/2]};                 (* lower \
+eigenvector of h.sigma *)
+
+eigenResidual = FullSimplify[
+  (gam rho PauliMatrix[2] + (deltaTLS/2) PauliMatrix[3]) . cSpinor + Rk \
+cSpinor];
+Print[\"h.sigma . cSpinor + Rk cSpinor  ->  \", eigenResidual];
+Print[\"  numeric spot check  ->  \",
+  Chop @ N[eigenResidual /. {ad -> 0.27, gam -> 0.05, rho -> 0.7, wr -> 0.4}]];
+Print[\"norm  Conjugate[cSpinor].cSpinor  ->  \", Simplify[Conjugate[cSpinor] \
+. cSpinor]];
+Print[\"energy of |\[Psi]_k>  =  meanTLS - Rk  =  \", meanTLS - Rk];\
+\>", "Input",
+ CellLabel->"In[83]:=",ExpressionUUID->"8627b776-4f92-4ab6-8708-243bcbe50ae3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"h.sigma . cSpinor + Rk cSpinor  ->  \"\>", "\[InvisibleSpace]", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0"}], "}"}]}],
+  SequenceForm["h.sigma . cSpinor + Rk cSpinor  ->  ", {0, 0}],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9978114347819223`*^9},
+ CellLabel->
+  "During evaluation of \
+In[83]:=",ExpressionUUID->"d7863bc9-d486-4b77-9a99-ab1e3e224e9f"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"  numeric spot check  ->  \"\>", "\[InvisibleSpace]", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0"}], "}"}]}],
+  SequenceForm["  numeric spot check  ->  ", {0, 0}],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.997811434782946*^9},
+ CellLabel->
+  "During evaluation of \
+In[83]:=",ExpressionUUID->"1aa405d7-b12b-406a-a60a-735089d97d2e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"norm  Conjugate[cSpinor].cSpinor  ->  \"\>", "\[InvisibleSpace]",
+    "1"}],
+  SequenceForm["norm  Conjugate[cSpinor].cSpinor  ->  ", 1],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.99781143480871*^9},
+ CellLabel->
+  "During evaluation of \
+In[83]:=",ExpressionUUID->"e72206a1-90c1-4137-9f6f-bd58db480a9a"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"energy of |\[Psi]_k>  =  meanTLS - Rk  =  \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    RowBox[{"-", 
+     SqrtBox[
+      RowBox[{
+       RowBox[{
+        SuperscriptBox["gam", "2"], " ", 
+        SuperscriptBox["rho", "2"]}], "+", 
+       RowBox[{
+        FractionBox["1", "4"], " ", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", 
+            SqrtBox[
+             RowBox[{"1", "-", 
+              RowBox[{"2", " ", "ad"}]}]]}], "+", 
+           SqrtBox[
+            RowBox[{"1", "+", 
+             RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}], "2"]}]}]]}], "+", 
+    RowBox[{
+     FractionBox["1", "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       SqrtBox[
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "ad"}]}]], "+", 
+       SqrtBox[
+        RowBox[{"1", "+", 
+         RowBox[{"2", " ", "ad"}]}]], "+", "wr"}], ")"}]}]}]}],
+  SequenceForm[
+  "energy of |\[Psi]_k>  =  meanTLS - Rk  =  ", -($CellContext`gam^2 \
+$CellContext`rho^2 + 
+      Rational[1, 
+         4] (-(1 - 2 $CellContext`ad)^Rational[1, 2] + (1 + 
+           2 $CellContext`ad)^Rational[1, 2] - $CellContext`wr)^2)^
+     Rational[1, 2] + 
+   Rational[1, 2] ((1 - 2 $CellContext`ad)^
+      Rational[1, 2] + (1 + 2 $CellContext`ad)^
+      Rational[1, 2] + $CellContext`wr)],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.997811434810845*^9},
+ CellLabel->
+  "During evaluation of \
+In[83]:=",ExpressionUUID->"46ad9998-c8e2-4f1d-8fbd-3817d3dcac4e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+8.2  Lifting to the hybridised chain / resonator photon state\
+\>", "Subsection",ExpressionUUID->"244c3230-4a88-4344-8671-69c62c9c4dbe"],
+
+Cell["\<\
+alpha_k and beta_k carry the SSH sublattice Bloch spinors  u_alpha = (1, \
+e^{-I ph})/Sqrt[2] , u_beta = (1, -e^{-I ph})/Sqrt[2] .  The hybridised state \
+is the TLS eigenvector with each amplitude attached to its photon number:  |\
+\[Psi]_k\[RightAngleBracket] = I Sin[beta_k/2] |u_alpha\[RightAngleBracket] \
+\[TensorProduct] |0\[RightAngleBracket] + Cos[beta_k/2] |u_beta\
+\[RightAngleBracket] \[TensorProduct] |1\[RightAngleBracket] .  Basis order  \
+(A,0), (B,0), (A,1), (B,1) .\
+\>", "Text",ExpressionUUID->"3f1ae1b7-2710-4ac1-bd3b-efc1eab2431e"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+uAlpha = {1, Exp[-I ph]}/Sqrt[2];
+uBeta  = {1, -Exp[-I ph]}/Sqrt[2];
+(* NB: trailing '+' keeps the two terms on one expression *)
+psiK   = I Sin[betaK/2] Flatten@KroneckerProduct[uAlpha, {1, 0}] +
+             Cos[betaK/2] Flatten@KroneckerProduct[uBeta, {0, 1}];
+
+Print[\"<psi_k|psi_k>  ->  \",
+  Simplify[ComplexExpand[Conjugate[psiK] . psiK, TargetFunctions -> {Re, \
+Im}]]];
+MatrixForm[psiK]\
+\>", "Input",
+ CellLabel->"In[93]:=",ExpressionUUID->"1f477537-d82a-4c4f-a364-d1147095f288"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"<psi_k|psi_k>  ->  \"\>", "\[InvisibleSpace]", 
+   TagBox[GridBox[{
+      {"\[Piecewise]", GridBox[{
+         {"0", 
+          RowBox[{
+           RowBox[{"2", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SqrtBox[
+               RowBox[{"1", "-", 
+                RowBox[{"4", " ", 
+                 SuperscriptBox["ad", "2"]}]}]], "+", 
+              RowBox[{
+               SqrtBox[
+                RowBox[{"1", "+", 
+                 RowBox[{"2", " ", "ad"}]}]], " ", "wr"}]}], ")"}]}], ">", 
+           RowBox[{"2", "+", 
+            RowBox[{"4", " ", 
+             SuperscriptBox["gam", "2"], " ", 
+             SuperscriptBox["rho", "2"]}], "+", 
+            RowBox[{"2", " ", 
+             SqrtBox[
+              RowBox[{"1", "-", 
+               RowBox[{"2", " ", "ad"}]}]], " ", "wr"}], "+", 
+            SuperscriptBox["wr", "2"]}]}]},
+         {"1", 
+          TagBox["True",
+           "PiecewiseDefault",
+           AutoDelete->True]}
+        },
+        AllowedDimensions->{2, Automatic},
+        Editable->True,
+        GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+        GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{1.}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.84]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}},
+        Selectable->True]}
+     },
+     GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{1.}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.35]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    "Piecewise",
+    DeleteWithContents->True,
+    Editable->False,
+    SelectWithContents->True,
+    Selectable->False,
+    StripWrapperBoxes->True]}],
+  SequenceForm["<psi_k|psi_k>  ->  ", 
+   Piecewise[{{
+     0, 2 ((1 - 4 $CellContext`ad^2)^
+         Rational[1, 2] + (1 + 2 $CellContext`ad)^
+          Rational[1, 2] $CellContext`wr) > 
+      2 + 4 $CellContext`gam^2 $CellContext`rho^2 + 
+       2 (1 - 2 $CellContext`ad)^
+         Rational[1, 2] $CellContext`wr + $CellContext`wr^2}}, 1]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.997811436575726*^9},
+ CellLabel->
+  "During evaluation of \
+In[93]:=",ExpressionUUID->"4dcfe352-7b30-4aff-9bdf-5ae51d67d4fe"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", 
+   TagBox[GridBox[{
+      {
+       FractionBox[
+        RowBox[{"\[ImaginaryI]", " ", 
+         RowBox[{"Sin", "[", 
+          RowBox[{
+           FractionBox["1", "2"], " ", 
+           RowBox[{"ArcTan", "[", 
+            RowBox[{
+             RowBox[{
+              FractionBox["1", "2"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"-", 
+                 SqrtBox[
+                  RowBox[{"1", "-", 
+                   RowBox[{"2", " ", "ad"}]}]]}], "+", 
+                SqrtBox[
+                 RowBox[{"1", "+", 
+                  RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}]}], ",", 
+             RowBox[{"gam", " ", "rho"}]}], "]"}]}], "]"}]}], 
+        SqrtBox["2"]]},
+      {
+       FractionBox[
+        RowBox[{"Cos", "[", 
+         RowBox[{
+          FractionBox["1", "2"], " ", 
+          RowBox[{"ArcTan", "[", 
+           RowBox[{
+            RowBox[{
+             FractionBox["1", "2"], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", 
+                SqrtBox[
+                 RowBox[{"1", "-", 
+                  RowBox[{"2", " ", "ad"}]}]]}], "+", 
+               SqrtBox[
+                RowBox[{"1", "+", 
+                 RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}]}], ",", 
+            RowBox[{"gam", " ", "rho"}]}], "]"}]}], "]"}], 
+        SqrtBox["2"]]},
+      {
+       FractionBox[
+        RowBox[{"\[ImaginaryI]", " ", 
+         SuperscriptBox["\[ExponentialE]", 
+          RowBox[{
+           RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+         RowBox[{"Sin", "[", 
+          RowBox[{
+           FractionBox["1", "2"], " ", 
+           RowBox[{"ArcTan", "[", 
+            RowBox[{
+             RowBox[{
+              FractionBox["1", "2"], " ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"-", 
+                 SqrtBox[
+                  RowBox[{"1", "-", 
+                   RowBox[{"2", " ", "ad"}]}]]}], "+", 
+                SqrtBox[
+                 RowBox[{"1", "+", 
+                  RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}]}], ",", 
+             RowBox[{"gam", " ", "rho"}]}], "]"}]}], "]"}]}], 
+        SqrtBox["2"]]},
+      {
+       RowBox[{"-", 
+        FractionBox[
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{
+            RowBox[{"-", "\[ImaginaryI]"}], " ", "ph"}]], " ", 
+          RowBox[{"Cos", "[", 
+           RowBox[{
+            FractionBox["1", "2"], " ", 
+            RowBox[{"ArcTan", "[", 
+             RowBox[{
+              RowBox[{
+               FractionBox["1", "2"], " ", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"-", 
+                  SqrtBox[
+                   RowBox[{"1", "-", 
+                    RowBox[{"2", " ", "ad"}]}]]}], "+", 
+                 SqrtBox[
+                  RowBox[{"1", "+", 
+                   RowBox[{"2", " ", "ad"}]}]], "-", "wr"}], ")"}]}], ",", 
+              RowBox[{"gam", " ", "rho"}]}], "]"}]}], "]"}]}], 
+         SqrtBox["2"]]}]}
+     },
+     GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.5599999999999999]}, 
+         Offset[0.27999999999999997`]}, "Rows" -> {
+         Offset[0.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}}],
+    Column], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.9978114365786343`*^9},
+ CellLabel->
+  "Out[99]//MatrixForm=",ExpressionUUID->"e11d28b3-60ee-433e-bf88-\
+c421b66fb8ea"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["8.3  The Zak phase", "Subsection",ExpressionUUID->"584d7b37-34f8-42c5-a335-117aad36e483"],
+
+Cell["\<\
+With abstract real functions beta(k), phi(k) the local Berry connection of \
+the lifted spinor collapses to  i \[LeftAngleBracket]\[Psi]_k| \[PartialD]_k \
+|\[Psi]_k\[RightAngleBracket] = phi'(k)/2 :  the pseudo-spin angle beta drops \
+out of the connection entirely.\
+\>", "Text",ExpressionUUID->"c6f1ab39-d995-46f2-88c5-1b858a3bf31a"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+ClearAll[betaFn, phiFn];
+uAf  = {1, Exp[-I phiFn[k]]}/Sqrt[2];
+uBf  = {1, -Exp[-I phiFn[k]]}/Sqrt[2];
+psiF = I Sin[betaFn[k]/2] Flatten@KroneckerProduct[uAf, {1, 0}] +
+           Cos[betaFn[k]/2] Flatten@KroneckerProduct[uBf, {0, 1}];
+
+berryConnection = ComplexExpand[I Conjugate[psiF] . D[psiF, k],
+   TargetFunctions -> {Re, Im}] // FullSimplify;
+Print[\"i <psi_k| d_k psi_k>  ->  \", berryConnection];   (* -> phiFn'[k]/2 : \
+beta drops out *)
+Print[\"  minus phiFn'[k]/2 at random functions  ->  \",
+  Chop @ N[(berryConnection - Derivative[1][phiFn][k]/2) /.
+     {betaFn -> Function[x, 0.7 x + 0.3], phiFn -> Function[x, 1.1 x - 0.2], \
+k -> 0.9}]];\
+\>", "Input",
+ CellLabel->
+  "In[100]:=",ExpressionUUID->"cf017ccd-3bdf-4034-b3e1-481b53fc8448"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"i <psi_k| d_k psi_k>  ->  \"\>", "\[InvisibleSpace]", 
+   FractionBox[
+    RowBox[{
+     SuperscriptBox["phiFn", "\[Prime]",
+      MultilineFunction->None], "[", "k", "]"}], "2"]}],
+  SequenceForm[
+  "i <psi_k| d_k psi_k>  ->  ", Rational[1, 2] 
+   Derivative[1][$CellContext`phiFn][$CellContext`k]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.997811436621841*^9},
+ CellLabel->
+  "During evaluation of \
+In[100]:=",ExpressionUUID->"1a82cff0-e668-4eef-b972-ef9bbe1cdf80"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"  minus phiFn'[k]/2 at random functions  ->  \"\>", "\[InvisibleSpace]",
+    "0"}],
+  SequenceForm["  minus phiFn'[k]/2 at random functions  ->  ", 0],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.997811436622922*^9},
+ CellLabel->
+  "During evaluation of \
+In[100]:=",ExpressionUUID->"a6ff1d86-eb22-4ce4-af59-820e682e280f"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["\<\
+So the Zak phase splits into an SSH piece and a two-level piece:
+
+  \[Gamma]_Zak = \[Integral]_0^{2\[Pi]} (phi'(k)/2) dk   +   \
+(anti-periodicity correction).
+
+The eigenvector  cSpinor = (I Sin[beta_k/2], Cos[beta_k/2])  is ANTI-periodic \
+across the BZ whenever the planar vector  (gam rho(k), \[CapitalDelta](k)/2)  \
+winds an odd number of times  w_h  about the origin  (beta_k -> beta_k + 2\
+\[Pi] w_h) , which adds  \[Pi] w_h .  The smooth piece integrates to -\[Pi] \
+w_C  with  w_C  the SSH winding  (0 if g_c1 > g_c2, else 1).  Therefore
+
+  \[Gamma]_Zak = \[Pi] (w_h - w_C)   (mod 2\[Pi])   \[Element]  {0, \[Pi]} .
+
+It is quantised, and w_h -- hence the whole invariant -- is controlled by \
+omega_r through \[CapitalDelta](k) = w_alpha(k) - w_beta(k) - omega_r .\
+\>", "Text",
+ CellChangeTimes->{{3.997811635752886*^9, 
+  3.997811637407151*^9}},ExpressionUUID->"6b2a04fb-690b-4900-9541-\
+83826de6392c"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+(* SSH winding: delta_{C,k} = g_c1 + g_c2 e^{-I k} traces a circle of radius \
+g_c2 about g_c1 *)
+wCwind[gc1_, gc2_] := If[gc2 > gc1, 1, 0];
+
+(* discrete winding of a closed list of complex numbers about the origin *)
+windingOf[zs_] := Round[Total[Arg[Rest[zs]/Most[zs]]]/(2 Pi)];
+
+zakTLS[gc1_, gc2_, gJ1_, gJ2_, wrv_, gamv_, nk_: 4000] := Module[
+  {ks, dCk, phk, adk, dJk, rhok, delk, zTLS, wH, wC},
+  ks   = N@Subdivide[0, 2 Pi, nk];
+  dCk  = gc1 + gc2 Exp[-I ks];
+  phk  = Arg[dCk];  adk = Abs[dCk];  dJk = gJ1 + gJ2 Exp[-I ks];
+  rhok = (1 - 4 adk^2)^(1/4) Im[dJk Exp[-I phk]];
+  delk = Sqrt[1 + 2 adk] - Sqrt[1 - 2 adk] - wrv;
+  zTLS = gamv rhok + I delk/2;                (* (gam rho, Delta/2) as a \
+complex number *)
+  wH   = Abs @ windingOf[zTLS];
+  wC   = wCwind[gc1, gc2];
+  <|\"w_h\" -> wH, \"w_C\" -> wC, \"gammaZak/Pi\" -> Mod[wH - wC, 2]|>];
+
+zakTLS[0.18, 0.11, 1.0, -0.5, 0.30, 0.03]\
+\>", "Input",
+ CellLabel->
+  "In[108]:=",ExpressionUUID->"5e920a7b-f1a2-48ee-a667-8dc27f46faa8"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"w_h\"\>", "\[Rule]", "1"}], ",", 
+   RowBox[{"\<\"w_C\"\>", "\[Rule]", "0"}], ",", 
+   RowBox[{"\<\"gammaZak/Pi\"\>", "\[Rule]", "1"}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{3.997811436649778*^9},
+ CellLabel->
+  "Out[116]=",ExpressionUUID->"7eac3d47-9b2c-475a-b223-ac9b6ba678f1"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["8.4  Cross-check against PeriodicChainSW.dressed_zak_phase", \
+"Subsection",ExpressionUUID->"e1e534c3-bb92-46db-a5b7-0e8d24b92655"],
+
+Cell["\<\
+The quantised TLS prediction is compared with  \
+PeriodicChainSW.dressed_zak_phase(band = 1) , the full cavity-dressed \
+per-momentum Zak phase of the lower hybridised band (numpy, photon cutoff 6, \
+N = 8 chain).  The reference values below were produced by that method; only \
+|\[Gamma]_Zak|/\[Pi] (0 vs 1) is physically meaningful.  Points span both \
+dimerisation sides and cross the k = 0 interband resonance  omega_r \
+\[TildeTilde] Sqrt[1 + 2 ad_0] - Sqrt[1 - 2 ad_0] .\
+\>", "Text",ExpressionUUID->"d6a6ceae-f9bf-4046-a0ed-95be4202e1de"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+zakReference = {
+  <|\"gc1\" -> 0.18, \"gc2\" -> 0.11, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.30, \"gam\" -> 0.03, \"dressed\" -> 1|>,
+  <|\"gc1\" -> 0.18, \"gc2\" -> 0.11, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.55, \"gam\" -> 0.03, \"dressed\" -> 1|>,
+  <|\"gc1\" -> 0.18, \"gc2\" -> 0.11, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.80, \"gam\" -> 0.03, \"dressed\" -> 0|>,
+  <|\"gc1\" -> 0.11, \"gc2\" -> 0.18, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.30, \"gam\" -> 0.03, \"dressed\" -> 0|>,
+  <|\"gc1\" -> 0.11, \"gc2\" -> 0.18, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.80, \"gam\" -> 0.03, \"dressed\" -> 1|>,
+  <|\"gc1\" -> 0.18, \"gc2\" -> 0.11, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.30, \"gam\" -> 0.06, \"dressed\" -> 1|>,
+  <|\"gc1\" -> 0.18, \"gc2\" -> 0.11, \"gJ1\" -> 1.0, \"gJ2\" -> -0.5, \"wr\" \
+-> 0.80, \"gam\" -> 0.06, \"dressed\" -> 0|>};
+
+Grid[Prepend[
+  Table[Module[{r = zakReference[[i]], z},
+     z = zakTLS[r[\"gc1\"], r[\"gc2\"], r[\"gJ1\"], r[\"gJ2\"], r[\"wr\"], r[\
+\"gam\"]];
+     {i,
+      Row[{\"g_c=(\", r[\"gc1\"], \",\", r[\"gc2\"], \")  \",
+           If[r[\"gc1\"] > r[\"gc2\"], \"trivial\", \"topological\"],
+           \"  omega_r=\", r[\"wr\"], \"  gamma=\", r[\"gam\"]}],
+      z[\"w_h\"], z[\"w_C\"], z[\"gammaZak/Pi\"], r[\"dressed\"],
+      If[z[\"gammaZak/Pi\"] === r[\"dressed\"], \"\[Checkmark]\", \
+\"\[Times]\"]}],
+    {i, Length[zakReference]}],
+  {\"#\", \"parameters\", \"w_h\", \"w_C\", \"|\[Gamma]_Zak|/\[Pi] (TLS)\",
+   \"dressed_zak_phase(1)/\[Pi]\", \"\"}],
+ Frame -> All, Alignment -> Left]\
+\>", "Input",
+ CellLabel->
+  "In[117]:=",ExpressionUUID->"d0a26e16-eecc-47ff-af41-2341885b0c6b"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"#\"\>", "\<\"parameters\"\>", "\<\"w_h\"\>", "\<\"w_C\"\>", "\<\"|\
+\[Gamma]_Zak|/\[Pi] (TLS)\"\>", "\<\"dressed_zak_phase(1)/\[Pi]\"\>", "\<\"\"\
+\>"},
+    {"1", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.18`", "\",\"", "0.11`", "\")  \"", "\"trivial\"", 
+       "\"  omega_r=\"", "0.3`", "\"  gamma=\"", "0.03`"},
+      "RowDefault"], "1", "0", "1", "1", "\<\"\[Checkmark]\"\>"},
+    {"2", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.18`", "\",\"", "0.11`", "\")  \"", "\"trivial\"", 
+       "\"  omega_r=\"", "0.55`", "\"  gamma=\"", "0.03`"},
+      "RowDefault"], "1", "0", "1", "1", "\<\"\[Checkmark]\"\>"},
+    {"3", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.18`", "\",\"", "0.11`", "\")  \"", "\"trivial\"", 
+       "\"  omega_r=\"", "0.8`", "\"  gamma=\"", "0.03`"},
+      "RowDefault"], "0", "0", "0", "0", "\<\"\[Checkmark]\"\>"},
+    {"4", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.11`", "\",\"", "0.18`", "\")  \"", "\"topological\"", 
+       "\"  omega_r=\"", "0.3`", "\"  gamma=\"", "0.03`"},
+      "RowDefault"], "1", "1", "0", "0", "\<\"\[Checkmark]\"\>"},
+    {"5", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.11`", "\",\"", "0.18`", "\")  \"", "\"topological\"", 
+       "\"  omega_r=\"", "0.8`", "\"  gamma=\"", "0.03`"},
+      "RowDefault"], "0", "1", "1", "1", "\<\"\[Checkmark]\"\>"},
+    {"6", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.18`", "\",\"", "0.11`", "\")  \"", "\"trivial\"", 
+       "\"  omega_r=\"", "0.3`", "\"  gamma=\"", "0.06`"},
+      "RowDefault"], "1", "0", "1", "1", "\<\"\[Checkmark]\"\>"},
+    {"7", 
+     TemplateBox[{
+      "\"g_c=(\"", "0.18`", "\",\"", "0.11`", "\")  \"", "\"trivial\"", 
+       "\"  omega_r=\"", "0.8`", "\"  gamma=\"", "0.06`"},
+      "RowDefault"], "0", "0", "0", "0", "\<\"\[Checkmark]\"\>"}
+   },
+   AutoDelete->False,
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.9978114366970463`*^9},
+ CellLabel->
+  "Out[119]=",ExpressionUUID->"2cc20682-6490-4728-bfeb-4bcfe0be19e2"]
+}, Open  ]],
+
+Cell["\<\
+The cavity as a topological knob.  At fixed SSH dimerisation w_C, sweeping \
+omega_r shifts \[CapitalDelta](k) = w_alpha(k) - w_beta(k) - omega_r rigidly. \
+ While omega_r lies inside the band-splitting window  [min_k (w_alpha - \
+w_beta), max_k (w_alpha - w_beta)]  the gap \[CapitalDelta](k) changes sign \
+somewhere in the BZ, the planar vector (gam rho, \[CapitalDelta]/2) encircles \
+the origin (w_h = 1) and \[Gamma]_Zak = \[Pi](1 - w_C).  Once omega_r leaves \
+that window \[CapitalDelta](k) keeps one sign, w_h = 0 and \[Gamma]_Zak = -\
+\[Pi] w_C.  So the resonator flips the Zak phase by \[Pi] on entering / \
+leaving the interband resonance, independent of gamma (which only sets how \
+wide the transition region in omega_r is).\
+\>", "Text",ExpressionUUID->"14be58e4-4c66-459f-84a1-f67471a9a6bc"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9  Analytical Zak phase of the hybridised band, step by step", "Section",ExpressionUUID->"bfdc495e-e187-4af8-9700-c602790a8f81"],
+
+Cell["\<\
+Everything is now an explicit function of k.  We build, in order:  (1) the \
+analytic band energies,  (2) the analytic spinors (SSH Bloch spinor \
+\[CircleTimes] planar two-level eigenvector, in a periodic gauge),  (3) their \
+k-derivatives,  (4) the Berry connection integrand  \[ScriptCapitalA](k) = i \
+\[LeftAngleBracket]\[Psi]_k| \[PartialD]_k |\[Psi]_k\[RightAngleBracket]  \
+split into blocks,  (5) the block integrals, giving  \[Gamma]_Zak = -\[Pi] \
+w_C - \[Pi] w_h \[Congruent] \[Pi] (w_h - w_C).\
+\>", "Text",ExpressionUUID->"380cd592-18b4-452e-abf8-5320fee5ae84"],
+
+Cell[CellGroupData[{
+
+Cell["9.1  k-explicit quantities", "Subsection",ExpressionUUID->"02079b24-cb69-4541-ad49-037b4300857a"],
+
+Cell["\<\
+Working symbols:  gc1, gc2 > 0 with gc1 + gc2 < 1/2  (capacitive intra / \
+inter hopping);  gJ1, gJ2 real  (Josephson intra / inter);  \[Gamma] > 0  \
+(cavity coupling);  \[Omega]r > 0  (cavity frequency).  \[Delta]_(C,k) = gc1 \
++ gc2 e^{-i k},  \[Delta]_(J,k) = gJ1 + gJ2 e^{-i k}.\
+\>", "Text",ExpressionUUID->"30d0fcd3-4f1b-4a2e-8859-22816ded4e84"],
+
+Cell["\<\
+$Assumptions = gc1 > 0 && gc2 > 0 && gc1 + gc2 < 1/2 && gJ1 \[Element] Reals &&
+   gJ2 \[Element] Reals && \[Gamma] > 0 && \[Omega]r > 0 && k \[Element] Reals;
+
+\[Delta]C[k_] := gc1 + gc2 Exp[-I k];
+\[Delta]J[k_] := gJ1 + gJ2 Exp[-I k];
+\[Kappa][k_]    := Sqrt[gc1^2 + gc2^2 + 2 gc1 gc2 Cos[k]];        (* \
+|\[Delta]_{C,k}| *)
+\[CurlyPhi][k_] := ArcTan[gc1 + gc2 Cos[k], -gc2 Sin[k]];        (* arg \
+\[Delta]_{C,k}  (two-argument ArcTan) *)
+
+Simplify[{\[Kappa][k]^2 - \[Delta]C[k] Conjugate[\[Delta]C[k]],
+          \[Kappa][k] Exp[I \[CurlyPhi][k]] - \[Delta]C[k]}]        (* {0, 0} \
+*)\
+\>", "Input",ExpressionUUID->"cbc165b5-4a09-4194-90e4-d7e60d286519"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.2  Analytical energies", "Subsection",ExpressionUUID->"33ed992d-f07e-463c-bf09-4e0cc8a73ee7"],
+
+Cell["\<\
+The capacitive bands are  \[Omega]\[Alpha],\[Beta](k) = Sqrt[1 \[PlusMinus] 2 \
+|\[Delta]_{C,k}|]  (section 4).  The doublet {|\[Alpha]_k, 0\
+\[RightAngleBracket], |\[Beta]_k, 1\[RightAngleBracket]} has detuning \
+\[CapitalDelta](k) = \[Omega]\[Alpha] - \[Omega]\[Beta] - \[Omega]r and is \
+coupled by  \[Tilde]A_J[\[Alpha]_k, \[Beta]_k] = i \[Rho](k)  (section 5, \
+purely imaginary), with the real amplitude  \[Rho](k) = (1 - \
+4|\[Delta]_C|^2)^{1/4} Im[\[Delta]_{J,k} e^{-i\[CurlyPhi]_k}]  which here \
+collapses to  (1 - 4|\[Delta]_C|^2)^{1/4} (gc2 gJ1 - gc1 gJ2) Sin[k] / |\
+\[Delta]_C| .  The hybridised band energies are  \
+\[ScriptCapitalE]\[PlusMinus](k) = (\[Omega]\[Alpha] + \[Omega]\[Beta] + \
+\[Omega]r)/2 \[PlusMinus] R(k),  R = Sqrt[(\[Gamma]\[Rho])^2 + (\
+\[CapitalDelta]/2)^2].\
+\>", "Text",ExpressionUUID->"caf8c59a-b419-4279-86f5-3c42f7c928c1"],
+
+Cell["\<\
+\[Omega]\[Alpha][k_] := Sqrt[1 + 2 \[Kappa][k]];
+\[Omega]\[Beta][k_]  := Sqrt[1 - 2 \[Kappa][k]];
+\[CapitalDelta][k_]  := \[Omega]\[Alpha][k] - \[Omega]\[Beta][k] - \[Omega]r;
+
+\[Rho][k_] := (1 - 4 \[Kappa][k]^2)^(1/4)/\[Kappa][k] *
+   ComplexExpand[Im[(gJ1 + gJ2 Exp[-I k]) (gc1 + gc2 Exp[I k])]];
+Print[\"\[Rho](k) = \", \[Rho][k]];                       (* -> \
+(1-4\[Kappa]^2)^(1/4) (gc2 gJ1 - gc1 gJ2) Sin[k] / \[Kappa] *)
+
+R[k_] := Sqrt[(\[Gamma] \[Rho][k])^2 + (\[CapitalDelta][k]/2)^2];
+\[ScriptCapitalE]lo[k_] := (\[Omega]\[Alpha][k] + \[Omega]\[Beta][k] + \
+\[Omega]r)/2 - R[k];   (* lower hybridised band *)
+\[ScriptCapitalE]hi[k_]  := (\[Omega]\[Alpha][k] + \[Omega]\[Beta][k] + \
+\[Omega]r)/2 + R[k];
+Column[{Row[{\"\[ScriptCapitalE]lo(k) = \", \[ScriptCapitalE]lo[k]}],
+        Row[{\"\[ScriptCapitalE]hi(k) = \",  \[ScriptCapitalE]hi[k]}]}]\
+\>", "Input",ExpressionUUID->"35ef2499-1f22-47c8-acf4-bc8e062f1097"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.3  Analytical spinors (periodic gauge)", "Subsection",ExpressionUUID->"c0b172d7-d044-4e43-94fa-dc92ce6af8be"],
+
+Cell["\<\
+The planar pseudo-spin is  h(k) = (0, \[Gamma]\[Rho](k), \
+\[CapitalDelta](k)/2);  its polar angle is  \[Theta](k) = \
+atan2(\[Gamma]\[Rho], \[CapitalDelta]/2).  The lower two-level eigenvector \
+c(k) = (i Sin[\[Theta]/2], Cos[\[Theta]/2])  is anti-periodic across the BZ \
+whenever \[Theta] winds an odd number of times, so we use the periodic-gauge \
+vector  cP(k) = e^{i\[Theta]/2} c(k), which is a function of e^{i\[Theta]} \
+alone.  The SSH Bloch spinors are  u\[Alpha],\[Beta](k) = (1, \[PlusMinus] \
+e^{-i\[CurlyPhi]_k})/Sqrt[2].  The hybridised chain / photon state, in the \
+basis (A,0),(B,0),(A,1),(B,1), is |\[Psi]_k\[RightAngleBracket] = cP_1 |u\
+\[Alpha]\[RightAngleBracket]\[TensorProduct]|0\[RightAngleBracket] + cP_2 |u\
+\[Beta]\[RightAngleBracket]\[TensorProduct]|1\[RightAngleBracket].\
+\>", "Text",ExpressionUUID->"36f54ebe-31a8-452b-92d6-45a467842d56"],
+
+Cell["\<\
+\[Theta][k_] := ArcTan[\[CapitalDelta][k]/2, \[Gamma] \[Rho][k]];      (* \
+polar angle of the planar pseudo-spin *)
+
+eMi\[CurlyPhi][k_] := (gc1 + gc2 Exp[I k])/\[Kappa][k];               (* \
+e^{-i \[CurlyPhi]_k} , since k is real *)
+u\[Alpha][k_] := {1,  eMi\[CurlyPhi][k]}/Sqrt[2];
+u\[Beta][k_]  := {1, -eMi\[CurlyPhi][k]}/Sqrt[2];
+
+c[k_]  := {I Sin[\[Theta][k]/2], Cos[\[Theta][k]/2]};              (* natural \
+gauge (anti-periodic) *)
+cP[k_] := Exp[I \[Theta][k]/2] c[k];                               (* \
+periodic gauge *)
+Print[\"cP , as a function of t = \[Theta](k):  \",
+      ComplexExpand[Exp[I t/2] {I Sin[t/2], Cos[t/2]}] // Simplify];   (* \
+function of Exp[I t] -> periodic *)
+
+\[Psi][k_] := cP[k][[1]] Flatten@KroneckerProduct[u\[Alpha][k], {1, 0}] +
+              cP[k][[2]] Flatten@KroneckerProduct[u\[Beta][k],  {0, 1}];
+
+(* structure, with s = Sin[\[Theta]/2], cc = Cos[\[Theta]/2], p = e^{-i\
+\[CurlyPhi]} *)
+Print[\"|\[Psi]_k\[RightAngleBracket] = cP_1(k) \
+|u\[Alpha]\[RightAngleBracket]\[CircleTimes]|0\[RightAngleBracket] + cP_2(k) \
+|u\[Beta]\[RightAngleBracket]\[CircleTimes]|1\[RightAngleBracket]  =\"];
+Print[MatrixForm[{I s Exp[I th/2]/Sqrt[2], cc Exp[I th/2]/Sqrt[2],
+                  I s Exp[I th/2] p/Sqrt[2], -cc Exp[I th/2] p/Sqrt[2]}]];
+
+(* norm is 1 for every k (proven symbolically in section 8 with abstract real \
+\[Theta]);
+   FullSimplify on the fully-explicit \[Psi] is a memory hog, so here a \
+numeric spot check *)
+normAt[kv_] := Chop[N[Conjugate[\[Psi][k]] . \[Psi][k] /.
+   {gc1 -> 0.18, gc2 -> 0.11, gJ1 -> 1.0, gJ2 -> -0.5, \[Gamma] -> 0.04, \
+\[Omega]r -> 0.55, k -> kv}]];
+Print[\"\[LeftAngleBracket]\[Psi]_k|\[Psi]_k\[RightAngleBracket] at k = 0.3, \
+1.1, 2.4, 4.0 :  \", normAt /@ {0.3, 1.1, 2.4, 4.0}]\
+\>", "Input",ExpressionUUID->"0da183d3-6d5a-4430-84fd-fc2a3a9f21f0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.4  Analytical derivatives", "Subsection",ExpressionUUID->"9da4faee-2ceb-4dc9-a5a4-b830a40bff2f"],
+
+Cell["\<\
+Only two derivatives feed the Berry connection:  \[CurlyPhi]'(k)  (SSH Bloch \
+phase) and  \[Theta]'(k)  (pseudo-spin angle).  \[CurlyPhi]'(k)  is \
+elementary;  \[Theta]'(k)  is lengthy (LeafCount ~ 400) but explicit -- it is \
+only ever used under the BZ integral.\
+\>", "Text",ExpressionUUID->"186a9cd3-0825-42ad-891e-066bb0767623"],
+
+Cell["\<\
+\[CurlyPhi]d[k_] = Simplify[D[\[CurlyPhi][k], k]];       (* elementary *)
+Print[\"\[CurlyPhi]'(k) = \", \[CurlyPhi]d[k]];        (* -gc2 (gc2 + gc1 \
+Cos[k]) / (gc1^2 + gc2^2 + 2 gc1 gc2 Cos[k]) *)
+
+\[Theta]d[k_] = D[\[Theta][k], k];      (* = (X Y' - Y X')/(X^2 + Y^2),  X = \
+\[CapitalDelta]/2, Y = \[Gamma]\[Rho];  left raw -- large *)
+Print[\"\[Theta]'(k)  LeafCount = \", LeafCount[\[Theta]d[k]], \"   (kept \
+unsimplified; only used under the BZ integral / numerically)\"];
+
+\[Psi]d[k_] = D[\[Psi][k], k];          (* 4-vector, raw *)
+Print[\"\[PartialD]_k \[Psi]_k  LeafCount = \", LeafCount[\[Psi]d[k]]];
+Print[\"\[Theta]'(k) numeric @ \
+(gc1,gc2,gJ1,gJ2,\[Gamma],\[Omega]r,k)=(.18,.11,1,-.5,.03,.55,1.0) = \",
+      N[\[Theta]d[k] /. {gc1 -> .18, gc2 -> .11, gJ1 -> 1., gJ2 -> -.5, \
+\[Gamma] -> .03, \[Omega]r -> .55, k -> 1.0}]]\
+\>", "Input",ExpressionUUID->"f59324e4-7fb0-4fe8-9210-ffa9a280973d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.5  The Berry connection integrand, in blocks", "Subsection",ExpressionUUID->"d6a15320-6b1c-422d-8b7a-8a4d8785f591"],
+
+Cell["\<\
+\[ScriptCapitalA](k) = i \[LeftAngleBracket]\[Psi]_k| \[PartialD]_k |\[Psi]_k\
+\[RightAngleBracket].  Two useful splittings.  (a) By physical origin:  the \
+SSH Bloch spinors carry the SAME orbital connection \[ScriptCapitalA]_orb^\
+\[Alpha] = \[ScriptCapitalA]_orb^\[Beta] = \
+i\[LeftAngleBracket]u_s|\[PartialD]_k u_s\[RightAngleBracket] = \
+\[CurlyPhi]'/2, and the periodic-gauge pseudo-spinor carries \
+\[ScriptCapitalA]_TLS = i\[LeftAngleBracket]cP|\[PartialD]_k cP\
+\[RightAngleBracket] = -\[Theta]'/2; since the orbital connections are equal \
+they factor out of the |cP|^2-weighted superposition, giving \
+\[ScriptCapitalA] = \[ScriptCapitalA]_TLS + \[CurlyPhi]'/2.  (b) By \
+sublattice:  the A-sublattice components give -\[Theta]'/4, the B-sublattice \
+components (which carry e^{-i\[CurlyPhi]}) give \[CurlyPhi]'/2 - \[Theta]'/4. \
+ Both give  \[ScriptCapitalA](k) = \[CurlyPhi]'(k)/2 - \[Theta]'(k)/2.\
+\>", "Text",ExpressionUUID->"cf35fe00-6419-4492-b927-76db8f68c5e7"],
+
+Cell["\<\
+(* -- block (a): orbital vs pseudo-spin, shown with abstract real \[Theta], \
+\[CurlyPhi] -- *)
+With[{U\[Alpha] = {1, Exp[-I \[Phi][k]]}/Sqrt[2], U\[Beta] = {1, -Exp[-I \
+\[Phi][k]]}/Sqrt[2],
+      CP = Exp[I \[CapitalTheta][k]/2] {I Sin[\[CapitalTheta][k]/2], Cos[\
+\[CapitalTheta][k]/2]}},
+ Aorb\[Alpha] = ComplexExpand[I Conjugate[U\[Alpha]] . D[U\[Alpha], k]] // \
+FullSimplify;
+ Aorb\[Beta]  = ComplexExpand[I Conjugate[U\[Beta]]  . D[U\[Beta],  k]] // \
+FullSimplify;
+ Atls    = ComplexExpand[I Conjugate[CP] . D[CP, k]] // FullSimplify;
+ Print[\"\[ScriptCapitalA]_orb^\[Alpha] = \[ScriptCapitalA]_orb^\[Beta] = \", \
+{Aorb\[Alpha], Aorb\[Beta]},
+       \"   (= \[CurlyPhi]'/2)\"];
+ Print[\"\[ScriptCapitalA]_TLS = \", Atls, \"   (= -\[CapitalTheta]'/2)\"];
+]
+
+(* -- block (b): by sublattice, and the total, again with abstract \[Theta], \
+\[CurlyPhi] -- *)
+psiAbstract = With[{U\[Alpha] = {1, Exp[-I \[Phi][k]]}/Sqrt[2], U\[Beta] = \
+{1, -Exp[-I \[Phi][k]]}/Sqrt[2],
+      CP = Exp[I \[CapitalTheta][k]/2] {I Sin[\[CapitalTheta][k]/2], Cos[\
+\[CapitalTheta][k]/2]}},
+   CP[[1]] Flatten@KroneckerProduct[U\[Alpha], {1, 0}] + CP[[2]] \
+Flatten@KroneckerProduct[U\[Beta], {0, 1}]];
+blkA  = ComplexExpand[I Conjugate[psiAbstract[[{1, 2}]]] . D[psiAbstract[[{1, \
+2}]], k]] // FullSimplify;
+blkB  = ComplexExpand[I Conjugate[psiAbstract[[{3, 4}]]] . D[psiAbstract[[{3, \
+4}]], k]] // FullSimplify;
+Atot  = ComplexExpand[I Conjugate[psiAbstract] . D[psiAbstract, k]] // \
+FullSimplify;
+Print[\"sublattice A block  = \", blkA];
+Print[\"sublattice B block  = \", blkB];
+Print[\"\[ScriptCapitalA](k)          = \", Atot,
+      \"     ( \[CurlyPhi]'/2 - \[CapitalTheta]'/2 ,  check -> \",
+      FullSimplify[Atot - (Derivative[1][\[Phi]][k]/2 - Derivative[1][\
+\[CapitalTheta]][k]/2)], \" )\"];
+
+(* -- plug in the explicit k-dependence -- *)
+integrand[k_] = \[CurlyPhi]d[k]/2 - \[Theta]d[k]/2;
+Print[\"integrand(k) = \[CurlyPhi]'(k)/2 - \[Theta]'(k)/2 ,  LeafCount = \", \
+LeafCount[integrand[k]]];\
+\>", "Input",ExpressionUUID->"c0e98555-b665-4f88-b4f0-5cb90434f5c6"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.6  The two block integrals", "Subsection",ExpressionUUID->"67668e48-a330-42d8-a1f7-495adec66978"],
+
+Cell["\<\
+\[Gamma]_Zak = \[Integral]_0^{2\[Pi]} \[ScriptCapitalA](k) dk  =  \[Integral] \
+\[CurlyPhi]'/2 dk  -  \[Integral] \[Theta]'/2 dk.  The orbital block \
+integrates in closed form to  -\[Pi] w_C  (w_C = 0 if gc1 > gc2, else 1 -- \
+the SSH winding).  The pseudo-spin block is a winding number: \[Integral] \
+\[Theta]'(k) dk = 2\[Pi] w_h  with  w_h  the number of times  \
+(\[Gamma]\[Rho](k), \[CapitalDelta](k)/2)  circles the origin;  Integrate \
+cannot resolve this for generic parameters, so w_h is read off numerically.\
+\>", "Text",ExpressionUUID->"3a3f3c7d-4001-4e9b-a30e-30cb59c5b767"],
+
+Cell["\<\
+(* orbital block -- exact, symbolic *)
+orbitalTrivial     = Assuming[gc1 > gc2 > 0, Integrate[\[CurlyPhi]d[k]/2, {k, \
+0, 2 Pi}]];   (* 0    -> w_C = 0 *)
+orbitalTopological = Assuming[gc2 > gc1 > 0, Integrate[\[CurlyPhi]d[k]/2, {k, \
+0, 2 Pi}]];   (* -\[Pi]  -> w_C = 1 *)
+Print[\"\[Integral] \[CurlyPhi]'/2 dk  =  -\[Pi] w_C :   gc1>gc2 -> \", \
+orbitalTrivial,
+      \" ;   gc2>gc1 -> \", orbitalTopological];
+
+(* pseudo-spin block -- winding number of (\[Gamma]\[Rho], \[CapitalDelta]/2) \
+about the origin *)
+windingOf[z_] := Round[Total[Arg[Rest[z]/Most[z]]] / (2 Pi)];
+wHof[gc1v_, gc2v_, gJ1v_, gJ2v_, \[Gamma]v_, \[Omega]rv_, nk_: 4000] := Module[
+  {g, \[Kappa]n, \[CurlyPhi]n, \[Rho]n, \[CapitalDelta]n},
+  g = N@Subdivide[0, 2 Pi, nk];
+  \[Kappa]n = Sqrt[gc1v^2 + gc2v^2 + 2 gc1v gc2v Cos[g]];
+  \[CurlyPhi]n = Arg[gc1v + gc2v Exp[-I g]];
+  \[Rho]n = (1 - 4 \[Kappa]n^2)^(1/4) Im[(gJ1v + gJ2v Exp[-I g]) Exp[-I \
+\[CurlyPhi]n]];
+  \[CapitalDelta]n = Sqrt[1 + 2 \[Kappa]n] - Sqrt[1 - 2 \[Kappa]n] - \
+\[Omega]rv;
+  Abs @ windingOf[\[Gamma]v \[Rho]n + I \[CapitalDelta]n/2]];
+Print[\"example  w_h(gc1=.18, gc2=.11, gJ1=1, gJ2=-.5, \[Gamma]=.03, \
+\[Omega]r=.55) = \",
+      wHof[0.18, 0.11, 1.0, -0.5, 0.03, 0.55]];\
+\>", "Input",ExpressionUUID->"ee86ae0e-01a7-4bb9-a514-ed573756792e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["9.7  \[Gamma]_Zak assembled, and cross-check vs PeriodicChainSW", \
+"Subsection",ExpressionUUID->"299c715b-3da6-4b38-ab48-19b4c6d85247"],
+
+Cell["\<\
+\[Gamma]_Zak = -\[Pi] w_C - \[Pi] w_h  \[Congruent]  \[Pi] (w_h - w_C)  (mod \
+2\[Pi])  \[Element] {0, \[Pi]} -- quantised, with the cavity frequency \
+\[Omega]r entering only through w_h.  Checked against the fully \
+cavity-dressed Wilson-loop Zak phase  PeriodicChainSW.dressed_zak_phase(1)  \
+(numpy, photon cutoff 6, N = 8), for which |\[Gamma]_Zak|/\[Pi] is the \
+physical (0 vs 1) content.\
+\>", "Text",ExpressionUUID->"aabc96a8-859b-4129-97f4-a22c2278bee8"],
+
+Cell["\<\
+zakReference = {
+  <|\"gc1\"->0.18,\"gc2\"->0.11,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.03,\
+\"\[Omega]r\"->0.30,\"dressed\"->1|>,
+  <|\"gc1\"->0.18,\"gc2\"->0.11,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.03,\
+\"\[Omega]r\"->0.55,\"dressed\"->1|>,
+  <|\"gc1\"->0.18,\"gc2\"->0.11,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.03,\
+\"\[Omega]r\"->0.80,\"dressed\"->0|>,
+  <|\"gc1\"->0.11,\"gc2\"->0.18,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.03,\
+\"\[Omega]r\"->0.30,\"dressed\"->0|>,
+  <|\"gc1\"->0.11,\"gc2\"->0.18,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.03,\
+\"\[Omega]r\"->0.80,\"dressed\"->1|>,
+  <|\"gc1\"->0.18,\"gc2\"->0.11,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.06,\
+\"\[Omega]r\"->0.30,\"dressed\"->1|>,
+  <|\"gc1\"->0.18,\"gc2\"->0.11,\"gJ1\"->1.0,\"gJ2\"->-0.5,\"\[Gamma]\"->0.06,\
+\"\[Omega]r\"->0.80,\"dressed\"->0|>};
+
+zakFromBlocks[p_] := Module[{wC, wh},
+  wC = If[p[\"gc1\"] > p[\"gc2\"], 0, 1];
+  wh = wHof[p[\"gc1\"], p[\"gc2\"], p[\"gJ1\"], p[\"gJ2\"], p[\"\[Gamma]\"], \
+p[\"\[Omega]r\"]];
+  <|\"w_C\" -> wC, \"w_h\" -> wh, \"\[Gamma]Zak/\[Pi]\" -> Mod[wh - wC, 2]|>];
+
+Grid[Prepend[
+  Table[Module[{p = zakReference[[i]], b},
+     b = zakFromBlocks[p];
+     {i, Row[{\"g_c=(\", p[\"gc1\"], \",\", p[\"gc2\"], \")  \",
+              If[p[\"gc1\"] > p[\"gc2\"], \"trivial\", \"topological\"],
+              \"  \[Omega]r=\", p[\"\[Omega]r\"], \"  \[Gamma]=\", p[\"\
+\[Gamma]\"]}],
+      b[\"w_C\"], b[\"w_h\"], b[\"\[Gamma]Zak/\[Pi]\"], p[\"dressed\"],
+      If[b[\"\[Gamma]Zak/\[Pi]\"] === p[\"dressed\"], \"\[Checkmark]\", \"\
+\[Times]\"]}],
+    {i, Length[zakReference]}],
+  {\"#\", \"parameters\", \"w_C\", \"w_h\", \"|\[Gamma]_Zak|/\[Pi]\", \
+\"dressed_zak_phase(1)/\[Pi]\", \"\"}],
+ Frame -> All, Alignment -> Left]\
+\>", "Input",ExpressionUUID->"e0f31617-4238-47cb-93b9-df2395c01552"]
+}, Open  ]],
+
+Cell["\<\
+The cavity as a topological knob.  w_C is fixed by the SSH dimerisation.  \
+\[Omega]r shifts \[CapitalDelta](k) = \[Omega]\[Alpha](k) - \
+\[Omega]\[Beta](k) - \[Omega]r rigidly:  while \[Omega]r lies inside the \
+interband-splitting window  [min_k(\[Omega]\[Alpha]-\[Omega]\[Beta]), max_k(\
+\[Omega]\[Alpha]-\[Omega]\[Beta])]  the detuning changes sign in the BZ, the \
+planar vector (\[Gamma]\[Rho], \[CapitalDelta]/2) encircles the origin, w_h = \
+1 and \[Gamma]_Zak = \[Pi](1 - w_C); outside the window w_h = 0 and \
+\[Gamma]_Zak = -\[Pi] w_C.  So the resonator toggles the Zak phase by \[Pi] \
+on crossing the interband resonance, independent of \[Gamma] (which only sets \
+how sharp the transition in \[Omega]r is).\
+\>", "Text",ExpressionUUID->"32947002-756d-4e24-93db-051bbdf600fd"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1440, 750.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"14.3 for Linux x86 (64-bit) (July 8, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"0282eac2-32c0-49d1-9d45-95dd73a94b0f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 128, 0, 70, "Title",ExpressionUUID->"5c8fe53e-5e51-495b-ab66-d4390e78eafc"],
+Cell[707, 24, 759, 10, 70, "Text",ExpressionUUID->"9c053818-5dfe-44c4-b85a-7195b79a078e"],
+Cell[1469, 36, 374, 5, 70, "Text",ExpressionUUID->"993981e4-01a8-4ab2-83d4-5dbd0b54cc36"],
+Cell[CellGroupData[{
+Cell[1868, 45, 82, 0, 70, "Section",ExpressionUUID->"a42aeb4b-5d6a-4504-9c46-76b53de17def"],
+Cell[1953, 47, 217, 6, 70, "Input",ExpressionUUID->"1bcef5dc-17cb-4063-8239-1ea6affbe92c"],
+Cell[2173, 55, 401, 8, 70, "Input",ExpressionUUID->"e1375398-8bf5-4272-bcde-75bbb1f9a760"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2611, 68, 126, 0, 70, "Section",ExpressionUUID->"9b90a75e-4da0-4514-95dc-75a7340ec895"],
+Cell[2740, 70, 289, 4, 70, "Text",ExpressionUUID->"21dfb15f-6419-4abb-bcd9-ce872c26ea39"],
+Cell[CellGroupData[{
+Cell[3054, 78, 865, 23, 70, "Input",ExpressionUUID->"cf974777-c0a2-4aa6-b7ff-04dfa03a491a"],
+Cell[3922, 103, 14420, 415, 70, "Output",ExpressionUUID->"b74e125e-3cc2-4c29-b6ee-68af5b0f6f44"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18391, 524, 108, 0, 70, "Section",ExpressionUUID->"cba39084-53c7-4fb0-b39e-933090b88b15"],
+Cell[CellGroupData[{
+Cell[18524, 528, 108, 0, 70, "Subsection",ExpressionUUID->"1bf3aa33-aef8-4b71-b863-4d86ab4d33df"],
+Cell[18635, 530, 331, 5, 70, "Text",ExpressionUUID->"e72e48ea-2f01-4047-abe4-53c4a8ac9b15"],
+Cell[18969, 537, 461, 11, 70, "Input",ExpressionUUID->"a559c2a8-6c79-4968-946a-853776c50d95"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19467, 553, 151, 2, 70, "Subsection",ExpressionUUID->"7594041c-9486-4306-93f8-af93a458d753"],
+Cell[19621, 557, 374, 5, 70, "Text",ExpressionUUID->"c87454da-1a6f-4266-9763-4e70757afbf9"],
+Cell[19998, 564, 588, 13, 70, "Input",ExpressionUUID->"177cd0d7-96dd-4d2e-81a9-a729b25eb151"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20623, 582, 98, 0, 70, "Subsection",ExpressionUUID->"82c07e6b-c1ef-4cf9-b9a2-41c141290fbc"],
+Cell[CellGroupData[{
+Cell[20746, 586, 189, 5, 70, "Input",ExpressionUUID->"9f36aec7-c457-4018-bb1d-0680594c9ebc"],
+Cell[20938, 593, 1240, 37, 70, "Output",ExpressionUUID->"e1223a6b-7853-470d-a93a-a004827fabca"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22239, 637, 94, 0, 70, "Section",ExpressionUUID->"1dab4222-246e-4698-9c6a-26bded24ded6"],
+Cell[22336, 639, 253, 4, 70, "Text",ExpressionUUID->"341e0e5c-d0d0-4e00-8eda-bbd67d5e54dd"],
+Cell[CellGroupData[{
+Cell[22614, 647, 227, 5, 70, "Input",ExpressionUUID->"fb365ed4-987b-48c7-b07b-0f97eae44287"],
+Cell[22844, 654, 2531, 80, 70, "Output",ExpressionUUID->"c6b37228-d081-46ec-b94b-cdc56196f050"]
+}, Open  ]],
+Cell[25390, 737, 206, 3, 70, "Text",ExpressionUUID->"7ca951f2-6c4c-49f5-bb45-48c2a1c2d5b1"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25633, 745, 124, 0, 70, "Section",ExpressionUUID->"6fdaac25-beec-493b-9e83-8a2c573c72ff"],
+Cell[CellGroupData[{
+Cell[25782, 749, 696, 16, 70, "Input",ExpressionUUID->"c934a3b5-b2a7-46cc-aa41-551540e23757"],
+Cell[26481, 767, 8262, 231, 70, "Output",ExpressionUUID->"db165a56-2d8d-4c54-86f9-d6685e3dd738"],
+Cell[34746, 1000, 8262, 231, 70, "Output",ExpressionUUID->"1a0ac1c8-b901-4db7-a28b-603018c5b209"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[43045, 1236, 123, 0, 70, "Subsection",ExpressionUUID->"a0fb8d33-d659-43f2-afe3-0685344ed317"],
+Cell[43171, 1238, 288, 4, 70, "Text",ExpressionUUID->"6081cf75-00d8-44d3-89a4-3e882f6a5dca"],
+Cell[CellGroupData[{
+Cell[43484, 1246, 938, 19, 70, "Input",ExpressionUUID->"75f6ce7c-f9bc-4e29-bb29-54ded6c9a564"],
+Cell[44425, 1267, 6763, 182, 70, "Output",ExpressionUUID->"423fa980-53cc-4343-8dbe-b83dbbbeaa3c"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51249, 1456, 111, 0, 70, "Section",ExpressionUUID->"120a1da6-6633-4846-8268-75488135dd2d"],
+Cell[51363, 1458, 317, 5, 70, "Text",ExpressionUUID->"914adba3-3536-4d4c-aefe-508445ca30b8"],
+Cell[51683, 1465, 702, 20, 70, "Input",ExpressionUUID->"22f1eb2e-404a-493d-a588-fde6b4f92da6"],
+Cell[CellGroupData[{
+Cell[52410, 1489, 656, 15, 70, "Input",ExpressionUUID->"82bb987e-50cb-4611-bbb8-d465172db2f1"],
+Cell[53069, 1506, 7959, 223, 70, "Output",ExpressionUUID->"2e71bc06-f21f-4c27-8a77-f54fd96e4cd1"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[61077, 1735, 147, 2, 70, "Section",ExpressionUUID->"0cb63d99-e556-4c6b-a4ac-d702d9e8842d"],
+Cell[61227, 1739, 626, 9, 70, "Text",ExpressionUUID->"317a3a02-b3ec-4a7d-9c31-e3942d9586f3"],
+Cell[61856, 1750, 9445, 141, 70, "Input",ExpressionUUID->"3f39e67a-cb66-499d-a45d-43fdaf3c1623"],
+Cell[71304, 1893, 329, 8, 70, "Input",ExpressionUUID->"575797c2-bb06-4f91-9818-550afa78a3a9"],
+Cell[CellGroupData[{
+Cell[71658, 1905, 719, 17, 70, "Input",ExpressionUUID->"19fa0d08-bcf3-4e9d-a128-c7f6c5e85b37"],
+Cell[72380, 1924, 7979, 228, 70, "Output",ExpressionUUID->"57de6f98-5a94-4aaa-9681-bda8d66d973a"]
+}, Open  ]],
+Cell[80374, 2155, 253, 4, 70, "Text",ExpressionUUID->"76d94e17-669f-43b0-a92f-e2c515df2e97"],
+Cell[CellGroupData[{
+Cell[80652, 2163, 120, 0, 70, "Subsection",ExpressionUUID->"693d37e0-2140-4331-9430-1914e6a20160"],
+Cell[CellGroupData[{
+Cell[80797, 2167, 967, 23, 70, "Input",ExpressionUUID->"8da26102-8695-48e7-83db-914a5be24ce6"],
+Cell[81767, 2192, 1651, 35, 70, "Output",ExpressionUUID->"e168a85e-d661-457b-a61e-b6001c1fb050"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[83479, 2234, 175, 3, 70, "Section",ExpressionUUID->"1ee33169-69be-490a-a0c7-45f77f3f6cff"],
+Cell[83657, 2239, 827, 12, 70, "Text",ExpressionUUID->"16093705-1cab-4583-bfa3-a03315a8eac0"],
+Cell[CellGroupData[{
+Cell[84509, 2255, 107, 0, 70, "Subsection",ExpressionUUID->"e944bceb-36e0-4304-8b5d-94f1ffa55e81"],
+Cell[84619, 2257, 796, 11, 70, "Text",ExpressionUUID->"691c3c61-05ef-41d6-83be-8af7d30337a9"],
+Cell[CellGroupData[{
+Cell[85440, 2272, 1040, 25, 70, "Input",ExpressionUUID->"b5176634-a73d-4112-b289-7db15f9008d9"],
+Cell[CellGroupData[{
+Cell[86505, 2301, 412, 9, 70, "Print",ExpressionUUID->"94487569-ba09-483d-aaf7-eb66ffa68e6e"],
+Cell[86920, 2312, 627, 17, 70, "Print",ExpressionUUID->"c2912260-711f-4e3e-a7b0-0df0909a9bc0"]
+}, Open  ]],
+Cell[87562, 2332, 2043, 65, 70, "Output",ExpressionUUID->"2c76876b-e05c-4fb7-914c-83004acfb98d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[89642, 2402, 921, 19, 70, "Input",ExpressionUUID->"8627b776-4f92-4ab6-8708-243bcbe50ae3"],
+Cell[CellGroupData[{
+Cell[90588, 2425, 411, 10, 70, "Print",ExpressionUUID->"d7863bc9-d486-4b77-9a99-ab1e3e224e9f"],
+Cell[91002, 2437, 389, 10, 70, "Print",ExpressionUUID->"1aa405d7-b12b-406a-a60a-735089d97d2e"],
+Cell[91394, 2449, 362, 9, 70, "Print",ExpressionUUID->"e72206a1-90c1-4137-9f6f-bd58db480a9a"],
+Cell[91759, 2460, 1526, 46, 70, "Print",ExpressionUUID->"46ad9998-c8e2-4f1d-8fbd-3817d3dcac4e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[93346, 2513, 146, 2, 70, "Subsection",ExpressionUUID->"244c3230-4a88-4344-8671-69c62c9c4dbe"],
+Cell[93495, 2517, 562, 8, 70, "Text",ExpressionUUID->"3f1ae1b7-2710-4ac1-bd3b-efc1eab2431e"],
+Cell[CellGroupData[{
+Cell[94082, 2529, 499, 12, 70, "Input",ExpressionUUID->"1f477537-d82a-4c4f-a364-d1147095f288"],
+Cell[94584, 2543, 2578, 72, 70, "Print",ExpressionUUID->"4dcfe352-7b30-4aff-9bdf-5ae51d67d4fe"],
+Cell[97165, 2617, 3658, 109, 70, "Output",ExpressionUUID->"e11d28b3-60ee-433e-bf88-c421b66fb8ea"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[100872, 2732, 95, 0, 70, "Subsection",ExpressionUUID->"584d7b37-34f8-42c5-a335-117aad36e483"],
+Cell[100970, 2734, 346, 5, 70, "Text",ExpressionUUID->"c6f1ab39-d995-46f2-88c5-1b858a3bf31a"],
+Cell[CellGroupData[{
+Cell[101341, 2743, 763, 17, 70, "Input",ExpressionUUID->"cf017ccd-3bdf-4034-b3e1-481b53fc8448"],
+Cell[CellGroupData[{
+Cell[102129, 2764, 527, 14, 70, "Print",ExpressionUUID->"1a82cff0-e668-4eef-b972-ef9bbe1cdf80"],
+Cell[102659, 2780, 378, 9, 70, "Print",ExpressionUUID->"a6ff1d86-eb22-4ce4-af59-820e682e280f"]
+}, Open  ]]
+}, Open  ]],
+Cell[103064, 2793, 923, 19, 70, "Text",ExpressionUUID->"6b2a04fb-690b-4900-9541-83826de6392c"],
+Cell[CellGroupData[{
+Cell[104012, 2816, 1008, 24, 70, "Input",ExpressionUUID->"5e920a7b-f1a2-48ee-a667-8dc27f46faa8"],
+Cell[105023, 2842, 374, 9, 70, "Output",ExpressionUUID->"7eac3d47-9b2c-475a-b223-ac9b6ba678f1"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[105446, 2857, 137, 1, 70, "Subsection",ExpressionUUID->"e1e534c3-bb92-46db-a5b7-0e8d24b92655"],
+Cell[105586, 2860, 555, 8, 70, "Text",ExpressionUUID->"d6a6ceae-f9bf-4046-a0ed-95be4202e1de"],
+Cell[CellGroupData[{
+Cell[106166, 2872, 1698, 34, 70, "Input",ExpressionUUID->"d0a26e16-eecc-47ff-af41-2341885b0c6b"],
+Cell[107867, 2908, 2159, 48, 70, "Output",ExpressionUUID->"2cc20682-6490-4728-bfeb-4bcfe0be19e2"]
+}, Open  ]],
+Cell[110041, 2959, 817, 11, 70, "Text",ExpressionUUID->"14be58e4-4c66-459f-84a1-f67471a9a6bc"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[110907, 2976, 134, 0, 70, "Section",ExpressionUUID->"bfdc495e-e187-4af8-9700-c602790a8f81"],
+Cell[111044, 2978, 585, 8, 70, "Text",ExpressionUUID->"380cd592-18b4-452e-abf8-5320fee5ae84"],
+Cell[CellGroupData[{
+Cell[111654, 2990, 103, 0, 70, "Subsection",ExpressionUUID->"02079b24-cb69-4541-ad49-037b4300857a"],
+Cell[111760, 2992, 362, 5, 70, "Text",ExpressionUUID->"30d0fcd3-4f1b-4a2e-8859-22816ded4e84"],
+Cell[112125, 2999, 670, 14, 70, "Input",ExpressionUUID->"cbc165b5-4a09-4194-90e4-d7e60d286519"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[112832, 3018, 101, 0, 70, "Subsection",ExpressionUUID->"33ed992d-f07e-463c-bf09-4e0cc8a73ee7"],
+Cell[112936, 3020, 873, 13, 70, "Text",ExpressionUUID->"caf8c59a-b419-4279-86f5-3c42f7c928c1"],
+Cell[113812, 3035, 935, 17, 70, "Input",ExpressionUUID->"35ef2499-1f22-47c8-acf4-bc8e062f1097"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[114784, 3057, 117, 0, 70, "Subsection",ExpressionUUID->"c0b172d7-d044-4e43-94fa-dc92ce6af8be"],
+Cell[114904, 3059, 882, 12, 70, "Text",ExpressionUUID->"36f54ebe-31a8-452b-92d6-45a467842d56"],
+Cell[115789, 3073, 1840, 37, 70, "Input",ExpressionUUID->"0da183d3-6d5a-4430-84fd-fc2a3a9f21f0"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[117666, 3115, 104, 0, 70, "Subsection",ExpressionUUID->"9da4faee-2ceb-4dc9-a5a4-b830a40bff2f"],
+Cell[117773, 3117, 345, 5, 70, "Text",ExpressionUUID->"186a9cd3-0825-42ad-891e-066bb0767623"],
+Cell[118121, 3124, 919, 16, 70, "Input",ExpressionUUID->"f59324e4-7fb0-4fe8-9210-ffa9a280973d"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[119077, 3145, 123, 0, 70, "Subsection",ExpressionUUID->"d6a15320-6b1c-422d-8b7a-8a4d8785f591"],
+Cell[119203, 3147, 992, 14, 70, "Text",ExpressionUUID->"cf35fe00-6419-4492-b927-76db8f68c5e7"],
+Cell[120198, 3163, 2075, 43, 70, "Input",ExpressionUUID->"c0e98555-b665-4f88-b4f0-5cb90434f5c6"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[122310, 3211, 105, 0, 70, "Subsection",ExpressionUUID->"67668e48-a330-42d8-a1f7-495adec66978"],
+Cell[122418, 3213, 598, 8, 70, "Text",ExpressionUUID->"3a3f3c7d-4001-4e9b-a30e-30cb59c5b767"],
+Cell[123019, 3223, 1304, 26, 70, "Input",ExpressionUUID->"ee86ae0e-01a7-4bb9-a514-ed573756792e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[124360, 3254, 142, 1, 70, "Subsection",ExpressionUUID->"299c715b-3da6-4b38-ab48-19b4c6d85247"],
+Cell[124505, 3257, 474, 7, 70, "Text",ExpressionUUID->"aabc96a8-859b-4129-97f4-a22c2278bee8"],
+Cell[124982, 3266, 1833, 37, 70, "Input",ExpressionUUID->"e0f31617-4238-47cb-93b9-df2395c01552"]
+}, Open  ]],
+Cell[126830, 3306, 799, 11, 70, "Text",ExpressionUUID->"32947002-756d-4e24-93db-051bbdf600fd"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

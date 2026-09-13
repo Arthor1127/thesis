@@ -1,0 +1,43 @@
+{
+  "name": "testA_yh400",
+  "two_port": true,
+  "n_freq": 41,
+  "f_min_hz": 6000000000.0,
+  "f_max_hz": 10000000000.0,
+  "Zpi_port1_mean_real": 55.13226020371831,
+  "Zpi_port1_mean_imag": 0.0,
+  "Zpi_port1_std_real": 0.00046607966823190145,
+  "Zpi_port2_mean_real": 56.30918031180084,
+  "eps_eff_port1_mean": 6.200173200642909,
+  "Zin_fromS11_50_mean_real": 52.026594930526365,
+  "Zin_fromS11_50_mean_imag": 3.4875211367378873,
+  "Zin_fromS11_50_abs_mean": 52.143530257512616,
+  "S11_50_mean_db": -25.963242992199913,
+  "S11_raw_mean_abs": 0.035810750028412455,
+  "convergence": {
+    "file": "testA_yh400_convergence.csv",
+    "raw": [
+      "Pass Number|Solved Elements|Max Mag. Delta S|",
+      "          1|            865|             N/A|",
+      "          2|           1129|         0.12589|",
+      "          3|           1474|        0.035068|",
+      "          4|           1921|        0.060822|",
+      "          5|           2501|         0.13999|",
+      "          6|           3263|        0.062728|",
+      "          7|           4254|        0.047299|",
+      "          8|           5542|        0.027966|",
+      "          9|           7205|        0.028034|",
+      "         10|           9370|         0.01936|",
+      "         11|          12191|          0.0124|"
+    ]
+  },
+  "analytic_targets": {
+    "DesignHelper_Z0": 49.96,
+    "SQDMetal_CpwParams_Z0": 50.29,
+    "PALACE_driven_Zin_abs": 40.48,
+    "PALACE_cap_Z0": 47.55
+  },
+  "Zpi_port1_mean": 55.13226020371831,
+  "abs_S11_50ohm_mean": 0.04016597798162297,
+  "abs_S11_raw_mean": 0.03555471225611753
+}

@@ -1,0 +1,217 @@
+{
+  "Problem": {
+    "Type": "Eigenmode",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "eig_njj_10_Lj_1.2nH.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          23
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          24
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        26,
+        25,
+        28,
+        27,
+        30,
+        29
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Attributes": [
+          1
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 2,
+        "Attributes": [
+          2
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 3,
+        "Attributes": [
+          3
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 4,
+        "Attributes": [
+          4
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 5,
+        "Attributes": [
+          5
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 6,
+        "Attributes": [
+          6
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 7,
+        "Attributes": [
+          7
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 8,
+        "Attributes": [
+          8
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 9,
+        "Attributes": [
+          9
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      },
+      {
+        "Index": 10,
+        "Attributes": [
+          10
+        ],
+        "Direction": [
+          1.0,
+          0.0,
+          0
+        ],
+        "R": 0,
+        "L": 1.2e-09,
+        "C": 2e-15
+      }
+    ],
+    "WavePort": []
+  },
+  "Solver": {
+    "Order": 1,
+    "Eigenmode": {
+      "N": 12,
+      "Tol": 1e-05,
+      "Target": 0.5,
+      "Save": 12
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-05,
+      "MaxIts": 300
+    }
+  }
+}

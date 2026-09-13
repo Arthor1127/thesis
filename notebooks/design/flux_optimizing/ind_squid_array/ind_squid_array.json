@@ -1,0 +1,112 @@
+{
+  "Problem": {
+    "Type": "Magnetostatic",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "ind_squid_array.msh",
+    "L0": 0.001,
+    "Refinement": {
+      "UniformLevels": 0
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          27
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          28
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 2.7e-06
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    "SurfaceCurrent": [
+      {
+        "Index": 1,
+        "Attributes": [
+          1
+        ],
+        "Direction": [
+          -1.0,
+          0.0,
+          0
+        ]
+      }
+    ],
+    "Postprocessing": {
+      "SurfaceFlux": [
+        {
+          "Index": 1,
+          "Attributes": [
+            37
+          ],
+          "Type": "Magnetic",
+          "Center": [
+            0,
+            0,
+            -1
+          ]
+        }
+      ]
+    }
+  },
+  "Solver": {
+    "Order": 1,
+    "Magnetostatic": {
+      "Save": 1
+    },
+    "Linear": {
+      "Type": "AMS",
+      "KSPType": "GMRES",
+      "Tol": 1e-06,
+      "MaxIts": 800
+    }
+  }
+}

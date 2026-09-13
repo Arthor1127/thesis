@@ -1,0 +1,109 @@
+{
+  "Problem": {
+    "Type": "Driven",
+    "Verbose": 2,
+    "Output": "outputFiles"
+  },
+  "Model": {
+    "Mesh": "phase1_bare_res.msh",
+    "L0": 0.001,
+    "CrackDisplacementFactor": 0,
+    "Refinement": {
+      "UniformLevels": 0,
+      "Tol": 0.01,
+      "MaxIts": 4,
+      "MaxSize": 3000000,
+      "UpdateFraction": 0.7,
+      "Nonconformal": true,
+      "SaveAdaptIterations": true,
+      "SaveAdaptMesh": false
+    }
+  },
+  "Domains": {
+    "Materials": [
+      {
+        "Attributes": [
+          5
+        ],
+        "Permeability": 1.0,
+        "Permittivity": 1.0,
+        "LossTan": 0.0
+      },
+      {
+        "Attributes": [
+          6
+        ],
+        "Permeability": 1,
+        "Permittivity": 11.45,
+        "LossTan": 1.2e-05
+      }
+    ]
+  },
+  "Boundaries": {
+    "PEC": {
+      "Attributes": [
+        3,
+        4
+      ]
+    },
+    "LumpedPort": [
+      {
+        "Index": 1,
+        "Elements": [
+          {
+            "Attributes": [
+              1
+            ],
+            "Direction": [
+              0.0,
+              1.0,
+              0
+            ]
+          },
+          {
+            "Attributes": [
+              2
+            ],
+            "Direction": [
+              -0.0,
+              -1.0,
+              0
+            ]
+          }
+        ],
+        "R": 50.0,
+        "L": 0,
+        "C": 0,
+        "Excitation": true
+      }
+    ],
+    "WavePort": [],
+    "Absorbing": {
+      "Attributes": [
+        8,
+        7,
+        10,
+        9,
+        12,
+        11
+      ],
+      "Order": 1
+    }
+  },
+  "Solver": {
+    "Order": 4,
+    "Driven": {
+      "MinFreq": 7.0,
+      "MaxFreq": 7.8,
+      "FreqStep": 0.1,
+      "SaveStep": 0
+    },
+    "Linear": {
+      "Type": "SuperLU",
+      "KSPType": "FGMRES",
+      "Tol": 1e-08,
+      "MaxIts": 300,
+      "InitialGuess": true
+    }
+  }
+}

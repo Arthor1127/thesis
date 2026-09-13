@@ -1,0 +1,42 @@
+{
+  "name": "testC_full_design",
+  "two_port": true,
+  "n_freq": 6001,
+  "f_min_hz": 8300000000.000001,
+  "f_max_hz": 8780000000.0,
+  "Zpi_port1_mean_real": 46.01629296953614,
+  "Zpi_port1_mean_imag": 0.037466951576939515,
+  "Zpi_port1_std_real": 1.446310192620916,
+  "Zpi_port2_mean_real": 45.64607561993577,
+  "eps_eff_port1_mean": 6.234569485281463,
+  "Zin_fromS11_50_mean_real": 47.5820015810251,
+  "Zin_fromS11_50_mean_imag": 0.09446847170943577,
+  "Zin_fromS11_50_abs_mean": 47.58212353612707,
+  "S11_50_mean_db": -30.442207217062773,
+  "abs_S11_50ohm_mean": 0.025917954896057426,
+  "S11_raw_mean_abs": 0.05566214589022438,
+  "convergence": {
+    "file": "testC_full_design_convergence.csv",
+    "raw": [
+      "Converged : Yes",
+      "==================",
+      "Pass Number|Solved Elements|Max Mag. Delta S|",
+      "          1|           8831|             N/A|",
+      "          2|          11481|         0.27534|",
+      "          3|          14931|         0.31264|",
+      "          4|          18577|         0.21135|",
+      "          5|          24155|         0.13269|",
+      "          6|          31404|        0.062787|",
+      "          7|          40830|        0.031017|",
+      "          8|          53084|        0.016518|",
+      "          9|          69024|        0.012477|"
+    ]
+  },
+  "analytic_targets": {
+    "DesignHelper_Z0": 49.96,
+    "SQDMetal_CpwParams_Z0": 50.29,
+    "PALACE_driven_Zin_abs": 40.48,
+    "PALACE_cap_Z0": 47.55
+  },
+  "note_deglitch": "Zpi(f) had 8 single-point spikes near the resonance (port-Zo report artifact); clamped before renormalising."
+}

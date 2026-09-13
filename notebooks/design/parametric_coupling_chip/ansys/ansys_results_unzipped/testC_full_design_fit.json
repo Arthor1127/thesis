@@ -1,0 +1,13 @@
+{
+  "resonator_mode": {
+    "fr_ghz": 8.546,
+    "source": "HFSS eigenmode solve (testC_eigenmodes.json)",
+    "Q_internal": 92231,
+    "Q_internal_note": "= 1/tan_delta (1.2e-5), i.e. dielectric-loss-limited as set up",
+    "palace_fr_ghz": 8.101,
+    "palace_eigenmode_fr_ghz": [8.25, 8.28]
+  },
+  "Qc_status": "not extracted",
+  "Qc_reason": "The driven S-matrix is flat: raw |S11| stays 0.054 +/- 0.002 across 6.5-8.7 GHz with no resonance feature (interpolating, Fast/ALPS, fine discrete to 80 kHz, and adapt-at-fr all agree). The driven adaptive mesh converges on the smooth feedline transmission and never resolves the weak coupling capacitance across the CoupledLineTee's ~15 um ground strip (testC_coupler_geometry.png). The HFSS 'Port Zo' report does spike at ~8.427 GHz -- a faint corroboration of a resonance near the eigenmode value -- but that is a post-processing quantity glitching, not a clean S-parameter measurement.",
+  "palace_reference": {"fr_hz": 8.101e9, "Qc": 14078, "Qr": 533}
+}

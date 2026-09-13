@@ -1,0 +1,508 @@
+{
+  "config": {
+    "Omega_J": 1.0,
+    "Chi_J": 0.0,
+    "d_ph": 4,
+    "Nk": 96,
+    "s_A": -0.25,
+    "s_B": 0.25,
+    "gamma_values": [
+      0.005,
+      0.0114,
+      0.0179,
+      0.0243,
+      0.0307,
+      0.0371,
+      0.0436,
+      0.05
+    ],
+    "omega_r_values": [
+      0.03,
+      0.0971,
+      0.1643,
+      0.2314,
+      0.2986,
+      0.3657,
+      0.4329,
+      0.5
+    ],
+    "chi_C_values": [
+      -0.9,
+      -0.643,
+      -0.386,
+      -0.129,
+      0.129,
+      0.386,
+      0.643,
+      0.9
+    ],
+    "omega_C_values": [
+      0.1,
+      0.214,
+      0.329,
+      0.443,
+      0.557,
+      0.671,
+      0.786,
+      0.9
+    ],
+    "y_axis": "omega_C",
+    "y_min": 0.02,
+    "y_max": 0.9,
+    "n_y": 100,
+    "x_axis": "omega_r",
+    "x_min": 0.02,
+    "x_max": 0.55,
+    "n_x": 100
+  },
+  "sweeps": [
+    {
+      "index": 0,
+      "chi_C": -0.9,
+      "gamma": 0.005,
+      "i_chi_C": 0,
+      "i_gamma": 0
+    },
+    {
+      "index": 1,
+      "chi_C": -0.9,
+      "gamma": 0.0114,
+      "i_chi_C": 0,
+      "i_gamma": 1
+    },
+    {
+      "index": 2,
+      "chi_C": -0.9,
+      "gamma": 0.0179,
+      "i_chi_C": 0,
+      "i_gamma": 2
+    },
+    {
+      "index": 3,
+      "chi_C": -0.9,
+      "gamma": 0.0243,
+      "i_chi_C": 0,
+      "i_gamma": 3
+    },
+    {
+      "index": 4,
+      "chi_C": -0.9,
+      "gamma": 0.0307,
+      "i_chi_C": 0,
+      "i_gamma": 4
+    },
+    {
+      "index": 5,
+      "chi_C": -0.9,
+      "gamma": 0.0371,
+      "i_chi_C": 0,
+      "i_gamma": 5
+    },
+    {
+      "index": 6,
+      "chi_C": -0.9,
+      "gamma": 0.0436,
+      "i_chi_C": 0,
+      "i_gamma": 6
+    },
+    {
+      "index": 7,
+      "chi_C": -0.9,
+      "gamma": 0.05,
+      "i_chi_C": 0,
+      "i_gamma": 7
+    },
+    {
+      "index": 8,
+      "chi_C": -0.643,
+      "gamma": 0.005,
+      "i_chi_C": 1,
+      "i_gamma": 0
+    },
+    {
+      "index": 9,
+      "chi_C": -0.643,
+      "gamma": 0.0114,
+      "i_chi_C": 1,
+      "i_gamma": 1
+    },
+    {
+      "index": 10,
+      "chi_C": -0.643,
+      "gamma": 0.0179,
+      "i_chi_C": 1,
+      "i_gamma": 2
+    },
+    {
+      "index": 11,
+      "chi_C": -0.643,
+      "gamma": 0.0243,
+      "i_chi_C": 1,
+      "i_gamma": 3
+    },
+    {
+      "index": 12,
+      "chi_C": -0.643,
+      "gamma": 0.0307,
+      "i_chi_C": 1,
+      "i_gamma": 4
+    },
+    {
+      "index": 13,
+      "chi_C": -0.643,
+      "gamma": 0.0371,
+      "i_chi_C": 1,
+      "i_gamma": 5
+    },
+    {
+      "index": 14,
+      "chi_C": -0.643,
+      "gamma": 0.0436,
+      "i_chi_C": 1,
+      "i_gamma": 6
+    },
+    {
+      "index": 15,
+      "chi_C": -0.643,
+      "gamma": 0.05,
+      "i_chi_C": 1,
+      "i_gamma": 7
+    },
+    {
+      "index": 16,
+      "chi_C": -0.386,
+      "gamma": 0.005,
+      "i_chi_C": 2,
+      "i_gamma": 0
+    },
+    {
+      "index": 17,
+      "chi_C": -0.386,
+      "gamma": 0.0114,
+      "i_chi_C": 2,
+      "i_gamma": 1
+    },
+    {
+      "index": 18,
+      "chi_C": -0.386,
+      "gamma": 0.0179,
+      "i_chi_C": 2,
+      "i_gamma": 2
+    },
+    {
+      "index": 19,
+      "chi_C": -0.386,
+      "gamma": 0.0243,
+      "i_chi_C": 2,
+      "i_gamma": 3
+    },
+    {
+      "index": 20,
+      "chi_C": -0.386,
+      "gamma": 0.0307,
+      "i_chi_C": 2,
+      "i_gamma": 4
+    },
+    {
+      "index": 21,
+      "chi_C": -0.386,
+      "gamma": 0.0371,
+      "i_chi_C": 2,
+      "i_gamma": 5
+    },
+    {
+      "index": 22,
+      "chi_C": -0.386,
+      "gamma": 0.0436,
+      "i_chi_C": 2,
+      "i_gamma": 6
+    },
+    {
+      "index": 23,
+      "chi_C": -0.386,
+      "gamma": 0.05,
+      "i_chi_C": 2,
+      "i_gamma": 7
+    },
+    {
+      "index": 24,
+      "chi_C": -0.129,
+      "gamma": 0.005,
+      "i_chi_C": 3,
+      "i_gamma": 0
+    },
+    {
+      "index": 25,
+      "chi_C": -0.129,
+      "gamma": 0.0114,
+      "i_chi_C": 3,
+      "i_gamma": 1
+    },
+    {
+      "index": 26,
+      "chi_C": -0.129,
+      "gamma": 0.0179,
+      "i_chi_C": 3,
+      "i_gamma": 2
+    },
+    {
+      "index": 27,
+      "chi_C": -0.129,
+      "gamma": 0.0243,
+      "i_chi_C": 3,
+      "i_gamma": 3
+    },
+    {
+      "index": 28,
+      "chi_C": -0.129,
+      "gamma": 0.0307,
+      "i_chi_C": 3,
+      "i_gamma": 4
+    },
+    {
+      "index": 29,
+      "chi_C": -0.129,
+      "gamma": 0.0371,
+      "i_chi_C": 3,
+      "i_gamma": 5
+    },
+    {
+      "index": 30,
+      "chi_C": -0.129,
+      "gamma": 0.0436,
+      "i_chi_C": 3,
+      "i_gamma": 6
+    },
+    {
+      "index": 31,
+      "chi_C": -0.129,
+      "gamma": 0.05,
+      "i_chi_C": 3,
+      "i_gamma": 7
+    },
+    {
+      "index": 32,
+      "chi_C": 0.129,
+      "gamma": 0.005,
+      "i_chi_C": 4,
+      "i_gamma": 0
+    },
+    {
+      "index": 33,
+      "chi_C": 0.129,
+      "gamma": 0.0114,
+      "i_chi_C": 4,
+      "i_gamma": 1
+    },
+    {
+      "index": 34,
+      "chi_C": 0.129,
+      "gamma": 0.0179,
+      "i_chi_C": 4,
+      "i_gamma": 2
+    },
+    {
+      "index": 35,
+      "chi_C": 0.129,
+      "gamma": 0.0243,
+      "i_chi_C": 4,
+      "i_gamma": 3
+    },
+    {
+      "index": 36,
+      "chi_C": 0.129,
+      "gamma": 0.0307,
+      "i_chi_C": 4,
+      "i_gamma": 4
+    },
+    {
+      "index": 37,
+      "chi_C": 0.129,
+      "gamma": 0.0371,
+      "i_chi_C": 4,
+      "i_gamma": 5
+    },
+    {
+      "index": 38,
+      "chi_C": 0.129,
+      "gamma": 0.0436,
+      "i_chi_C": 4,
+      "i_gamma": 6
+    },
+    {
+      "index": 39,
+      "chi_C": 0.129,
+      "gamma": 0.05,
+      "i_chi_C": 4,
+      "i_gamma": 7
+    },
+    {
+      "index": 40,
+      "chi_C": 0.386,
+      "gamma": 0.005,
+      "i_chi_C": 5,
+      "i_gamma": 0
+    },
+    {
+      "index": 41,
+      "chi_C": 0.386,
+      "gamma": 0.0114,
+      "i_chi_C": 5,
+      "i_gamma": 1
+    },
+    {
+      "index": 42,
+      "chi_C": 0.386,
+      "gamma": 0.0179,
+      "i_chi_C": 5,
+      "i_gamma": 2
+    },
+    {
+      "index": 43,
+      "chi_C": 0.386,
+      "gamma": 0.0243,
+      "i_chi_C": 5,
+      "i_gamma": 3
+    },
+    {
+      "index": 44,
+      "chi_C": 0.386,
+      "gamma": 0.0307,
+      "i_chi_C": 5,
+      "i_gamma": 4
+    },
+    {
+      "index": 45,
+      "chi_C": 0.386,
+      "gamma": 0.0371,
+      "i_chi_C": 5,
+      "i_gamma": 5
+    },
+    {
+      "index": 46,
+      "chi_C": 0.386,
+      "gamma": 0.0436,
+      "i_chi_C": 5,
+      "i_gamma": 6
+    },
+    {
+      "index": 47,
+      "chi_C": 0.386,
+      "gamma": 0.05,
+      "i_chi_C": 5,
+      "i_gamma": 7
+    },
+    {
+      "index": 48,
+      "chi_C": 0.643,
+      "gamma": 0.005,
+      "i_chi_C": 6,
+      "i_gamma": 0
+    },
+    {
+      "index": 49,
+      "chi_C": 0.643,
+      "gamma": 0.0114,
+      "i_chi_C": 6,
+      "i_gamma": 1
+    },
+    {
+      "index": 50,
+      "chi_C": 0.643,
+      "gamma": 0.0179,
+      "i_chi_C": 6,
+      "i_gamma": 2
+    },
+    {
+      "index": 51,
+      "chi_C": 0.643,
+      "gamma": 0.0243,
+      "i_chi_C": 6,
+      "i_gamma": 3
+    },
+    {
+      "index": 52,
+      "chi_C": 0.643,
+      "gamma": 0.0307,
+      "i_chi_C": 6,
+      "i_gamma": 4
+    },
+    {
+      "index": 53,
+      "chi_C": 0.643,
+      "gamma": 0.0371,
+      "i_chi_C": 6,
+      "i_gamma": 5
+    },
+    {
+      "index": 54,
+      "chi_C": 0.643,
+      "gamma": 0.0436,
+      "i_chi_C": 6,
+      "i_gamma": 6
+    },
+    {
+      "index": 55,
+      "chi_C": 0.643,
+      "gamma": 0.05,
+      "i_chi_C": 6,
+      "i_gamma": 7
+    },
+    {
+      "index": 56,
+      "chi_C": 0.9,
+      "gamma": 0.005,
+      "i_chi_C": 7,
+      "i_gamma": 0
+    },
+    {
+      "index": 57,
+      "chi_C": 0.9,
+      "gamma": 0.0114,
+      "i_chi_C": 7,
+      "i_gamma": 1
+    },
+    {
+      "index": 58,
+      "chi_C": 0.9,
+      "gamma": 0.0179,
+      "i_chi_C": 7,
+      "i_gamma": 2
+    },
+    {
+      "index": 59,
+      "chi_C": 0.9,
+      "gamma": 0.0243,
+      "i_chi_C": 7,
+      "i_gamma": 3
+    },
+    {
+      "index": 60,
+      "chi_C": 0.9,
+      "gamma": 0.0307,
+      "i_chi_C": 7,
+      "i_gamma": 4
+    },
+    {
+      "index": 61,
+      "chi_C": 0.9,
+      "gamma": 0.0371,
+      "i_chi_C": 7,
+      "i_gamma": 5
+    },
+    {
+      "index": 62,
+      "chi_C": 0.9,
+      "gamma": 0.0436,
+      "i_chi_C": 7,
+      "i_gamma": 6
+    },
+    {
+      "index": 63,
+      "chi_C": 0.9,
+      "gamma": 0.05,
+      "i_chi_C": 7,
+      "i_gamma": 7
+    }
+  ]
+}

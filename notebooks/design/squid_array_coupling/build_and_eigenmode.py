@@ -6,9 +6,11 @@ import time
 import traceback
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_design import (build_design, L_TRANSMON_NH, L_PROBE_NH, RES_LENGTH_MM,
-                           CJ_TRANSMON_FF, CJ_PROBE_FF, QUBIT_COMPONENT_NAME,
-                           JJ_INDEX_SINGLE, JJ_INDEX_SQUID_A)
+from build_design import (build_design, N_SQUIDS, L_J_NH, CJ_J_FF, RES_LENGTH_MM,
+                          JJ_PER_LOOP, ARRAY_COMPONENT_NAME,
+                          SQUID_GAP_UM, ARM_WIDTH_UM, JOSEPHSON_GAP_UM,
+                          SEGMENT_LENGTH_UM, ARM_SEMI_LENGTH_UM, LINE_WIDTH_UM,
+                          GROUND_GAP_UM, ARRAY_POS_X_UM, ARRAY_POS_Y_UM)
 
 
 def _json_safe(obj):
@@ -17,9 +19,8 @@ def _json_safe(obj):
 
     numpy complex scalars have .tolist(), but it converts them to a plain
     Python `complex` - which is STILL not JSON serializable, so that result
-    must be re-checked (2026-08-25: this crashed mid-write on interface_epr
-    data, corrupting the output file for a run whose actual solve had
-    already succeeded)."""
+    must be re-checked (this once crashed mid-write on interface_epr data,
+    corrupting the output file for a run whose solve had already succeeded)."""
     if isinstance(obj, dict):
         return {k: _json_safe(v) for k, v in obj.items()}
     if isinstance(obj, (list, tuple)):
@@ -31,85 +32,169 @@ def _json_safe(obj):
     return obj
 
 
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--L-transmon-nH", type=float, default=None,
-                    help="Transmon junction (to ground) inductance L_T (nH). "
-                        "Defaults to build_design.L_TRANSMON_NH.")
-    p.add_argument("--L-probe-nH", type=float, default=None,
-                    help="SQUID branch-a probe inductance L_probe (nH). "
-                        "Defaults to build_design.L_PROBE_NH.")
-    p.add_argument("--res-length-mm", type=float, default=None,
-                    help="Readout resonator total length (mm). Defaults to build_design.RES_LENGTH_MM.")
-    p.add_argument("--outdir", required=True)
-    p.add_argument("--palace-bin", required=True)
-    p.add_argument("--num-cpus", type=int, default=16)
-    p.add_argument("--number-of-freqs", type=int, default=6,
-                    help="Number of eigenmodes to solve. EPR_C_EXTRACTION.md Sec 4.3 "
-                        "recommends at least 6 (resonator fundamental + harmonics + transmon).")
-    p.add_argument("--starting-freq", type=float, default=5e9)
-    p.add_argument("--bg-min-size-um", type=float, default=6.0,
-                    help="General background min element size (um); also the fallback "
-                        "for --resonator-bg-min-size-um. 6um resolves trace_gap=12.25um.")
-    p.add_argument("--bg-max-size-um", type=float, default=150.0)
-    p.add_argument("--amr-max-its", type=int, default=0)
-    p.add_argument("--amr-tol", type=float, default=1e-2)
-    p.add_argument("--chip-size-x-mm", type=float, default=None)
-    p.add_argument("--chip-size-y-mm", type=float, default=None)
-    p.add_argument("--chip-center-x-mm", type=float, default=None)
-    p.add_argument("--chip-center-y-mm", type=float, default=None)
-    p.add_argument("--resonator-bg-min-size-um", type=float, default=None,
-                    help="readout_1's own background min_size (um). Should resolve "
-                        "trace_gap=12.25um (design.variables['cpw_gap']) - roughly "
-                        "half the gap, i.e. ~6um, is a reasonable floor. Defaults to "
-                        "--bg-min-size-um if not given.")
-    p.add_argument("--resonator-bg-max-size-um", type=float, default=None,
-                    help="readout_1's own background max_size (um). "
-                        "Defaults to --bg-max-size-um if not given.")
-    p.add_argument("--qubit-bg-min-size-um", type=float, default=2.0,
-                    help="Q1_SQUID's own background min_size (um), separate from the "
-                        "resonator's since the qubit has finer features. Smallest "
-                        "non-junction-port gap on the qubit is squid_options.g1=4um "
-                        "(SQUID branch-to-ground clearance); ~half that, 2um, "
-                        "resolves it the same way --resonator-bg-min-size-um resolves "
-                        "trace_gap. (pad_gap=10um is coarser and already covered by "
-                        "this.) Junction gaps themselves (jj_sim_gap=3um) are handled "
-                        "separately by --junction-mesh-min-um.")
-    p.add_argument("--qubit-bg-max-size-um", type=float, default=150.0,
-                    help="Q1_SQUID's own background max_size (um). Raised from an "
-                        "original 20.0um default (2026-08-25): 20um forced a large "
-                        "fraction of the whole domain to stay at that size instead of "
-                        "relaxing further, a major contributor to an 11.5M-element "
-                        "mesh blowup at otherwise-identical settings.")
-    p.add_argument("--junction-mesh-min-um", type=float, default=6.0,
-                    help="Fine-mesh min element size local to each junction port (um). "
-                        "Raised from an original 1.5um default per the 2026-08-25 "
-                        "per-region sweep: EVERY region tested (readout, pad, squid_arm, "
-                        "junction) independently passed at 6um (~80-96s) and timed out "
-                        "(>120s) at 5um and below - a shared GMSH background-field-"
-                        "computation floor, not something specific to one region's size "
-                        "or shape. Do not go below 6um without re-validating against that "
-                        "floor first.")
-    p.add_argument("--junction-mesh-max-um", type=float, default=20.0,
-                    help="Fine-mesh max element size local to each junction port (um).")
-    args = p.parse_args()
+def _build_parser():
+    p = argparse.ArgumentParser(
+        description="Build the SQUID-array + readout-resonator design and run a "
+                    "Palace eigenmode EPR simulation. Every CLI knob below that "
+                    "defaults to None falls back to the constant of the same "
+                    "name in build_design.py.")
 
-    L_transmon_nH = args.L_transmon_nH if args.L_transmon_nH is not None else L_TRANSMON_NH
-    L_probe_nH = args.L_probe_nH if args.L_probe_nH is not None else L_PROBE_NH
-    res_length_mm = args.res_length_mm if args.res_length_mm is not None else RES_LENGTH_MM
+    # --- what to launch: the physics sweep knobs ---
+    sweep = p.add_argument_group("sweep knobs (geometry / inductance)")
+    sweep.add_argument("--n-squids", type=int, default=None,
+                       help=f"Number of SQUID loops in the series array. "
+                            f"Default build_design.N_SQUIDS ({N_SQUIDS}).")
+    sweep.add_argument("--L-j-nH", type=float, default=None,
+                       help=f"Inductance of EVERY junction in the array (nH). "
+                            f"Default build_design.L_J_NH ({L_J_NH}). Total array "
+                            f"superinductance ~ n_squids * L_j / 2 (two junctions "
+                            f"per loop in parallel).")
+    sweep.add_argument("--Cj-j-fF", type=float, default=None,
+                       help=f"Parallel capacitance of every junction (fF). "
+                            f"Default build_design.CJ_J_FF ({CJ_J_FF}).")
+    sweep.add_argument("--res-length-mm", type=float, default=None,
+                       help=f"Readout resonator total length (mm). "
+                            f"Default build_design.RES_LENGTH_MM ({RES_LENGTH_MM}).")
+    sweep.add_argument("--squid-gap-um", type=float, default=None,
+                       help=f"Loop height (um). Default {SQUID_GAP_UM}.")
+    sweep.add_argument("--arm-width-um", type=float, default=None,
+                       help=f"Width of plate1 / seg a / seg b / seg c (um). "
+                            f"Default {ARM_WIDTH_UM}.")
+    sweep.add_argument("--josephson-gap-um", type=float, default=None,
+                       help=f"Width of the gap each junction bridges (um). "
+                            f"Default {JOSEPHSON_GAP_UM}.")
+    sweep.add_argument("--segment-length-um", type=float, default=None,
+                       help=f"seg d (right contact) length (um). Default {SEGMENT_LENGTH_UM}.")
+    sweep.add_argument("--arm-semi-length-um", type=float, default=None,
+                       help=f"seg a / seg b length (um). Default {ARM_SEMI_LENGTH_UM}.")
+    sweep.add_argument("--line-width-um", type=float, default=None,
+                       help=f"seg d (right contact) height (um). Default {LINE_WIDTH_UM}.")
+    sweep.add_argument("--ground-gap-um", type=float, default=None,
+                       help=f"Ground-plane pocket width around the whole chain (um). "
+                            f"Default {GROUND_GAP_UM}.")
+    sweep.add_argument("--array-pos-x-um", type=float, default=None,
+                       help=f"Array anchor x (um). Default {ARRAY_POS_X_UM}.")
+    sweep.add_argument("--array-pos-y-um", type=float, default=None,
+                       help=f"Array anchor y (um). Default {ARRAY_POS_Y_UM}.")
+
+    # --- solver ---
+    solver = p.add_argument_group("eigenmode solver")
+    solver.add_argument("--number-of-freqs", type=int, default=6,
+                        help="Number of eigenmodes to solve (resonator fundamental "
+                             "+ harmonics). >=6 recommended.")
+    solver.add_argument("--starting-freq", type=float, default=4e9,
+                        help="Eigen-search start frequency (Hz). The loaded array "
+                             "pulls the resonator DOWN, so this is below the "
+                             "unloaded lambda/4 frequency.")
+    solver.add_argument("--solver-order", type=int, default=1)
+    solver.add_argument("--solver-tol", type=float, default=1.0e-5)
+    solver.add_argument("--solver-maxits", type=int, default=300)
+    solver.add_argument("--fillet-resolution", type=int, default=12)
+    solver.add_argument("--amr-max-its", type=int, default=0,
+                        help="Solution-based AMR iterations. 0 = off (production).")
+    solver.add_argument("--amr-tol", type=float, default=1e-2)
+
+    # --- mesh ---
+    mesh = p.add_argument_group("mesh")
+    mesh.add_argument("--bg-min-size-um", type=float, default=6.0,
+                      help="General background min element size (um); also the "
+                           "fallback for the resonator/array min sizes.")
+    mesh.add_argument("--bg-max-size-um", type=float, default=150.0)
+    mesh.add_argument("--resonator-bg-min-size-um", type=float, default=None,
+                      help="readout_1 fine-mesh min size (um). Should resolve "
+                           "cpw_gap=12.25um - ~6um is a reasonable floor. "
+                           "Defaults to --bg-min-size-um.")
+    mesh.add_argument("--resonator-bg-max-size-um", type=float, default=None,
+                      help="readout_1 fine-mesh max size (um). Defaults to --bg-max-size-um.")
+    mesh.add_argument("--resonator-taper-dist-min-um", type=float, default=40.0,
+                      help="readout_1: distance from the metal held at min size (um).")
+    mesh.add_argument("--resonator-taper-dist-max-um", type=float, default=200.0,
+                      help="readout_1: distance from the metal at which mesh reaches max size (um).")
+    mesh.add_argument("--array-bg-min-size-um", type=float, default=2.0,
+                      help="Array fine-mesh min size (um). The finest features are "
+                           "the josephson gap and ground_gap (~3um each); ~half of "
+                           "that resolves them.")
+    mesh.add_argument("--array-bg-max-size-um", type=float, default=150.0,
+                      help="Array fine-mesh max size (um).")
+    mesh.add_argument("--array-taper-dist-min-um", type=float, default=5.0,
+                      help="array: distance from the metal held at min size (um). The "
+                           "junction-gap current (hence p, hence c ~ sqrt(p)) is set by "
+                           "the field in the VACUUM around the 3um gap, so pushing this "
+                           "out matters as much as a smaller min size.")
+    mesh.add_argument("--array-taper-dist-max-um", type=float, default=200.0,
+                      help="array: distance from the metal at which mesh reaches max size (um).")
+    mesh.add_argument("--coupling-rect-min-um", type=float, default=None,
+                      help="If set, add fine_mesh_in_rectangle boxes around the two "
+                           "signal loops (array near end + far end, each with a margin "
+                           "of vacuum) at this min size. This is where p - hence c - "
+                           "lives; a global fine taper over the whole 5mm of metal "
+                           "perimeter just explodes the mesh.")
+    mesh.add_argument("--coupling-rect-margin-um", type=float, default=180.0,
+                      help="half-size of the coupling-zone boxes (um).")
+
+    # --- chip / infra ---
+    chip = p.add_argument_group("chip / infra")
+    chip.add_argument("--chip-size-x-mm", type=float, default=None)
+    chip.add_argument("--chip-size-y-mm", type=float, default=None)
+    chip.add_argument("--chip-center-x-mm", type=float, default=None)
+    chip.add_argument("--chip-center-y-mm", type=float, default=None)
+    chip.add_argument("--outdir", required=True)
+    chip.add_argument("--palace-bin", required=True)
+    chip.add_argument("--num-cpus", type=int, default=16)
+
+    return p
+
+
+def main():
+    args = _build_parser().parse_args()
+
+    def _or_default(v, default):
+        return default if v is None else v
+
+    n_squids = _or_default(args.n_squids, N_SQUIDS)
+    L_j_nH = _or_default(args.L_j_nH, L_J_NH)
+    cj_j_fF = _or_default(args.Cj_j_fF, CJ_J_FF)
+    res_length_mm = _or_default(args.res_length_mm, RES_LENGTH_MM)
+
+    geom = dict(
+        squid_gap_um=_or_default(args.squid_gap_um, SQUID_GAP_UM),
+        arm_width_um=_or_default(args.arm_width_um, ARM_WIDTH_UM),
+        josephson_gap_um=_or_default(args.josephson_gap_um, JOSEPHSON_GAP_UM),
+        segment_length_um=_or_default(args.segment_length_um, SEGMENT_LENGTH_UM),
+        arm_semi_length_um=_or_default(args.arm_semi_length_um, ARM_SEMI_LENGTH_UM),
+        line_width_um=_or_default(args.line_width_um, LINE_WIDTH_UM),
+        ground_gap_um=_or_default(args.ground_gap_um, GROUND_GAP_UM),
+        array_pos_x_um=_or_default(args.array_pos_x_um, ARRAY_POS_X_UM),
+        array_pos_y_um=_or_default(args.array_pos_y_um, ARRAY_POS_Y_UM),
+    )
+
+    os.makedirs(args.outdir, exist_ok=True)
+    n_ports = JJ_PER_LOOP * n_squids
 
     t0 = time.time()
-    print(f"[1/4] Building design (L_transmon={L_transmon_nH}nH, L_probe={L_probe_nH}nH, "
+    print(f"[1/4] Building design (n_squids={n_squids}, L_j={L_j_nH}nH, "
           f"res_length={res_length_mm}mm)...")
-    design = build_design(L_transmon_nH=L_transmon_nH, L_probe_nH=L_probe_nH,
-                            res_length_mm=res_length_mm,
-                            chip_size_x_mm=args.chip_size_x_mm,
-                            chip_size_y_mm=args.chip_size_y_mm,
-                            chip_center_x_mm=args.chip_center_x_mm,
-                            chip_center_y_mm=args.chip_center_y_mm)
+    design = build_design(n_squids=n_squids, L_j_nH=L_j_nH, cj_j_fF=cj_j_fF,
+                          res_length_mm=res_length_mm,
+                          chip_size_x_mm=args.chip_size_x_mm,
+                          chip_size_y_mm=args.chip_size_y_mm,
+                          chip_center_x_mm=args.chip_center_x_mm,
+                          chip_center_y_mm=args.chip_center_y_mm,
+                          **geom)
     print(f"      OK ({time.time()-t0:.1f}s). Components: {list(design.components.keys())}")
 
     design.rebuild()
+
+    n_jj = len(design.qgeometry.tables['junction'].loc[
+        design.qgeometry.tables['junction']['component']
+        == design.components[ARRAY_COMPONENT_NAME].id])
+    if n_jj != n_ports:
+        print(f"\n!!! FAILED: array has {n_jj} junction rows, expected {n_ports} "
+              f"(= {JJ_PER_LOOP} x {n_squids}).")
+        json.dump({"status": "failed", "reason": "junction count mismatch",
+                   "n_junction_rows": n_jj, "expected": n_ports},
+                  open(f"{args.outdir}/epr_result.json", "w"), indent=2)
+        sys.exit(1)
 
     print("[2/4] Importing SQDMetal PALACE eigenmode module...")
     from SQDMetal.PALACE.Eigenmode_Simulation import PALACE_Eigenmode_Simulation
@@ -119,32 +204,28 @@ def main():
     import matplotlib
     matplotlib.use("Agg", force=True)
 
-    print("[3/4] Setting up + running eigenmode simulation (production settings)...")
+    print(f"[3/4] Setting up + running eigenmode simulation "
+          f"({n_ports} lumped inductive ports on the array)...")
     t1 = time.time()
     user_defined_options = {
-        "mesh_refinement": 0,  # UniformLevels - NOT AMR; see --amr-max-its
+        "mesh_refinement": 0,   # UniformLevels - NOT AMR; see --amr-max-its
         "dielectric_material": "silicon",
         "starting_freq": args.starting_freq,
         "number_of_freqs": args.number_of_freqs,
         "solns_to_save": args.number_of_freqs,
-        # order=1/tol=1e-5 (not the original order=2/tol=1e-8) per the
-        # 2026-08-25 findings: order=2 roughly 6-8x's the DOF count for the
-        # same mesh and was the direct cause of an earlier 38.6M-unknown
-        # OOM (the "6um-everywhere" run); order=1 has converged cleanly
-        # (1 FGMRES iteration per solve) at every mesh size tested since.
-        "solver_order": 1,
-        "solver_tol": 1.0e-5,
-        "solver_maxits": 300,
-        "fillet_resolution": 12,
+        "solver_order": args.solver_order,
+        "solver_tol": args.solver_tol,
+        "solver_maxits": args.solver_maxits,
+        "fillet_resolution": args.fillet_resolution,
         "palace_dir": args.palace_bin,
         "num_cpus": args.num_cpus,
     }
 
-    run_label = f"Ltransmon_{L_transmon_nH}_Lprobe_{L_probe_nH}_reslen_{res_length_mm}mm"
+    run_label = f"nsq_{n_squids}_Lj_{L_j_nH}nH_reslen_{res_length_mm}mm"
 
     def _fail(status, extra=None):
-        payload = {"status": status, "L_transmon_nH": L_transmon_nH,
-                   "L_probe_nH": L_probe_nH, "res_length_mm": res_length_mm}
+        payload = {"status": status, "n_squids": n_squids, "l_j_nh": L_j_nH,
+                   "res_length_mm": res_length_mm}
         if extra:
             payload.update(extra)
         json.dump(payload, open(f"{args.outdir}/epr_result.json", "w"), indent=2)
@@ -162,68 +243,51 @@ def main():
         eigen_sim.add_metallic(1)
         eigen_sim.add_ground_plane()
 
-        # Exactly two lumped inductive ports, per EPR_C_EXTRACTION.md Sec 4.1:
-        # the transmon junction (L_T) and the SQUID's probe arm a (L_probe).
-        # Branch b is bridged with continuous metal in build_design.py
-        # (jj_b_options.export_mask=True) and gets no port at all - it is not
-        # a real junction for this measurement. port-EPR.csv will therefore
-        # have exactly 2 participation columns, in this creation order:
-        # column 0 = transmon, column 1 = probe. SQDMetal has no name-based
-        # port lookup (create_port_JosephsonJunction only stores an
-        # auto-generated port_name, not the source component/junction_index),
-        # so this ordering must be tracked here rather than read back later.
-        eigen_sim.create_port_JosephsonJunction(
-            QUBIT_COMPONENT_NAME, junction_index=JJ_INDEX_SINGLE,
-            L_J=L_transmon_nH * 1e-9, C_J=CJ_TRANSMON_FF * 1e-15)
-        eigen_sim.create_port_JosephsonJunction(
-            QUBIT_COMPONENT_NAME, junction_index=JJ_INDEX_SQUID_A,
-            L_J=L_probe_nH * 1e-9, C_J=CJ_PROBE_FF * 1e-15)
+        # One lumped inductive port per junction gap. SquidArray emits, per
+        # loop i: jj_i_upper (index 2i) then jj_i_lower (index 2i+1). Every gap
+        # is a real vacuum break and MUST be ported - an open gap breaks the
+        # loop and its participation is identically zero
+        # (../squid_resonator_epr/EPR_C_EXTRACTION.md Sec 2). port-EPR.csv will
+        # then have n_ports participation columns, in this same index order.
+        for k in range(n_ports):
+            eigen_sim.create_port_JosephsonJunction(
+                ARRAY_COMPONENT_NAME, junction_index=k,
+                L_J=L_j_nH * 1e-9, C_J=cj_j_fF * 1e-15)
 
-        resonator_bg_min_um = (args.resonator_bg_min_size_um
-                                if args.resonator_bg_min_size_um is not None
-                                else args.bg_min_size_um)
-        resonator_bg_max_um = (args.resonator_bg_max_size_um
-                                if args.resonator_bg_max_size_um is not None
-                                else args.bg_max_size_um)
-        # taper_dist_min widened per the 2026-08-25 AMR run: the Indicator
-        # field showed refinement concentrating broadly around the readout
-        # resonator (mode 1's field lives entirely on its trace) while the
-        # qubit pad/SQUID arms as a whole only accounted for ~1-4% of
-        # indicator mass - so the readout's fine zone extends further and
-        # the qubit's stays narrow.
+        resonator_bg_min_um = _or_default(args.resonator_bg_min_size_um, args.bg_min_size_um)
+        resonator_bg_max_um = _or_default(args.resonator_bg_max_size_um, args.bg_max_size_um)
+
         eigen_sim.fine_mesh_components(
             ["readout_1"],
             min_size=resonator_bg_min_um * 1e-6, max_size=resonator_bg_max_um * 1e-6,
-            taper_dist_min=40e-6, metals_only=False,
+            taper_dist_min=args.resonator_taper_dist_min_um * 1e-6,
+            taper_dist_max=args.resonator_taper_dist_max_um * 1e-6, metals_only=False,
         )
         eigen_sim.fine_mesh_components(
-            [QUBIT_COMPONENT_NAME],
-            min_size=args.qubit_bg_min_size_um * 1e-6, max_size=args.qubit_bg_max_size_um * 1e-6,
-            taper_dist_min=5e-6, metals_only=False,
+            [ARRAY_COMPONENT_NAME],
+            min_size=args.array_bg_min_size_um * 1e-6, max_size=args.array_bg_max_size_um * 1e-6,
+            taper_dist_min=args.array_taper_dist_min_um * 1e-6,
+            taper_dist_max=args.array_taper_dist_max_um * 1e-6, metals_only=False,
         )
 
-        # A dedicated squid-loop fine_mesh_in_rectangle was tried here and
-        # reverted (2026-08-25): fine_mesh_in_rectangle fine-meshes the
-        # WHOLE box regardless of whether there's metal there, unlike
-        # fine_mesh_components (which only refines near actual geometry
-        # edges) - most of a box wide enough to cover the squid arms is
-        # empty substrate/ground plane, so it blew unknowns up from 2.86M
-        # to 13.2M for no benefit. A direct mesh-file check of the
-        # qubit-wide pass alone already showed ~3.1um median element size
-        # right at the squid loop, so it was already adequately resolved
-        # without this addition.
-
-        # Junction-local fine_mesh_in_rectangle REMOVED (2026-08-25): an
-        # isolation test (identical config with/without this block) showed
-        # it alone - not the readout taper widening, not the qubit max_size
-        # - was what pushed mesh generation from 52.9s/2.47M elements to
-        # a >180s timeout, even though the port bounding box itself is
-        # tiny. Root cause not fully understood (some background-field
-        # interaction with the other fine-mesh regions), but the qubit-wide
-        # pass alone already gives ~3.1um median element size at the SQUID
-        # loop (verified directly from a generated mesh file), so junction
-        # resolution was not actually depending on this block.
-        # --junction-mesh-min-um/--junction-mesh-max-um are now unused.
+        if args.coupling_rect_min_um is not None:
+            # the array (SquidArray) is anchored at pos_x = ARRAY_POS_X_UM and
+            # runs +x; its loop pitch is ~ full_w. The two loops that carry the
+            # coupling are the near end (last loop, ~ pin b) and the far end
+            # (first loop). Box each with a vacuum margin. (ARRAY_POS_*_UM are
+            # imported at module top.)
+            pitch_um = 47.0   # SquidArray full_w for the default single-loop geometry
+            x_far = ARRAY_POS_X_UM
+            x_near = ARRAY_POS_X_UM + n_squids * pitch_um
+            m = args.coupling_rect_margin_um
+            for tag, xc in (("far", x_far), ("near", x_near)):
+                eigen_sim.fine_mesh_in_rectangle(
+                    (xc - m) * 1e-6, (ARRAY_POS_Y_UM - m) * 1e-6,
+                    (xc + m) * 1e-6, (ARRAY_POS_Y_UM + m) * 1e-6,
+                    mesh_min=args.coupling_rect_min_um * 1e-6, mesh_max=60e-6,
+                    taper_dist_min=40e-6, taper_dist_max=150e-6)
+            print(f"      coupling-zone fine mesh: {args.coupling_rect_min_um}um boxes "
+                  f"(+/-{m}um) at x={x_far:.0f} and x={x_near:.0f} um")
 
         eigen_sim.setup_EPR_interfaces(
             metal_air=MaterialInterface("Aluminium-Vacuum"),
@@ -253,10 +317,8 @@ def main():
     eig_csv_path = eigen_sim._output_data_dir + "/eig.csv"
     if not os.path.exists(eig_csv_path):
         print(f"\n!!! FAILED: run() completed without raising, but {eig_csv_path} "
-              "was never written.")
-        print("This usually means the MPI job itself was killed mid-run "
-              "(check for OOM/signal 9 in the log above) without Palace/SQDMetal "
-              "propagating that as a Python exception.")
+              "was never written (MPI job likely killed mid-run - check for "
+              "OOM/signal 9 above).")
         _fail("failed", {"reason": "missing eig.csv, likely killed MPI job"})
         sys.exit(1)
 
@@ -270,66 +332,101 @@ def main():
     port_epr = eigen_sim.retrieve_mode_port_EPR()
     mesh_sizes = eigen_sim.retrieve_simulation_sizes()
 
-    mat_mode_port = port_epr['mat_mode_port']  # shape (num_modes, num_inductive_ports)
+    mat_mode_port = port_epr['mat_mode_port']   # (num_modes, num_inductive_ports)
     freqs_hz = port_epr['eigenfrequencies']
     loaded_Q = port_epr['loaded_Q']
 
-    if mat_mode_port is None or mat_mode_port.shape[1] < 2:
-        print(f"\n!!! FAILED: port-EPR.csv did not yield 2 inductive-port columns "
-              f"(got shape {None if mat_mode_port is None else mat_mode_port.shape}). "
-              "Check that both create_port_JosephsonJunction calls actually produced "
-              "inductive ports (L_J > 0).")
+    if mat_mode_port is None or mat_mode_port.shape[1] < 1:
+        print(f"\n!!! FAILED: port-EPR.csv yielded no inductive-port columns "
+              f"(shape {None if mat_mode_port is None else mat_mode_port.shape}).")
         _fail("no_port_epr", {"mat_mode_port_shape": None if mat_mode_port is None
-                               else list(mat_mode_port.shape)})
+                              else list(mat_mode_port.shape)})
         sys.exit(1)
+
+    n_cols = mat_mode_port.shape[1]
+    if n_cols != n_ports:
+        print(f"      WARNING: got {n_cols} inductive-port columns, expected "
+              f"{n_ports}. Summing over whatever is present.")
 
     num_modes = len(freqs_hz)
     if num_modes == 0:
         print(f"\n!!! FAILED: zero converged modes. starting_freq="
               f"{args.starting_freq/1e9:.3f}GHz, number_of_freqs={args.number_of_freqs}.")
         _fail("no_modes_converged", {"starting_freq_hz": args.starting_freq,
-                                      "number_of_freqs": args.number_of_freqs})
+                                     "number_of_freqs": args.number_of_freqs})
         sys.exit(1)
 
-    p_transmon = mat_mode_port[:, 0]
-    p_probe = mat_mode_port[:, 1]
+    import numpy as np
+    from build_design import identify_resonator_mode
 
-    # Participation-based mode ID (EPR_C_EXTRACTION.md Sec 6.3): sort on
-    # participation, not frequency - frequency-based ID fails silently the
-    # moment a qubit mode crosses a resonator harmonic.
-    transmon_idx = int(p_transmon.argmax())
-    freq_order = sorted((i for i in range(num_modes) if i != transmon_idx),
-                         key=lambda i: freqs_hz[i])
-    resonator_rank = {i: rank + 1 for rank, i in enumerate(freq_order)}
+    p_array_signed = mat_mode_port.sum(axis=1)          # signed total participation
+    p_array_abs = np.abs(mat_mode_port).sum(axis=1)     # phonon (~1) vs non-array (<<1)
+    per_loop_available = (n_cols == n_ports)
+    if per_loop_available:
+        p_per_loop = (mat_mode_port[:, 0::2] + mat_mode_port[:, 1::2])  # (num_modes, n_squids)
+
+    # The array's own "phonon" modes store ~all inductive energy in the
+    # junctions (sum|p_j| ~ 1); the readout resonator (field on the CPW) has
+    # sum|p_j| << 1e-3. Pick the resonator by that, then label the rest
+    # phonons by ascending frequency. (min_ghz omitted: sum|p_j| is enough.)
+    try:
+        res_idx, res_info = identify_resonator_mode(mat_mode_port, freqs_hz)
+    except RuntimeError as e:
+        print(f"      WARNING: {e}  -> flagging no mode as resonator.")
+        res_idx, res_info = None, {"error": str(e)}
+
+    phonon_rank = {}
+    for rank, i in enumerate(sorted((i for i in range(num_modes) if i != res_idx),
+                                    key=lambda i: freqs_hz[i])):
+        phonon_rank[i] = rank + 1
 
     modes = []
     for i in range(num_modes):
-        assignment = "transmon" if i == transmon_idx else f"resonator_mode_{resonator_rank[i]}"
-        modes.append({
+        m = {
             "m": i + 1,
             "f_ghz": float(freqs_hz[i]) / 1e9,
             "Q": float(loaded_Q[i]),
-            "p": {"probe": float(p_probe[i]), "transmon": float(p_transmon[i])},
-            "assignment": assignment,
-        })
+            "p_array_signed": float(p_array_signed[i]),
+            "p_array_abs_sum": float(p_array_abs[i]),
+            "assignment": "resonator" if i == res_idx else f"phonon_{phonon_rank[i]}",
+        }
+        if per_loop_available:
+            m["p_array_per_loop"] = [float(x) for x in p_per_loop[i]]
+        modes.append(m)
+
+    resonator_mode = None
+    if res_idx is not None:
+        resonator_mode = {
+            "m": res_idx + 1,
+            "f_ghz": float(freqs_hz[res_idx]) / 1e9,
+            "Q": float(loaded_Q[res_idx]),
+            "p_array_signed": float(p_array_signed[res_idx]),
+            "p_array_abs_sum": float(p_array_abs[res_idx]),
+            "p_per_junction": [float(x) for x in mat_mode_port[res_idx]],
+        }
+        if per_loop_available:
+            resonator_mode["p_per_loop"] = [float(x) for x in p_per_loop[res_idx]]
 
     print("      Modes found:")
     for mode in modes:
         print(f"        m={mode['m']}: f={mode['f_ghz']:.4f}GHz, Q={mode['Q']:.3e}, "
-              f"p_probe={mode['p']['probe']:.3e}, p_transmon={mode['p']['transmon']:.3e}, "
-              f"assignment={mode['assignment']}")
+              f"sum|p_j|={mode['p_array_abs_sum']:.3e}, {mode['assignment']}")
 
     result = {
         "status": "success",
-        "l_probe_nh": L_probe_nH,
-        "l_transmon_nh": L_transmon_nH,
+        "n_squids": n_squids,
+        "l_j_nh": L_j_nH,
+        "cj_j_ff": cj_j_fF,
         "res_length_mm": res_length_mm,
+        "geometry_um": geom,
+        "n_inductive_ports": n_cols,
+        "resonator_id": res_info,
+        "resonator_mode": resonator_mode,
         "modes": modes,
         "mesh": {
             "elements": mesh_sizes.get("MeshElements"),
-            "min_size_um": resonator_bg_min_um,
-            "qubit_min_size_um": args.qubit_bg_min_size_um,
-            "junction_min_size_um": args.junction_mesh_min_um,
+            "resonator_min_size_um": resonator_bg_min_um,
+            "array_min_size_um": args.array_bg_min_size_um,
         },
         "interface_epr": _json_safe(interface_epr),
         "wall_time_s": time.time() - t0,

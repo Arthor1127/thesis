@@ -1,0 +1,4 @@
+2.8814 shuntc_2p88fF
+9.1117 shuntc_9p11fF
+28.8137 shuntc_28p8fF
+100.0 shuntc_100fF
